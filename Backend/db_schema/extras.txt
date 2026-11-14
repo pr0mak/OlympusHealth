@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS astra_db;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON astra_db.*
+TO 'astra_app'@'localhost';SHOW GRANTS FOR 'astra_app'@'localhost';
+
+
