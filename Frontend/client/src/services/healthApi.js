@@ -9,16 +9,16 @@ export const healthApi = {
     apiRequest("/api/health/measurements", { token }),
 
   createMeasurement: (token, data) =>
-    apiRequest("/api/health/measurements", {
-      token,
-      method: "POST",
-      body: JSON.stringify(data)
-    }),
+  apiRequest("/api/health/measurements", {
+    token,
+    method: "POST",
+    body: JSON.stringify(data)
+  }),
 
   updateMeasurement: (token, data) =>
-    apiRequest("/api/health/measurements", {
-      token,
-      method: "PUT",
-      body: JSON.stringify(data)
-    })
+  apiRequest("/api/health/measurements", {
+    token,
+    method: "PUT",
+    body: JSON.stringify(data)
+  })
 };

@@ -13,6 +13,7 @@ const dashboardRoutes = require("./routes/DashboardRoutes");
 const healthRoutes = require("./routes/HealthRoutes");
 const projectionRoutes = require("./routes/projectionRoutes");
 const assistantRoutes = require("./routes/assistantRoutes");
+const alertRoutes = require("./routes/alertRoutes");
 
 // Middleware
 const verifyToken = require("./middleware/authMiddleware");
@@ -93,6 +94,8 @@ app.use(
     dashboardRoutes
 );
 
+app.use("/api/alerts", verifyToken, alertRoutes);
+
 // 404 Handler
 app.use((req, res) => {
     return res.status(404).json({
@@ -103,7 +106,6 @@ app.use((req, res) => {
 
 // Global error handler
 app.use(errorHandler);
-
 // Server configuration
 const PORT = Number(process.env.PORT || 3001);
 
