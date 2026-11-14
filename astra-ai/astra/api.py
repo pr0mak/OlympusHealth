@@ -2,8 +2,11 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+import os
 
 from .charts import router as charts_router
+from .integration import router as integration_router
+from .adaptive_ai import router as adaptive_ai_router
 from .evidence_routes import router as evidence_router
 from .health_briefing import BriefingQuestion, BriefingRequest, answer_question, generate_briefing
 from .bone_health import BoneObservation, METRIC_GROUPS, METRIC_INFO, summarize_observations
@@ -18,11 +21,13 @@ from .tbone_metabolism import published_tbone_metabolism
 from .schemas import OptimizeRequest, OptimizationResponse, SimulateRequest, TrajectoryResponse
 from .simulator import simulate
 
-app = FastAPI(title="ASTRA AI Engine", version="1.2.0", description="Experimental bone health simulator; not a medical device")
+app = FastAPI(title="ASTRA AI Engine", version="1.4.0", description="Experimental bone health simulator; not a medical device")
 app.mount('/assets', StaticFiles(directory=Path(__file__).parent / 'static'), name='assets')
 app.include_router(charts_router)
 app.include_router(evidence_router)
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000", "http://localhost:5173"],
+app.include_router(integration_router)
+app.include_router(adaptive_ai_router)
+app.add_middleware(CORSMiddleware, allow_origins=[x.strip() for x in os.getenv("ASTRA_CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",") if x.strip()],
                    allow_methods=["GET", "POST"], allow_headers=["*"])
 
 
@@ -128,3 +133,9 @@ def health_briefing_post(req: BriefingRequest):
 @app.post("/health-briefing/ask")
 def health_briefing_ask(req: BriefingQuestion):
     return answer_question(req)
+
+
+@app.get("/adaptive-ai", include_in_schema=False)
+def adaptive_ai_page():
+    from fastapi.responses import FileResponse
+    return FileResponse(Path(__file__).parent / "static" / "adaptive_ai.html")
