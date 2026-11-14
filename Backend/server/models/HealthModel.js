@@ -1,9 +1,43 @@
 
 const db = require("../config/db");
 
-const findLatestByUser = async (userId) => {
+const COLUMNS = {
+  heartRate: "avg_heart_rate",
+  oxygenSaturation: "oxygen_saturation",
+  bodyTemperature: "body_temperature",
+  sleepHours: "sleep_duration"
+};
+
+// Return the original MySQL DATETIME without timezone conversion.
+const SELECT = `
+  SELECT
+    id,
+    user_id,
+    avg_heart_rate,
+    oxygen_saturation,
+    body_temperature,
+    sleep_duration,
+    DATE_FORMAT(
+      recorded_at,
+      '%Y-%m-%dT%H:%i:%s'
+    ) AS recorded_at
+  FROM generic_health
+`;
+
+async function findAllByUser(userId) {
   const [rows] = await db.execute(
-    `SELECT * FROM health_measurements
+    `${SELECT}
+     WHERE user_id = ?
+     ORDER BY recorded_at DESC, id DESC`,
+    [userId]
+  );
+
+  return rows;
+}
+
+async function findLatestByUser(userId) {
+  const [rows] = await db.execute(
+    `${SELECT}
      WHERE user_id = ?
      ORDER BY recorded_at DESC, id DESC
      LIMIT 1`,
@@ -11,116 +45,77 @@ const findLatestByUser = async (userId) => {
   );
 
   return rows[0] || null;
-};
+}
 
-const findAllByUser = async (userId) => {
-  const [rows] = await db.execute(
-    `SELECT * FROM health_measurements
-     WHERE user_id = ?
-     ORDER BY recorded_at DESC, id DESC`,
-    [userId]
-  );
-
-  return rows;
-};
-
-const countByUser = async (userId) => {
+async function countByUser(userId) {
   const [rows] = await db.execute(
     `SELECT COUNT(*) AS total
-     FROM health_measurements
+     FROM generic_health
      WHERE user_id = ?`,
     [userId]
   );
 
-  return rows[0].total;
-};
+  return Number(rows[0].total);
+}
 
-const create = async (userId, data) => {
+async function findByIdAndUser(id, userId) {
+  const [rows] = await db.execute(
+    `${SELECT}
+     WHERE id = ? AND user_id = ?
+     LIMIT 1`,
+    [id, userId]
+  );
+
+  return rows[0] || null;
+}
+
+async function create(userId, data) {
   const [result] = await db.execute(
-    `INSERT INTO health_measurements (
-      user_id, heart_rate, systolic_bp, diastolic_bp,
-      oxygen_saturation, body_temperature, blood_glucose,
-      sleep_hours, mood, body_mass
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO generic_health (
+      user_id,
+      avg_heart_rate,
+      oxygen_saturation,
+      body_temperature,
+      sleep_duration
+    ) VALUES (?, ?, ?, ?, ?)`,
     [
       userId,
       data.heartRate ?? null,
-      data.bloodPressure?.systolic ?? null,
-      data.bloodPressure?.diastolic ?? null,
       data.oxygenSaturation ?? null,
       data.bodyTemperature ?? null,
-      data.bloodGlucose ?? null,
-      data.sleepHours ?? null,
-      data.mood ?? null,
-      data.bodyMass ?? null
+      data.sleepHours ?? null
     ]
   );
 
   return result.insertId;
-};
+}
 
-const update = async (userId, measurementId, data) => {
-  const fields = {
-    heartRate: "heart_rate",
-    oxygenSaturation: "oxygen_saturation",
-    bodyTemperature: "body_temperature",
-    bloodGlucose: "blood_glucose",
-    sleepHours: "sleep_hours",
-    mood: "mood",
-    bodyMass: "body_mass"
-  };
+async function update(userId, measurementId, data) {
+  const fields = Object.entries(COLUMNS).filter(
+    ([key]) => data[key] !== undefined
+  );
 
-  const updates = [];
-
-  for (const [key, column] of Object.entries(fields)) {
-    if (data[key] !== undefined) {
-      updates.push([column, data[key]]);
-    }
-  }
-
-  if (data.bloodPressure?.systolic !== undefined) {
-    updates.push(["systolic_bp", data.bloodPressure.systolic]);
-  }
-
-  if (data.bloodPressure?.diastolic !== undefined) {
-    updates.push(["diastolic_bp", data.bloodPressure.diastolic]);
-  }
-
-  if (updates.length === 0) return null;
-
-  const setClause = updates
-    .map(([column]) => `${column} = ?`)
+  const setClause = fields
+    .map(([, column]) => `${column} = ?`)
     .join(", ");
 
+  const values = fields.map(([key]) => data[key]);
+
   const [result] = await db.execute(
-    `UPDATE health_measurements
+    `UPDATE generic_health
      SET ${setClause}
      WHERE id = ? AND user_id = ?`,
-    [
-      ...updates.map(([, value]) => value),
-      measurementId,
-      userId
-    ]
+    [...values, measurementId, userId]
   );
 
   return result.affectedRows;
-};
-
-const findByIdAndUser = async (measurementId, userId) => {
-  const [rows] = await db.execute(
-    `SELECT * FROM health_measurements
-     WHERE id = ? AND user_id = ?`,
-    [measurementId, userId]
-  );
-
-  return rows[0] || null;
-};
+}
 
 module.exports = {
-  findLatestByUser,
   findAllByUser,
+  findLatestByUser,
   countByUser,
+  findByIdAndUser,
   create,
-  update,
-  findByIdAndUser
+  update
 };

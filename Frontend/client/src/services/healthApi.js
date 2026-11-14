@@ -1,27 +1,24 @@
 
-const API_URL = "http://localhost:3001";
-
-async function request(endpoint, token) {
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "API request failed");
-  }
-
-  return result.data;
-}
+import { apiRequest } from "../api/client.js";
 
 export const healthApi = {
   getSummary: (token) =>
-    request("/api/health", token),
+    apiRequest("/api/health", { token }),
 
   getMeasurements: (token) =>
-    request("/api/health/measurements", token)
+    apiRequest("/api/health/measurements", { token }),
+
+  createMeasurement: (token, data) =>
+    apiRequest("/api/health/measurements", {
+      token,
+      method: "POST",
+      body: JSON.stringify(data)
+    }),
+
+  updateMeasurement: (token, data) =>
+    apiRequest("/api/health/measurements", {
+      token,
+      method: "PUT",
+      body: JSON.stringify(data)
+    })
 };
