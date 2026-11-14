@@ -3,45 +3,64 @@ const db = require("../config/db");
 
 class User {
 
-    static async exists(email) {
+    // Check if username already exists
+    static async exists(username) {
         const [rows] = await db.execute(
-            "SELECT id FROM users WHERE email = ? LIMIT 1",
-            [email]
+            `SELECT id
+             FROM users
+             WHERE username = ?
+             LIMIT 1`,
+            [username]
         );
 
         return rows.length > 0;
     }
 
-    static async findByEmail(email) {
+    // Find user by username (used during login)
+    static async findByUsername(username) {
         const [rows] = await db.execute(
-            "SELECT * FROM users WHERE email = ? LIMIT 1",
-            [email]
+            `SELECT id, username, password, gender, age
+             FROM users
+             WHERE username = ?
+             LIMIT 1`,
+            [username]
         );
 
         return rows[0] || null;
     }
 
+    // Find user by ID (used in /api/auth/me)
     static async findById(id) {
         const [rows] = await db.execute(
-            `SELECT id, firstname, lastname, phone,
-                    email, role, created_at
+            `SELECT id, username, gender, age
              FROM users
-             WHERE id = ? LIMIT 1`,
+             WHERE id = ?
+             LIMIT 1`,
             [id]
         );
 
         return rows[0] || null;
     }
 
+    // Create new user (used during registration)
     static async create(user) {
-        const { firstname, lastname, phone,
-                email, password, role = "user" } = user;
+        const {
+            username,
+            password,
+            gender,
+            age
+        } = user;
 
         const [result] = await db.execute(
             `INSERT INTO users
-             (firstname, lastname, phone, email, password, role)
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            [firstname, lastname, phone, email, password, role]
+                (username, password, gender, age)
+             VALUES (?, ?, ?, ?)`,
+            [
+                username,
+                password,
+                gender,
+                age
+            ]
         );
 
         return result.insertId;

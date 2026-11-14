@@ -1,8 +1,5 @@
 
 require("dotenv").config();
-const projectionRoutes = require("./routes/projectionRoutes");
-
-const assistantRoutes = require("./routes/assistantRoutes");
 
 const express = require("express");
 const cors = require("cors");
@@ -10,26 +7,35 @@ const rateLimit = require("express-rate-limit");
 
 const db = require("./config/db");
 
-const authRoutes = require("./routes/authRoutes");
-const errorHandler = require("./middleware/errorHandler");
+// Routes
+const authRoutes = require("./routes/AuthRoutes");
 const dashboardRoutes = require("./routes/DashboardRoutes");
-const verifyToken = require("./middleware/authMiddleware");
 const healthRoutes = require("./routes/HealthRoutes");
+const projectionRoutes = require("./routes/projectionRoutes");
+const assistantRoutes = require("./routes/assistantRoutes");
+
+// Middleware
+const verifyToken = require("./middleware/authMiddleware");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
-// CORS Configuration
+// -------------------------------------
+// CORS
+// -------------------------------------
 app.use(cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173"
 }));
 
-// Parse JSON request bodies
+// -------------------------------------
+// Body Parsers
+// -------------------------------------
 app.use(express.json({ limit: "16kb" }));
-
-// Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
+// -------------------------------------
 // Request Logger (Development)
+// -------------------------------------
 if (process.env.NODE_ENV !== "production") {
     app.use((req, res, next) => {
         console.log("REQUEST:", req.method, req.originalUrl);
@@ -37,7 +43,9 @@ if (process.env.NODE_ENV !== "production") {
     });
 }
 
-// Rate Limiter for Authentication
+// -------------------------------------
+// Authentication Rate Limiter
+// -------------------------------------
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 20,
@@ -49,36 +57,64 @@ const authLimiter = rateLimit({
     }
 });
 
-// Health Check
-app.get("/api/health", (req, res) => {
-    res.status(200).json({
+// -------------------------------------
+// Public Server Health Check
+// -------------------------------------
+app.get("/healthz", (req, res) => {
+    return res.status(200).json({
         success: true,
         status: "online",
         service: "ASTRA API"
     });
 });
 
-// Routes
+// -------------------------------------
+// Authentication
+// -------------------------------------
 app.use("/api/auth", authLimiter, authRoutes);
+
+// -------------------------------------
+// Protected Dashboard
+// -------------------------------------
 app.use("/api", verifyToken, dashboardRoutes);
+
+// -------------------------------------
+// Protected Health Data
+// -------------------------------------
 app.use("/api/health", verifyToken, healthRoutes);
 
+// -------------------------------------
+// Projection
+// Authentication is handled inside
+// projectionRoutes.js
+// -------------------------------------
 app.use("/api/projection", projectionRoutes);
 
+// -------------------------------------
+// AI Assistant
+// Authentication is handled inside
+// assistantRoutes.js
+// -------------------------------------
 app.use("/api/assistant", assistantRoutes);
 
+// -------------------------------------
 // 404 Handler
+// -------------------------------------
 app.use((req, res) => {
-    res.status(404).json({
+    return res.status(404).json({
         success: false,
         message: "Το endpoint δεν βρέθηκε."
     });
 });
 
+// -------------------------------------
 // Global Error Handler
+// -------------------------------------
 app.use(errorHandler);
 
+// -------------------------------------
 // Server Configuration
+// -------------------------------------
 const PORT = Number(process.env.PORT || 3001);
 
 async function startServer() {
@@ -96,7 +132,9 @@ async function startServer() {
         console.log("MySQL connected successfully");
 
         app.listen(PORT, () => {
-            console.log(`ASTRA API running at http://localhost:${PORT}`);
+            console.log(
+                `ASTRA API running at http://localhost:${PORT}`
+            );
         });
 
     } catch (error) {

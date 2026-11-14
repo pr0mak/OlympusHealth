@@ -5,39 +5,50 @@ const jwt = require("jsonwebtoken");
 
 const {
     validateRegistration,
-    emailPattern
+    USERNAME_PATTERN
 } = require("../utils/validators");
 
+// Fields that are safe to return to the frontend
+function publicUser(user) {
+    return {
+        id: String(user.id),
+        username: user.username,
+        gender: user.gender,
+        age: user.age
+    };
+}
+
+// POST /api/auth/register
 async function register(req, res, next) {
     try {
-        const error = validateRegistration(req.body);
+        const validationError = validateRegistration(req.body);
 
-        if (error) {
+        if (validationError) {
             return res.status(400).json({
                 success: false,
-                message: error
+                message: validationError
             });
         }
 
-        const { firstname, lastname, phone, password } = req.body;
-        const email = req.body.email.trim().toLowerCase();
+        const { password, gender, age } = req.body;
+        const username = req.body.username.trim();
 
-        if (await User.exists(email)) {
+        const exists = await User.exists(username);
+
+        if (exists) {
             return res.status(409).json({
                 success: false,
-                message: "Το email χρησιμοποιείται ήδη."
+                message: "Το username χρησιμοποιείται ήδη."
             });
         }
 
-        const passwordHash = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         await User.create({
-            firstname: firstname.trim(),
-            lastname: lastname.trim(),
-            phone: phone.trim(),
-            email,
-            password: passwordHash,
-            role: "user"
+            username,
+            password: hashedPassword,
+            gender,
+            age
         });
 
         return res.status(201).json({
@@ -46,11 +57,10 @@ async function register(req, res, next) {
         });
 
     } catch (error) {
-        // MySQL duplicate unique key
         if (error.code === "ER_DUP_ENTRY") {
             return res.status(409).json({
                 success: false,
-                message: "Το email χρησιμοποιείται ήδη."
+                message: "Το username χρησιμοποιείται ήδη."
             });
         }
 
@@ -58,25 +68,24 @@ async function register(req, res, next) {
     }
 }
 
+// POST /api/auth/login
 async function login(req, res, next) {
     try {
-        const { email, password } = req.body || {};
+        const { username, password } = req.body || {};
 
         if (
-            typeof email !== "string" ||
-            email.length > 254 ||
-            !emailPattern.test(email.trim()) ||
+            typeof username !== "string" ||
+            !USERNAME_PATTERN.test(username.trim()) ||
             typeof password !== "string" ||
             !password
         ) {
             return res.status(400).json({
                 success: false,
-                message: "Συμπλήρωσε σωστά email και κωδικό."
+                message: "Συμπλήρωσε σωστά username και κωδικό."
             });
         }
 
-        const normalizedEmail = email.trim().toLowerCase();
-        const user = await User.findByEmail(normalizedEmail);
+        const user = await User.findByUsername(username.trim());
 
         const isValid = user
             ? await bcrypt.compare(password, user.password)
@@ -85,14 +94,13 @@ async function login(req, res, next) {
         if (!isValid) {
             return res.status(401).json({
                 success: false,
-                message: "Λανθασμένο email ή κωδικός πρόσβασης."
+                message: "Λανθασμένο username ή κωδικός πρόσβασης."
             });
         }
 
         const token = jwt.sign(
             {
-                id: String(user.id),
-                role: user.role
+                id: String(user.id)
             },
             process.env.JWT_SECRET,
             {
@@ -105,14 +113,7 @@ async function login(req, res, next) {
             success: true,
             message: "Επιτυχής σύνδεση!",
             token,
-            user: {
-                id: String(user.id),
-                firstname: user.firstname,
-                lastname: user.lastname,
-                phone: user.phone,
-                email: user.email,
-                role: user.role
-            }
+            user: publicUser(user)
         });
 
     } catch (error) {
@@ -120,7 +121,7 @@ async function login(req, res, next) {
     }
 }
 
-
+// GET /api/auth/me
 async function me(req, res, next) {
     try {
         const userId = req.user.id;
@@ -136,15 +137,7 @@ async function me(req, res, next) {
 
         return res.status(200).json({
             success: true,
-            user: {
-                id: String(user.id),
-                firstname: user.firstname,
-                lastname: user.lastname,
-                phone: user.phone,
-                email: user.email,
-                role: user.role,
-                createdAt: user.created_at
-            }
+            user: publicUser(user)
         });
 
     } catch (error) {
@@ -152,5 +145,8 @@ async function me(req, res, next) {
     }
 }
 
-
-module.exports = { register, login, me };
+module.exports = {
+    register,
+    login,
+    me
+};
