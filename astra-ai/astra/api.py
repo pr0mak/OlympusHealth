@@ -4,6 +4,12 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import os
 
+from .health_forecast import ForecastRequest, forecast_health
+from .health_mpc import (
+    HealthMPCRequest,
+    optimize_health_exercise,
+    compare_exercise_fatigue
+)
 from .charts import router as charts_router
 from .integration import router as integration_router
 from .adaptive_ai import router as adaptive_ai_router
@@ -53,6 +59,30 @@ def optimize_endpoint(req: OptimizeRequest):
     except (RuntimeError, ValueError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
+
+@app.post("/api/v1/health-mpc")
+def health_mpc_endpoint(req: HealthMPCRequest):
+    try:
+        return optimize_health_exercise(req)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=str(exc)
+        ) from exc
+
+@app.post("/api/v1/exercise-impact")
+def exercise_impact_endpoint(req: HealthMPCRequest):
+    try:
+        return compare_exercise_fatigue(req)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=str(exc)
+        ) from exc
+        
+@app.post("/api/v1/health-forecast")
+def health_forecast_endpoint(req: ForecastRequest):
+    return forecast_health(req)
 
 @app.get("/reference/bmd")
 def bmd_reference(days: int = 180, initial_bmd_g_cm2: float | None = None):

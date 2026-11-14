@@ -13,6 +13,7 @@ const dashboardRoutes = require("./routes/DashboardRoutes");
 const healthRoutes = require("./routes/HealthRoutes");
 const projectionRoutes = require("./routes/projectionRoutes");
 const assistantRoutes = require("./routes/assistantRoutes");
+const futureProjectionRoutes = require("./routes/FutureProjectionRoutes");
 
 // Middleware
 const verifyToken = require("./middleware/authMiddleware");
@@ -21,9 +22,11 @@ const errorHandler = require("./middleware/errorHandler");
 const app = express();
 
 // CORS
-app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173"
-}));
+app.use(
+    cors({
+        origin: process.env.FRONTEND_URL || "http://localhost:5173"
+    })
+);
 
 // Body parsers
 app.use(express.json({ limit: "16kb" }));
@@ -72,11 +75,18 @@ app.use(
     healthRoutes
 );
 
-// Future Projection - Protected
+// Existing scientific projection - Protected
 app.use(
     "/api/projection",
     verifyToken,
     projectionRoutes
+);
+
+// NEW: MySQL-based Future Projection - Protected
+app.use(
+    "/api/future-projection",
+    verifyToken,
+    futureProjectionRoutes
 );
 
 // AI Assistant - Protected
@@ -85,14 +95,22 @@ app.use(
     verifyToken,
     assistantRoutes
 );
-
+app.use(
+  "/api/future-projection",
+  verifyToken,
+  futureProjectionRoutes
+);
 // Dashboard - Protected
 app.use(
     "/api",
     verifyToken,
     dashboardRoutes
 );
-
+app.use(
+  "/api/future-projection",
+  verifyToken,
+  futureProjectionRoutes
+);
 // 404 Handler
 app.use((req, res) => {
     return res.status(404).json({
