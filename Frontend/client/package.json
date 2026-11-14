@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check:anatomy": "node scripts/check-anatomy.mjs"
+    "check:anatomy": "node scripts/check-anatomy.mjs",
+    "check:muscles": "node scripts/check-muscle-status.mjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

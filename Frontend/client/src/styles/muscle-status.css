@@ -1,0 +1,141 @@
+.overview-sidebar {
+  min-width: 0;
+  width: 100%;
+  align-self: start;
+}
+.sidebar-surface { min-width: 0; }
+.sidebar-view[hidden] { display: none; }
+.overview-sidebar[data-phase="exiting"] .sidebar-surface {
+  animation: sidebar-exit 320ms cubic-bezier(0.4, 0, 1, 1) both;
+  pointer-events: none;
+}
+.overview-sidebar[data-phase="entering"] .sidebar-surface {
+  animation: sidebar-enter 440ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+/* Re-entering widgets use the sidebar slide, not the initial page sequence. */
+.home-overview[data-assembled="true"] .overview-sidebar[data-interacted="true"] .widget {
+  animation: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+.muscle-status {
+  padding: 1.35rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 14px;
+  background: linear-gradient(145deg, #132430, #0a101af5 75%);
+  box-shadow: 0 16px 42px #00000026;
+}
+.muscle-status-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.muscle-status-topline .eyebrow { margin: 0; }
+.muscle-status-demo {
+  flex-shrink: 0;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+}
+.muscle-status h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+.muscle-status-subtitle {
+  margin: 0.45rem 0 1.2rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+.muscle-recovery {
+  padding: 1rem;
+  margin-top: 1.2rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 10px;
+  background: var(--accent-dim);
+}
+.muscle-recovery-label { color: var(--text-secondary); font-size: 0.75rem; }
+.muscle-recovery p { margin: 0.4rem 0; }
+.muscle-recovery strong {
+  color: var(--cyan);
+  font: 500 2.6rem/1.15 "SFMono-Regular", Consolas, monospace;
+}
+.muscle-recovery p > span { color: var(--text-secondary); font-size: 0.95rem; }
+.muscle-recovery-caption { color: var(--text-muted); font-size: 0.65rem; }
+.muscle-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0.9rem 0;
+}
+.muscle-metric {
+  --metric-accent: var(--cyan);
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #08111b80;
+}
+.muscle-metric--soreness { --metric-accent: var(--health); }
+.muscle-metric--fatigue { --metric-accent: var(--violet); }
+.muscle-metric--endurance { --metric-accent: var(--amber); }
+.muscle-metric dt { color: var(--text-secondary); font-size: 0.72rem; }
+.muscle-metric dd {
+  margin: 0.55rem 0 0.7rem;
+  color: var(--metric-accent);
+  font: 500 1.7rem/1 "SFMono-Regular", Consolas, monospace;
+}
+.muscle-metric dd > span { color: var(--text-muted); font-size: 0.7rem; font-weight: 400; }
+.muscle-metric-track { height: 3px; overflow: hidden; border-radius: 99px; background: var(--border); }
+.muscle-metric-track span { display: block; height: 100%; background: var(--metric-accent); border-radius: inherit; }
+.muscle-status-footnote { margin: 1rem 0; color: var(--text-muted); font-size: 0.65rem; line-height: 1.6; }
+.muscle-status-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.muscle-status-back:hover { border-color: var(--cyan); background: #17303d; }
+
+@keyframes sidebar-exit {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100vw); opacity: 0; }
+}
+@keyframes sidebar-enter {
+  from { transform: translateX(100vw); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@media (max-width: 400px) {
+  .muscle-status { padding: 1rem; }
+  .muscle-metric { padding: 0.75rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overview-sidebar[data-phase] .sidebar-surface {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+  @keyframes sidebar-exit {
+    from { opacity: 1; }
+    to { opacity: 1; }
+  }
+  @keyframes sidebar-enter {
+    from { opacity: 1; }
+    to { opacity: 1; }
+  }
+}
