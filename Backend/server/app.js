@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const dashboardRoutes = require("./routes/DashboardRoutes");
 const verifyToken = require("./middleware/authMiddleware");
+const healthRoutes = require("./routes/HealthRoutes");
 
 const app = express();
 
@@ -54,9 +55,10 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-// Authentication Routes
+// Routes
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api", verifyToken, dashboardRoutes);
+app.use("/api/health", verifyToken, healthRoutes);
 
 // 404 Handler
 app.use((req, res) => {
