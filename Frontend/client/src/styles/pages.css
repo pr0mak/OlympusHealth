@@ -457,3 +457,12 @@ tbody tr:last-child > * {
     gap: 0.3rem;
   }
 }
+
+/* ASTRA authentication integration */
+.account-logout { color: inherit; cursor: pointer; font-size: inherit; }
+.account-muted { color: #a8b9bd; font-size: .8rem; }
+.auth-form button:disabled { cursor: wait; opacity: .65; }
+.auth-notice { width: min(100% - 3rem, 480px); margin: 1.25rem auto 0; color: #b6f4e4; text-align: center; }
+.account-profile { display: grid; grid-template-columns: minmax(0, 90px) minmax(0, 1fr); gap: 1rem; margin-top: 2rem; font-size: .9rem; }
+.account-profile dt { color: #91c7be; }
+.account-profile dd { margin: 0; overflow-wrap: anywhere; }
