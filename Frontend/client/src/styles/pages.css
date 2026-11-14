@@ -75,7 +75,7 @@
   .home-overview .anatomy-viewer {
     height: var(--overview-model-height);
   }
-  .home-overview .widget-stack {
+  .home-overview .overview-sidebar {
     width: 100%;
     max-width: 380px;
     margin-top: var(--overview-head-inset);

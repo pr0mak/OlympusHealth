@@ -9,6 +9,7 @@ import {
 
 import Widget from "../components/Widget.jsx";
 import HealthDataPreview from "../components/HealthDataPreview.jsx";
+import OverviewSidebar from "../components/OverviewSidebar.jsx";
 import TrendChart from "../components/TrendChart.jsx";
 import { createProjection, heartRate } from "../data/mockHealth.js";
 
@@ -19,10 +20,15 @@ const AnatomyViewer = lazy(
 );
 
 export default function Home() {
+  const [selectedPart, setSelectedPart] = useState(null);
   const [assembled, setAssembled] = useState(false);
 
   const assemblePage = useCallback(() => {
     setAssembled(true);
+  const assemblePage = useCallback(() => setAssembled(true), []);
+  const clearSelection = useCallback(() => {
+    setSelectedPart(null);
+    document.getElementById("anatomy-viewport")?.focus({ preventScroll: true });
   }, []);
 
   useEffect(() => {
@@ -52,7 +58,11 @@ export default function Home() {
             />
           }
         >
-          <AnatomyViewer onModelReady={assemblePage} />
+          <AnatomyViewer
+            onModelReady={assemblePage}
+            selected={selectedPart?.key ?? null}
+            onSelectionChange={setSelectedPart}
+          />
         </Suspense>
 
         <aside
@@ -118,6 +128,43 @@ export default function Home() {
           </Widget>
 
         </aside>
+        <OverviewSidebar
+          selection={["muscles", "skeleton", "organs"].includes(selectedPart?.system) ? selectedPart : null}
+          onClear={clearSelection}
+        >
+          <div className="widget-stack">
+            <Widget id="health-data" title="Health Data" to="/health-data">
+              <HealthDataPreview />
+            </Widget>
+            <Widget
+              id="mission-assistant"
+              title="Mission Assistant"
+              to="/mission-assistant"
+            >
+              <p className="preview-title">Your mission workspace</p>
+              <p className="preview-copy">
+                Review your daily check-in and explore your health overview.
+              </p>
+            </Widget>
+            <Widget
+              id="future-projection"
+              title="Future Projection"
+              to="/future-projection"
+            >
+              <div className="preview-metric">
+                <strong>
+                  7 <small>days</small>
+                </strong>
+                <span>Illustrative outlook</span>
+              </div>
+              <TrendChart
+                values={createProjection()}
+                label="Illustrative activity index"
+                compact
+              />
+            </Widget>
+          </div>
+        </OverviewSidebar>
       </div>
     </main>
   );
