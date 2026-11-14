@@ -1,7 +1,8 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import Widget from "../components/Widget.jsx";
+import HealthDataPreview from "../components/HealthDataPreview.jsx";
 import TrendChart from "../components/TrendChart.jsx";
-import { createProjection, heartRate } from "../data/mockHealth.js";
+import { createProjection } from "../data/mockHealth.js";
 import "../styles/anatomy.css";
 
 const AnatomyViewer = lazy(
@@ -33,17 +34,7 @@ export default function Home() {
         </Suspense>
         <aside className="widget-stack" aria-label="Health and mission widgets">
           <Widget id="health-data" title="Health Data" to="/health-data">
-            <div className="preview-metric">
-              <strong>
-                72 <small>bpm</small>
-              </strong>
-              <span>Heart rate · Demo</span>
-            </div>
-            <TrendChart
-              values={heartRate}
-              label="Sample heart rate in beats per minute"
-              compact
-            />
+            <HealthDataPreview />
           </Widget>
           <Widget
             id="mission-assistant"
