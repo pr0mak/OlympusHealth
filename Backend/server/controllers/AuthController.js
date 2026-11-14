@@ -120,9 +120,12 @@ async function login(req, res, next) {
     }
 }
 
+
 async function me(req, res, next) {
     try {
-        const user = await User.findById(req.user.id);
+        const userId = req.user.id;
+
+        const user = await User.findById(userId);
 
         if (!user) {
             return res.status(404).json({
@@ -131,11 +134,16 @@ async function me(req, res, next) {
             });
         }
 
-        return res.json({
+        return res.status(200).json({
             success: true,
             user: {
-                ...user,
-                id: String(user.id)
+                id: String(user.id),
+                firstname: user.firstname,
+                lastname: user.lastname,
+                phone: user.phone,
+                email: user.email,
+                role: user.role,
+                createdAt: user.created_at
             }
         });
 
@@ -143,5 +151,6 @@ async function me(req, res, next) {
         next(error);
     }
 }
+
 
 module.exports = { register, login, me };
