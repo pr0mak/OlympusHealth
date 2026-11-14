@@ -21,3 +21,13 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP
 );
+
+create TABLE user_health_diagnostics (
+    id BIGINT UNSIGNED ,
+    health_dignostic ENUM('radiation_level','Bone_Density'),
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+);
+
+
+
