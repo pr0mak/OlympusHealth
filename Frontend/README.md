@@ -30,4 +30,74 @@ npm run dev
 - `src/pages/`: σελίδες της εφαρμογής.
 - `src/context/`: React context providers.
 
+## Pages and routing
+
+React Router provides separate full-page views at `/`, `/register`, `/sign-in`,
+`/health-data`, `/mission-assistant`, and `/future-projection`.
+Home widgets link to their matching detail pages. Account forms are frontend
+previews only; they do not send or store credentials or create a session.
+Health measurements and scenario projections are mock data.
+
+For production static hosting, configure an SPA fallback that serves `index.html`
+for application routes. This lets refreshes and direct links to nested URLs work.
+
+## 3D anatomy viewer
+
+The overview lazily loads `src/components/anatomy/AnatomyViewer.jsx`.
+It uses React Three Fiber, Three.js, and Drei with a locally served Meshopt GLB.
+No Blender setup, remote model URL, or decoder CDN is required at runtime.
+
+- Switch between Muscles, Skeleton, and Organs. A faint skeleton provides context
+  for the muscle and organ views.
+- Drag to rotate and scroll/pinch to zoom.
+- Hover to identify a region, then click directly on the model to select and
+  smoothly frame it. The viewer exposes only the three layer buttons below the
+  model; it has no heading, border, dropdown, or extra camera controls.
+- Click empty canvas space, double-click the viewer, press Escape while the
+  viewer is focused, or click a layer button to return to its full-body view.
+- Selection is lifted to Home's React state and displayed in the Health Data
+  widget. Its vital readings remain global mock data, not measurements of that
+  selected structure.
+
+`AnatomyScene.jsx` clones the cached scene, assigns materials per mesh, controls
+layer visibility and pointer events, and frames selection using bounding boxes.
+`src/data/anatomy.js` maps asset mesh names to the licensed catalog.
+The model has some grouped structures, such as upper-arm muscles and lumbar spine.
+It is generic reference anatomy and does not represent an individual crew member.
+
+Attribution and CC BY 4.0 license links are available in the page footer. Source revision,
+asset checksum, and original notices are in `public/models/anatomy/`.
+The GLB is approximately 7.6 MB. Rendering is on demand and pixel ratio is capped
+at 1.5. Full-body rendering still needs WebGL and a capable graphics device.
+
+Run `npm run check:anatomy` to verify the source checksum, real Meshopt decoding,
+catalog mappings, selectable core structures, model dimensions, and license files.
+
+### Muscle selection regions
+
+The Muscles layer exposes exactly nine selection IDs. Configure their original
+mesh members in `src/data/muscleGroups.js`; the GLB stays unchanged.
+
+| Selection ID | Label |
+| --- | --- |
+| `left_arm` | Left arm |
+| `right_arm` | Right arm |
+| `chest` | Chest |
+| `abdominals` | Abdominals |
+| `left_upper_leg` | Left leg above the knee |
+| `right_upper_leg` | Right leg above the knee |
+| `left_lower_leg` | Left leg below the knee |
+| `right_lower_leg` | Right leg below the knee |
+| `neck` | Neck |
+
+Left/right refer to the body's anatomical sides. Arms include shoulders and hands;
+upper legs include thigh, hip-flexor, and gluteal muscles; lower legs include feet.
+Chest includes the pectoral and intercostal muscles. Unlisted back, trapezius,
+diaphragm, and pelvic-floor meshes remain visible but are not selectable.
+
+Hovering, clicking, and camera framing operate on the entire region.
+The Health Data widget receives that region's ID and label via `onSelectionChange`.
+Skeleton and Organs keep their existing selections. The asset check also verifies
+group membership, anatomical sides, missing meshes, and duplicate assignments.
+
 Χρησιμοποίησε σύγχρονη έκδοση Node.js LTS συμβατή με το Vite. Το setup ελέγχθηκε με Node.js 24.
