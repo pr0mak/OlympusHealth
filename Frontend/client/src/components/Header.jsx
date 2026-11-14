@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Link,
@@ -61,12 +60,14 @@ export default function Header({ showMission = false }) {
 
         ) : user ? (
           <>
-            <NavLink
-              className="register-link"
-              to="/profile"
-            >
-              {user.username}
-            </NavLink>
+            <p className="welcome-text">
+              Welcome{" "}
+              <span>
+                <Link to="/profile" className="username-link">
+                  {user.username}
+                </Link>
+              </span>
+            </p>
 
             <button
               className="sign-in-link account-logout"

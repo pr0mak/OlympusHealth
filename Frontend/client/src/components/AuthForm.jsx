@@ -57,9 +57,9 @@ export default function AuthForm({ register = false }) {
           values.password
         );
 
-        navigate("/profile", {
-          replace: true
-        });
+      navigate("/", {
+        replace: true
+      });
       }
 
     } catch (err) {

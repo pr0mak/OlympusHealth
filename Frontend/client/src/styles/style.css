@@ -200,6 +200,27 @@ summary:focus-visible {
   gap: 1.8rem;
   font-size: 0.875rem;
 }
+
+.welcome-text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  white-space: nowrap;
+  color: white;
+}
+
+.username-link {
+  color: var(--cyan);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.username-link:hover {
+  color: rgb(40, 135, 190);
+  text-decoration: underline;
+}
+
 .register-link {
   color: var(--text-secondary);
   transition: color 160ms ease;
@@ -333,6 +354,33 @@ h1 {
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
+
+.profile-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.profile-heading h1 {
+  margin: 0;
+}
+
+.profile-logo {
+  width: 85px;
+  height: 85px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 480px) {
+  .profile-logo {
+    width: 55px;
+    height: 55px;
+  }
+}
+
 .page-footer {
   display: flex;
   flex-wrap: wrap;

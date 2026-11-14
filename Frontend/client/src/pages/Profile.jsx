@@ -37,9 +37,15 @@ export default function Profile() {
           Authenticated astronaut
         </p>
 
-        <h1>
-          Welcome, {user.username}!
-        </h1>
+        <div className="profile-heading">
+          <h1>Welcome, {user.username}!</h1>
+
+          <img
+            src="/astropic.png"
+            alt="Astronaut logo"
+            className="profile-logo"
+          />
+        </div>
 
         <p className="muted-copy">
           Your account information is loaded
@@ -66,12 +72,6 @@ export default function Profile() {
           <dd>{user.age} years</dd>
         </dl>
 
-        <Link
-          to="/future-projection"
-          className="primary-button"
-        >
-          Explore Future Projection
-        </Link>
       </section>
     </main>
   );
