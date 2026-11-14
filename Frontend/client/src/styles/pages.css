@@ -45,10 +45,27 @@
 }
 .home-overview .widget {
   border: 1px solid var(--accent);
+  min-height: 0;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
 }
 .home-overview .widget::before {
   display: none;
 }
+.home-overview .widget-stack {
+  gap: 0.75rem;
+  align-self: start;
+}
+.home-overview .widget-preview {
+  margin-block: 0.4rem;
+  min-height: 0;
+}
+.home-overview .widget-open { padding-top: 0.5rem; }
+.home-overview .preview-metric strong { font-size: 1.8rem; }
+.home-overview .preview-title { margin-bottom: 0.3rem; font-size: 1rem; }
+.home-overview .preview-copy { line-height: 1.6; }
+.home-overview .trend-chart--compact { margin-top: 0.4rem; }
+.home-overview .trend-chart--compact svg { height: 28px; }
 @media (min-width: 761px) {
   .home-overview {
     --overview-model-height: clamp(620px, calc(100svh - 220px), 860px);
@@ -59,24 +76,11 @@
     height: var(--overview-model-height);
   }
   .home-overview .widget-stack {
-    height: calc(var(--overview-model-height) - var(--overview-head-inset));
+    width: 100%;
+    max-width: 380px;
     margin-top: var(--overview-head-inset);
-    grid-template-rows: repeat(3, minmax(0, 1fr));
-    align-self: start;
+    justify-self: end;
   }
-  .home-overview .widget {
-    min-height: 0;
-    padding-block: 0.9rem;
-  }
-  .home-overview .widget-header,
-  .home-overview .widget-open { flex-shrink: 0; }
-  .home-overview .widget-preview {
-    margin-block: 0.5rem;
-    min-height: 0;
-    overflow: auto;
-  }
-  .home-overview .preview-metric strong { font-size: 2.2rem; }
-  .home-overview .trend-chart--compact svg { height: 32px; }
 }
 .widget-header {
   align-items: center;
@@ -510,7 +514,7 @@ tbody tr:last-child > * {
 }
 
 /* ASTRA authentication integration */
-.account-logout { color: inherit; cursor: pointer; font-size: inherit; }
+.account-logout { cursor: pointer; font-size: inherit; }
 .account-muted { color: #a8b9bd; font-size: .8rem; }
 .auth-form button:disabled { cursor: wait; opacity: .65; }
 .auth-notice { width: min(100% - 3rem, 480px); margin: 1.25rem auto 0; color: #b6f4e4; text-align: center; }
