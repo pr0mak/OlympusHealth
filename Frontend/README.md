@@ -49,7 +49,14 @@ No Blender setup, remote model URL, or decoder CDN is required at runtime.
 
 - Switch between Muscles, Skeleton, and Organs. A faint skeleton provides context
   for the muscle and organ views.
-- Drag to rotate and scroll/pinch to zoom.
+- Drag sideways to rotate around the upright body. Vertical tilt is locked.
+- Panning is disabled. Zoom-out stops at the original fitted full-body scale for
+  the current viewport and restores the centered orbit target when it settles.
+  Cursor-focused closeups remain available while zoomed in.
+- Mouse-wheel/trackpad zoom follows the cursor only while it intersects visible
+  model geometry, so pointing at the chest or feet zooms toward that area.
+  Wheel gestures over blank canvas space scroll the page normally. Hidden layers cannot
+  activate zoom. Touch pinch remains available.
 - Hover to identify a region, then click directly on the model to select and
   smoothly frame it. The viewer exposes only the three layer buttons below the
   model; it has no heading, border, dropdown, or extra camera controls.
