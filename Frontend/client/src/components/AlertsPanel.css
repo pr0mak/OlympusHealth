@@ -1,0 +1,20 @@
+.astra-alert-widget{border:1px solid #718899;border-radius:12px;background:rgba(15,22,33,.93);color:#e8eef3;overflow:hidden}
+.astra-alert-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.astra-alert-toggle:hover{background:rgba(255,255,255,.04)}
+.astra-alert-toggle:focus-visible{outline:2px solid #a9d6ee;outline-offset:-3px}
+.astra-alert-toggle>span:first-child{display:flex;flex-direction:column;gap:8px}
+.astra-alert-heading{font-size:12px;letter-spacing:.13em;font-weight:700}
+.astra-alert-subtitle{font-size:13px;color:#aab8c8}
+.astra-alert-list{border-top:1px solid #2c3c4c;padding:16px 22px 20px;max-height:370px;overflow-y:auto}
+.astra-alert-list p{line-height:1.55}
+.astra-alert-summary{color:#b4c4d1;font-size:13px;margin:0 0 16px}
+.astra-alert-group{margin:0 0 17px}
+.astra-alert-level{margin:0 0 10px;font-weight:600;font-size:13px}
+.astra-alert-level--high{color:#f5a5a9}
+.astra-alert-level--medium{color:#efd09b}
+.astra-alert-level--low{color:#b6cddd}
+.astra-alert-item{padding:10px 0;border-top:1px solid #2a3949}
+.astra-alert-item strong{font-size:13px}
+.astra-alert-item p{margin:6px 0;color:#bdc9d5;font-size:12px}
+.astra-alert-item small{color:#879aab;font-size:11px}
+.astra-alert-disclaimer{border-top:1px solid #2a3949;margin:12px 0 0;padding-top:12px;font-size:11px;color:#8fa2b2}

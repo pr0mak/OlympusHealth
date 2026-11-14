@@ -10,6 +10,7 @@ import MissionAssistant from './pages/MissionAssistant.jsx';
 import FutureProjection from './pages/FutureProjection.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Profile from './pages/Profile.jsx';
+import Alerts from "./pages/Alerts.jsx";
 
 const pageTitles = {
   '/': 'Overview',
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/health-data" element={<HealthData />} />
         <Route path="/mission-assistant" element={<MissionAssistant />} />
         <Route path="/future-projection" element={<FutureProjection />} />
+        <Route path="/alerts" element={<Alerts />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <footer className="page-footer">
