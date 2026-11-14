@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ASTRA | Bone Health & Exercise Planner</title>
+  <link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+ <main class="app">
+  <header class="topbar">
+    <div class="brand"><div class="orb" aria-hidden="true">✦</div><div><span class="eyebrow">ASTRA / HEALTH INTELLIGENCE</span><h1>Bone Health & Exercise Planner</h1><p class="subdued">Evidence-based charts with a simple explanation below each result.</p></div></div>
+    <span class="header-pill">NO FABRICATED MEASUREMENTS · RESEARCH DEMONSTRATOR</span>
+  </header>
+  <div class="layout">
+   <aside class="panel settings">
+    <div class="panel-title"><span>01 / MODEL INPUTS</span></div>
+    <h2>Explore a mission</h2>
+    <p class="subdued small">No personal medical record is loaded by default. A preflight DXA value is optional and remains user-provided, not verified.</p>
+    <form method="get" action="/charts">__FORM__<button type="submit">Update projections</button></form>
+    <p class="side-link"><a href="/docs">Open API documentation ↗</a></p>
+   </aside>
+   <section class="content">
+    <div class="hero panel">
+     <div class="eyebrow accent">YOUR MISSION HEALTH OVERVIEW</div>
+     <h2 id="brief-headline">The research model projects bone-density loss during the mission.</h2>
+     <p id="brief-intro" class="hero-paragraph"></p>
+     <div class="provenance"><span class="dot"></span> <span id="brief-evidence">Literature-based estimate · Not a patient measurement</span></div>
+     <div class="hero-stats">
+      <div><span class="muted-label">Projected BMD change</span><strong id="headline-loss">—</strong><small>Population model · femoral neck</small></div>
+      <div><span class="muted-label">Mission horizon</span><strong id="headline-days">—</strong><small>Days</small></div>
+      <div><span class="muted-label">Verified personal bone scans</span><strong id="headline-scans">0</strong><small>Not linked</small></div>
+     </div>
+    </div>
+    <section class="science" id="scientific-details"><div class="science-heading"><div><span class="eyebrow accent">02 / LIVE CHARTS</span><h2>Bone Health & Exercise Planner</h2><p class="subdued small">Three bone-health dimensions, plus your 7-day MPC exercise plan. Simple interpretations appear under each chart.</p></div></div>
+      <div class="science-grid">
+       <section class="panel"><h3>Bone Density: literature baseline</h3><div class="status">Axpe et al. (2020) · Population curve, not an individual measurement.</div><canvas class="chart" id="bmd" role="img" aria-label="Bone density literature baseline chart"></canvas><div class="legend">Projected % of preflight BMD · no exercise effect assumed</div><div class="interpretation"><strong>What this means</strong><p id="bmd-meaning"></p></div></section>
+       <section class="panel"><h3>T-score (optional)</h3><div class="status">Requires user-provided preflight femoral-neck DXA BMD. Not a measured daily T-score.</div><canvas class="chart" id="tscore" role="img" aria-label="Calculated T-score forecast"></canvas><div class="legend">Model-derived using a specific reference population</div><div class="interpretation"><strong>What this means</strong><p id="tscore-meaning"></p></div></section>
+       <section class="panel"><h3>MPC: 7-day exercise schedule</h3><div class="status">Experimental schedule, not a medical prescription or an exercise-to-BMD model.</div><canvas class="chart" id="exercise" role="img" aria-label="Resistance and aerobic exercise plan"></canvas><div class="legend"><span class="legend-dot mint"></span> Resistance &nbsp; <span class="legend-dot blue"></span> Aerobic</div><div class="interpretation"><strong>What this means</strong><p id="exercise-meaning"></p></div></section>
+       <section class="panel"><h3>Planned exercise sessions</h3><div id="sessions" class="sessions"></div><div class="interpretation"><strong>What this means</strong><p id="sessions-meaning">This is a planned schedule, not an exercise prescription. The MPC does not yet predict the effect on bone density.</p></div></section>
+       <section class="panel"><h3>Bone Quality — Published ISS Study</h3>
+         <p class="status">TBone · Gabel et al. (2022) · 17 ISS astronauts · distal tibia · HR-pQCT</p>
+         <label class="study-control">Published structural indicator
+           <select id="quality-study" aria-label="TBone published Bone Quality indicator"></select>
+         </label>
+         <div class="study-source">Published group median % change relative to preflight · Return / 6 / 12 months after landing</div>
+         <canvas class="chart" id="quality-study-chart" role="img" aria-label="TBone published group median changes in distal tibia bone quality"></canvas>
+         <div class="interpretation"><strong>What this means</strong><p id="quality-study-meaning"></p></div>
+         <div class="study-source"><strong>NEW · Mathematical recovery curve (R+0 to R+12 months)</strong> · interpolated group medians, not daily astronaut measurements.</div>
+         <label class="study-control">Mathematical curve
+           <select id="quality-dynamics-method" aria-label="Postflight recovery mathematical model">
+             <option value="pchip">PCHIP interpolation · all indicators</option>
+             <option value="exponential">Exponential fit · when eligible</option>
+           </select>
+         </label>
+         <canvas class="chart" id="quality-dynamics-chart" role="img" aria-label="Descriptive postflight recovery curve with measured TBone group medians"></canvas>
+         <div class="legend"><span class="legend-dot mint"></span> Model interpolation &nbsp; <span class="legend-dot blue"></span> Published group observations</div>
+         <label class="study-control">Explore days after return <input id="quality-dynamics-day" type="range" min="0" max="365" step="1" value="90"></label>
+         <p id="quality-dynamics-value" class="status"></p>
+         <div class="interpretation"><strong>What this means</strong><p id="quality-dynamics-meaning"></p></div>
+         <p class="status">Source: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/" target="_blank" rel="noopener noreferrer">Gabel et al. 2022, Table 1 ↗</a> · Published group medians, not this astronaut’s scans. No individual predictions.</p>
+         <details class="csv-help"><summary>My own structural measurements (optional CSV)</summary>
+           <p class="status">Separate, unverified user-supplied data. Never combined with the published group results.</p>
+           <select id="quality" aria-label="Personal Bone Quality metric"><option value="trabecular_vbmd_mg_cm3">Trabecular vBMD</option><option value="cortical_thickness_mm">Cortical thickness</option><option value="estimated_strength_n">Estimated strength</option></select>
+           <div id="quality-empty" class="status">No personal structural measurements loaded.</div>
+           <canvas class="chart" id="quality-chart" role="img" aria-label="User supplied bone quality values"></canvas>
+           <div class="interpretation"><strong>What this means</strong><p id="quality-meaning"></p></div>
+         </details>
+       </section>
+       <section class="panel"><h3>Bone Metabolism — Published ISS Study</h3>
+         <p class="status">TBone · Gabel et al. (2022) · Preflight lab results · n=8 recovered vs n=9 incomplete recovery of tibia BMD</p>
+         <label class="study-control">Published biomarker (each uses its own unit)
+           <select id="metabolism-study" aria-label="TBone published Bone Metabolism marker"></select>
+         </label>
+         <div class="study-source">Two group means measured <strong>before spaceflight</strong>. Groups classified by bone recovery at 12 months. Not an individual health assessment.</div>
+         <canvas class="chart" id="metabolism-study-chart" role="img" aria-label="TBone reported preflight biomarker group comparison"></canvas>
+         <div class="legend"><span class="legend-dot mint"></span> Recovered (n=8) &nbsp; <span class="legend-dot blue"></span> Incomplete (n=9)</div>
+         <div class="interpretation"><strong>What this means</strong><p id="metabolism-study-meaning"></p></div>
+         <details class="csv-help"><summary>Other published bone-metabolism findings (without invented numerical values)</summary><div id="metabolism-time-findings" class="study-time-findings"></div></details>
+         <p class="status">Source: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/" target="_blank" rel="noopener noreferrer">Gabel et al. 2022, Results and Fig. 4 ↗</a> · Published group values, not personal readings.</p>
+         <details class="csv-help"><summary>My own laboratory measurements (optional CSV, unverified)</summary><p class="status">Separate from the study values. CSV is only parsed in your browser.</p><select id="metabolism" aria-label="Bone Metabolism metric"><option value="ctx_ng_l">CTX</option><option value="p1np_ug_l">P1NP</option><option value="bone_alp_ug_l">Bone ALP</option><option value="calcium_mg_dl">Calcium</option><option value="pth_pg_ml">PTH</option></select><div id="metabolism-empty" class="status">No verified measurements loaded.</div><canvas class="chart" id="metabolism-chart" role="img" aria-label="User provided bone metabolism values"></canvas><div class="interpretation"><strong>What this means</strong><p id="metabolism-meaning"></p></div></details></section>
+      </div>
+     </section>
+
+    <section class="panel summary-panel" aria-labelledby="summary-title"><div class="eyebrow">03 / QUICK SUMMARY</div><h2 id="summary-title">What this means for you</h2>
+     <div class="summary-rows"><div class="summary-row"><span class="summary-symbol known">✓</span><div><h3>What we know</h3><p id="what-know"></p></div></div><div class="summary-row"><span class="summary-symbol unknown">?</span><div><h3>What we don’t know</h3><p id="what-unknown"></p></div></div><div class="summary-row"><span class="summary-symbol next">→</span><div><h3>What to check next</h3><p id="what-next"></p></div></div></div>
+    </section>
+    <section class="panel explainer" aria-labelledby="explainer-title"><div class="section-header"><div><span class="eyebrow accent">EVIDENCE EXPLAINER</span><h2 id="explainer-title">Ask about your results</h2></div><span class="status-pill missing">RULE-BASED · NOT AN LLM</span></div>
+     <p class="subdued small">Select a question for a plain-language explanation grounded in what is actually available.</p>
+     <div class="questions" role="group" aria-label="Choose a question"><button class="question-btn" type="button" data-topic="density">Why is BMD decreasing?</button><button class="question-btn" type="button" data-topic="quality">Do we have bone-quality scans?</button><button class="question-btn" type="button" data-topic="metabolism">What do the lab tests show?</button><button class="question-btn" type="button" data-topic="exercise">What does MPC do?</button><button class="question-btn" type="button" data-topic="limitations">What are the limitations?</button></div>
+     <div class="answer" role="status" aria-live="polite"><div class="answer-icon">✦</div><p id="answer-text">Choose a question above. No new medical facts will be generated.</p></div>
+    </section>
+     <section class="panel upload-panel"><div><div class="eyebrow">04 / OPTIONAL REAL-DATA INPUT</div><h2>Load sourced measurements</h2><p class="subdued small">Bone Quality and Bone Metabolism have separate published TBone group-results charts; personal measurements remain empty until data is provided. CSV files stay in this browser; nothing is uploaded. A source note is not proof that the data has been independently verified.</p></div><div class="upload-control"><input type="file" id="file" accept=".csv,text/csv" aria-label="Load local measurement CSV"><button type="button" id="clear" class="secondary-button">Clear</button></div><p id="uploadstatus" class="status">No observations loaded · no placeholder values</p><details class="csv-help"><summary>Required CSV columns</summary><code>day,source_type,source_note,ctx_ng_l</code><p class="status">Use source_type=measured and an identifiable source_note; optional metric names are in <a href="/bone-health/catalog">the API catalog</a>. Values are user-supplied and unverified unless separately checked.</p></details></section>
+     <footer><strong>Scientific transparency:</strong> the default BMD curve comes from a published population model. The published TBone Table 1 group medians are bundled for Bone Quality; no individual NASA astronaut QCT records or biomarker dataset is bundled; published preflight TBone group biomarkers are included. User-supplied measurements are unverified. Fatigue and training intensity are illustrative. No individual fracture risk, diagnosis, or treatment effect is calculated. <a href="https://doi.org/10.1371/journal.pone.0226434" target="_blank" rel="noopener noreferrer">BMD paper ↗</a></footer>
+   </section>
+  </div>
+ </main>
+ <script>const DATA=__DATA__;</script>
+ <script src="/assets/dashboard.js" defer></script>
+</body>
+</html>

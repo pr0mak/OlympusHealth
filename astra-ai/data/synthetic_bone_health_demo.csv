@@ -1,0 +1,6 @@
+day,source_type,source_note,trabecular_vbmd_mg_cm3,cortical_thickness_mm,estimated_strength_n,ctx_ng_l,p1np_ug_l,bone_alp_ug_l,calcium_mg_dl,pth_pg_ml
+0,synthetic,ILLUSTRATIVE ONLY - not NASA measurements,180,3.2,7200,350,50,14,9.5,40
+30,synthetic,ILLUSTRATIVE ONLY - not NASA measurements,177,3.18,7150,390,49,14.5,9.6,42
+60,synthetic,ILLUSTRATIVE ONLY - not NASA measurements,172,3.16,7030,415,48,15,9.5,43
+90,synthetic,ILLUSTRATIVE ONLY - not NASA measurements,167,3.12,6920,425,47,15.2,9.4,44
+180,synthetic,ILLUSTRATIVE ONLY - not NASA measurements,158,3.08,6700,450,46,15.5,9.6,45
