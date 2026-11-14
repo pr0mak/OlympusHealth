@@ -11,7 +11,7 @@ import {
 export default function HealthData() {
   const [period, setPeriod] = useState("day");
   return (
-    <main className="dashboard detail-page" id="main-content" tabIndex={-1}>
+    <main className="dashboard detail-page health-data-page" id="main-content" tabIndex={-1}>
       <PageHeading
         title="Health Data"
         description="Explore your measurements and trends in one place."

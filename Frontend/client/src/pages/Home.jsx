@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import Widget from "../components/Widget.jsx";
 import TrendChart from "../components/TrendChart.jsx";
 import { createProjection, heartRate } from "../data/mockHealth.js";
@@ -10,8 +10,17 @@ const AnatomyViewer = lazy(
 
 export default function Home() {
   const [selectedPart, setSelectedPart] = useState(null);
+  const [assembled, setAssembled] = useState(false);
+  const assemblePage = useCallback(() => setAssembled(true), []);
+
+  useEffect(() => {
+    if (assembled) return;
+    // Keep the overview usable even when the model is slow or cannot load.
+    const fallback = window.setTimeout(assemblePage, 1800);
+    return () => window.clearTimeout(fallback);
+  }, [assembled, assemblePage]);
   return (
-    <main className="dashboard" id="main-content" tabIndex={-1}>
+    <main className="dashboard home-overview" data-assembled={assembled} id="main-content" tabIndex={-1}>
       <div className="dashboard-grid">
         <Suspense
           fallback={
@@ -21,7 +30,7 @@ export default function Home() {
             />
           }
         >
-          <AnatomyViewer onSelectionChange={setSelectedPart} />
+          <AnatomyViewer onSelectionChange={setSelectedPart} onModelReady={assemblePage} />
         </Suspense>
         <aside className="widget-stack" aria-label="Health and mission widgets">
           <Widget id="health-data" title="Health Data" to="/health-data">

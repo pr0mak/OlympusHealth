@@ -5,7 +5,7 @@ import { ANATOMY_LAYERS, anatomyByKey, MODEL_URL } from '../../data/anatomy.js';
 import AnatomyScene from './AnatomyScene.jsx';
 import ViewerErrorBoundary from './ViewerErrorBoundary.jsx';
 
-export default function AnatomyViewer({ onSelectionChange }) {
+export default function AnatomyViewer({ onSelectionChange, onModelReady }) {
   const [layer, setLayer] = useState('muscles');
   const [selected, setSelected] = useState(null);
   const [hoveredLabel, setHoveredLabel] = useState(null);
@@ -15,7 +15,10 @@ export default function AnatomyViewer({ onSelectionChange }) {
   const controlsRef = useRef(null);
   const viewportRef = useRef(null);
   const { progress } = useProgress();
-  const onReady = useCallback(() => setReady(true), []);
+  const onReady = useCallback(() => {
+    setReady(true);
+    onModelReady?.();
+  }, [onModelReady]);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -42,7 +45,7 @@ export default function AnatomyViewer({ onSelectionChange }) {
   }
 
   return (
-    <section className="anatomy-viewer" aria-label="Interactive 3D anatomy viewer">
+    <section className="anatomy-viewer" data-model-ready={ready} aria-label="Interactive 3D anatomy viewer">
       <ViewerErrorBoundary key={attempt} onRetry={retry}>
         <div ref={viewportRef} className={`anatomy-viewport${hoveredLabel ? ' anatomy-viewport--hover' : ''}`}
           tabIndex={0} role="group" aria-label="Anatomy model. Click a region to select it; press Escape to return to the full body."

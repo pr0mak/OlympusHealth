@@ -1,0 +1,170 @@
+/* A single entrance sequence; all final positions remain the normal layout. */
+.site-header .brand-symbol {
+  animation: assemble-logo 1600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.site-header .brand-name {
+  animation: assemble-wordmark 1400ms 250ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.site-header .account-nav > a {
+  animation: assemble-header 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.site-header .account-nav > a:nth-child(1) {
+  animation-delay: 480ms;
+}
+.site-header .account-nav > a:nth-child(2) {
+  animation-delay: 760ms;
+}
+.page-footer {
+  animation: assemble-panel 1400ms 2400ms ease-out both;
+}
+
+.orbit-lines ellipse {
+  stroke-dasharray: 1;
+  animation: trace-orbit 3600ms cubic-bezier(0.25, 0.5, 0.3, 1) both;
+}
+.orbit-lines ellipse:nth-child(4n + 2) {
+  animation-delay: 200ms;
+}
+.orbit-lines ellipse:nth-child(4n + 3) {
+  animation-delay: 450ms;
+}
+.orbit-lines ellipse:nth-child(4n) {
+  animation-delay: 700ms;
+}
+.star-field {
+  animation: assemble-stars 2400ms 300ms ease-out both;
+}
+.star-glints {
+  animation: assemble-stars 2400ms 800ms ease-out both;
+}
+
+.anatomy-viewer[data-model-ready="true"] .anatomy-viewport {
+  animation: assemble-model 2600ms 100ms cubic-bezier(0.22, 0.65, 0.2, 1) both;
+}
+.anatomy-viewer[data-model-ready="false"] .anatomy-layers {
+  opacity: 0;
+  visibility: hidden;
+}
+.anatomy-viewer[data-model-ready="true"] .anatomy-layers {
+  animation: assemble-panel 1400ms 1800ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.home-overview[data-assembled="false"] .widget {
+  opacity: 0;
+  visibility: hidden;
+}
+.home-overview[data-assembled="true"] .widget {
+  animation: assemble-widget 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.home-overview[data-assembled="true"] .widget:nth-child(1) {
+  animation-delay: 900ms;
+}
+.home-overview[data-assembled="true"] .widget:nth-child(2) {
+  animation-delay: 1400ms;
+}
+.home-overview[data-assembled="true"] .widget:nth-child(3) {
+  animation-delay: 1900ms;
+}
+.detail-heading,
+.auth-card {
+  animation: assemble-panel 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes assemble-logo {
+  from {
+    opacity: 0;
+    transform: translateX(-32px) rotate(-90deg) scale(0.65);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0) scale(1);
+  }
+}
+@keyframes assemble-wordmark {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes assemble-header {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes assemble-model {
+  from {
+    opacity: 0;
+    transform: translateX(100vw);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes assemble-widget {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(26px);
+  }
+  1% {
+    visibility: visible;
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+@keyframes assemble-panel {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes trace-orbit {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes assemble-stars {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header .brand-symbol,
+  .site-header .brand-name,
+  .site-header .account-nav > a,
+  .page-footer,
+  .orbit-lines ellipse,
+  .star-field,
+  .star-glints,
+  .detail-heading,
+  .auth-card,
+  .anatomy-viewer[data-model-ready] .anatomy-viewport,
+  .anatomy-viewer[data-model-ready] .anatomy-layers,
+  .home-overview[data-assembled] .widget {
+    animation: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    stroke-dashoffset: 0;
+  }
+}

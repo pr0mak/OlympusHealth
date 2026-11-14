@@ -2,6 +2,18 @@
 
 React με JavaScript/JSX και Vite.
 
+## Visual theme
+
+The shared color tokens live in `src/styles/style.css`: deep blue-gray backgrounds,
+off-white typography, and red health, violet assistant, and amber projection accents.
+`OrbitalBackground.jsx` provides 16 orbit paths and a fixed star field with no pointer interaction.
+`src/styles/assembly.css` coordinates the slower entrance: model from beyond the right edge,
+staggered widgets, rotating logo, individual navigation links, footer, stars, and traced orbit lines.
+The model entrance lasts 2.6 seconds and starts after
+its asset is ready; widgets have a loading fallback. Reduced-motion preferences
+show everything immediately. Page and anatomy styles share the theme tokens while
+preserving the existing layout and viewer controls.
+
 ## Εκκίνηση
 
 Από τον φάκελο `Frontend`:
@@ -49,7 +61,14 @@ No Blender setup, remote model URL, or decoder CDN is required at runtime.
 
 - Switch between Muscles, Skeleton, and Organs. A faint skeleton provides context
   for the muscle and organ views.
-- Drag to rotate and scroll/pinch to zoom.
+- Drag sideways to rotate around the upright body. Vertical tilt is locked.
+- Panning is disabled. Zoom-out stops at the original fitted full-body scale for
+  the current viewport and restores the centered orbit target when it settles.
+  Cursor-focused closeups remain available while zoomed in.
+- Mouse-wheel/trackpad zoom follows the cursor only while it intersects visible
+  model geometry, so pointing at the chest or feet zooms toward that area.
+  Wheel gestures over blank canvas space scroll the page normally. Hidden layers cannot
+  activate zoom. Touch pinch remains available.
 - Hover to identify a region, then click directly on the model to select and
   smoothly frame it. The viewer exposes only the three layer buttons below the
   model; it has no heading, border, dropdown, or extra camera controls.
