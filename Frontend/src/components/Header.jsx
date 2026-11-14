@@ -1,59 +1,31 @@
-import { useRef, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import Icon from "./Icon.jsx";
 
 export default function Header() {
-  const dialogRef = useRef(null);
-  const [accountAction, setAccountAction] = useState("Sign in");
-
-  function openAccountNotice(event, action) {
-    event.preventDefault();
-    setAccountAction(action);
-    dialogRef.current.showModal();
-  }
-
   return (
-    <>
       <header className="site-header">
-        <a className="brand" href="#" aria-label="Mission Health home">
+        <Link className="brand" to="/" aria-label="Home">
           <span className="brand-symbol">
             <Icon name="orbit" />
           </span>
           <span className="brand-name">
             My<span>Logo</span>
           </span>
-        </a>
+        </Link>
         <nav className="account-nav" aria-label="Account">
-          <a
+          <NavLink
             className="register-link"
-            href="#register"
-            onClick={(event) => openAccountNotice(event, "Register")}
+            to="/register"
           >
             Register
-          </a>
-          <a
+          </NavLink>
+          <NavLink
             className="sign-in-link"
-            href="#sign-in"
-            onClick={(event) => openAccountNotice(event, "Sign in")}
+            to="/sign-in"
           >
             Sign in <span aria-hidden="true">↗</span>
-          </a>
+          </NavLink>
         </nav>
       </header>
-      <dialog
-        ref={dialogRef}
-        className="account-dialog"
-        aria-labelledby="account-dialog-title"
-      >
-        <p className="eyebrow">Account access</p>
-        <h2 id="account-dialog-title">{accountAction}</h2>
-        <p>
-          Account access is coming soon. You can explore the dashboard layout
-          while we prepare this feature.
-        </p>
-        <form method="dialog">
-          <button className="dialog-close">Back to dashboard</button>
-        </form>
-      </dialog>
-    </>
   );
 }

@@ -30,4 +30,15 @@ npm run dev
 - `src/pages/`: σελίδες της εφαρμογής.
 - `src/context/`: React context providers.
 
+## Pages and routing
+
+React Router provides separate full-page views at `/`, `/register`, `/sign-in`,
+`/health-data`, `/mission-assistant`, and `/future-projection`.
+Home widgets link to their matching detail pages. Account forms are frontend
+previews only; they do not send or store credentials or create a session.
+Health measurements and scenario projections are mock data.
+
+For production static hosting, configure an SPA fallback that serves `index.html`
+for application routes. This lets refreshes and direct links to nested URLs work.
+
 Χρησιμοποίησε σύγχρονη έκδοση Node.js LTS συμβατή με το Vite. Το setup ελέγχθηκε με Node.js 24.
