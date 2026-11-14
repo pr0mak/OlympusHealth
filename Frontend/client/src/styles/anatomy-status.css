@@ -1,3 +1,4 @@
+/* Shared layout and transitions for muscle, bone and organ details. */
 .overview-sidebar {
   min-width: 0;
   width: 100%;
@@ -19,22 +20,22 @@
   visibility: visible;
 }
 
-.muscle-status {
+.anatomy-status {
   padding: 1.35rem;
   border: 1px solid var(--accent-border);
   border-radius: 14px;
   background: linear-gradient(145deg, #132430, #0a101af5 75%);
   box-shadow: 0 16px 42px #00000026;
 }
-.muscle-status-topline {
+.anatomy-status-topline {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
-.muscle-status-topline .eyebrow { margin: 0; }
-.muscle-status-demo {
+.anatomy-status-topline .eyebrow { margin: 0; }
+.anatomy-status-demo {
   flex-shrink: 0;
   padding: 0.3rem 0.55rem;
   border: 1px solid var(--border-strong);
@@ -42,40 +43,40 @@
   color: var(--text-secondary);
   font-size: 0.65rem;
 }
-.muscle-status h2 {
+.anatomy-status h2 {
   margin: 0;
   font-size: 1.4rem;
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.025em;
 }
-.muscle-status-subtitle {
+.anatomy-status-subtitle {
   margin: 0.45rem 0 1.2rem;
   color: var(--text-muted);
   font-size: 0.78rem;
 }
-.muscle-recovery {
+.anatomy-highlight {
   padding: 1rem;
   margin-top: 1.2rem;
   border: 1px solid var(--accent-border);
   border-radius: 10px;
   background: var(--accent-dim);
 }
-.muscle-recovery-label { color: var(--text-secondary); font-size: 0.75rem; }
-.muscle-recovery p { margin: 0.4rem 0; }
-.muscle-recovery strong {
+.anatomy-highlight-label { color: var(--text-secondary); font-size: 0.75rem; }
+.anatomy-highlight p { margin: 0.4rem 0; }
+.anatomy-highlight strong {
   color: var(--cyan);
   font: 500 2.6rem/1.15 "SFMono-Regular", Consolas, monospace;
 }
-.muscle-recovery p > span { color: var(--text-secondary); font-size: 0.95rem; }
-.muscle-recovery-caption { color: var(--text-muted); font-size: 0.65rem; }
-.muscle-metrics {
+.anatomy-highlight p > span { color: var(--text-secondary); font-size: 0.95rem; }
+.anatomy-highlight-caption { color: var(--text-muted); font-size: 0.65rem; }
+.anatomy-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
   margin: 0.9rem 0;
 }
-.muscle-metric {
+.anatomy-metric {
   --metric-accent: var(--cyan);
   min-width: 0;
   padding: 0.85rem;
@@ -83,20 +84,25 @@
   border-radius: 10px;
   background: #08111b80;
 }
-.muscle-metric--soreness { --metric-accent: var(--health); }
-.muscle-metric--fatigue { --metric-accent: var(--violet); }
-.muscle-metric--endurance { --metric-accent: var(--amber); }
-.muscle-metric dt { color: var(--text-secondary); font-size: 0.72rem; }
-.muscle-metric dd {
+.anatomy-metric--soreness { --metric-accent: var(--health); }
+.anatomy-metric--fatigue { --metric-accent: var(--violet); }
+.anatomy-metric--endurance { --metric-accent: var(--amber); }
+.anatomy-metric--structure { --metric-accent: var(--violet); }
+.anatomy-metric--formation { --metric-accent: var(--cyan); }
+.anatomy-metric--breakdown { --metric-accent: var(--amber); }
+.anatomy-metric dt { color: var(--text-secondary); font-size: 0.72rem; }
+.anatomy-metric dd {
   margin: 0.55rem 0 0.7rem;
   color: var(--metric-accent);
   font: 500 1.7rem/1 "SFMono-Regular", Consolas, monospace;
 }
-.muscle-metric dd > span { color: var(--text-muted); font-size: 0.7rem; font-weight: 400; }
-.muscle-metric-track { height: 3px; overflow: hidden; border-radius: 99px; background: var(--border); }
-.muscle-metric-track span { display: block; height: 100%; background: var(--metric-accent); border-radius: inherit; }
-.muscle-status-footnote { margin: 1rem 0; color: var(--text-muted); font-size: 0.65rem; line-height: 1.6; }
-.muscle-status-back {
+.anatomy-metric dd > span { color: var(--text-muted); font-size: 0.7rem; font-weight: 400; }
+.anatomy-metric-track { height: 3px; overflow: hidden; border-radius: 99px; background: var(--border); }
+.anatomy-metric-track span { display: block; height: 100%; background: var(--metric-accent); border-radius: inherit; }
+.anatomy-status-footnote { margin: 1rem 0; color: var(--text-muted); font-size: 0.65rem; line-height: 1.6; }
+.bone-turnover-title { margin: 1.2rem 0 0.35rem; font-size: 0.85rem; font-weight: 500; }
+.bone-turnover-caption { margin: 0; color: var(--text-muted); font-size: 0.7rem; line-height: 1.6; }
+.anatomy-status-back {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,7 +117,18 @@
   font-size: 0.78rem;
   cursor: pointer;
 }
-.muscle-status-back:hover { border-color: var(--cyan); background: #17303d; }
+.anatomy-status-back:hover { border-color: var(--cyan); background: #17303d; }
+
+.organ-highlight strong { overflow-wrap: anywhere; }
+.organ-highlight-unit[data-long="true"] { display: block; padding-top: 0.25rem; }
+.organ-metrics dt { line-height: 1.5; }
+.organ-metric dd { line-height: 1.25; }
+.organ-metric dd > span { display: block; margin-top: 0.4rem; line-height: 1.4; }
+.organ-metric[data-text="true"] dd {
+  font-family: inherit;
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
 
 @keyframes sidebar-exit {
   from { transform: translateX(0); opacity: 1; }
@@ -122,8 +139,8 @@
   to { transform: translateX(0); opacity: 1; }
 }
 @media (max-width: 400px) {
-  .muscle-status { padding: 1rem; }
-  .muscle-metric { padding: 0.75rem; }
+  .anatomy-status { padding: 1rem; }
+  .anatomy-metric { padding: 0.75rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .overview-sidebar[data-phase] .sidebar-surface {

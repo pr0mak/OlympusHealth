@@ -1,10 +1,19 @@
 import { useEffect, useReducer } from "react";
 import MuscleStatusPanel from "./MuscleStatusPanel.jsx";
+import BoneStatusPanel from "./BoneStatusPanel.jsx";
+import OrganStatusPanel from "./OrganStatusPanel.jsx";
 import { initialSidebarState, sidebarTransition } from "./sidebarTransition.js";
-import "../styles/muscle-status.css";
+import "../styles/anatomy-status.css";
+
+const panels = {
+  muscles: { component: MuscleStatusPanel, kind: "muscle" },
+  skeleton: { component: BoneStatusPanel, kind: "bone" },
+  organs: { component: OrganStatusPanel, kind: "organ" },
+};
 
 export default function OverviewSidebar({ selection, onClear, children }) {
   const [state, dispatch] = useReducer(sidebarTransition, initialSidebarState);
+  const { component: Panel, kind } = panels[state.displayed?.system] ?? panels.muscles;
 
   useEffect(() => {
     dispatch({ type: "select", selection });
@@ -25,7 +34,7 @@ export default function OverviewSidebar({ selection, onClear, children }) {
       className="overview-sidebar"
       data-phase={state.phase}
       data-interacted={state.interacted}
-      aria-label={state.displayed ? `${state.displayed.label} muscle information` : "Health and mission widgets"}
+      aria-label={state.displayed ? `${state.displayed.label} ${kind} information` : "Health and mission widgets"}
       aria-busy={state.phase !== "idle"}
       onKeyDown={(event) => {
         if (event.key === "Escape" && selection) onClear();
@@ -41,7 +50,7 @@ export default function OverviewSidebar({ selection, onClear, children }) {
           {children}
         </div>
         {state.displayed && (
-          <MuscleStatusPanel
+          <Panel
             key={state.displayed.key}
             selection={state.displayed}
             onClear={onClear}

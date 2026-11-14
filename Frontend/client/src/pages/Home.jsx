@@ -43,7 +43,7 @@ export default function Home() {
           />
         </Suspense>
         <OverviewSidebar
-          selection={selectedPart?.system === "muscles" ? selectedPart : null}
+          selection={["muscles", "skeleton", "organs"].includes(selectedPart?.system) ? selectedPart : null}
           onClear={clearSelection}
         >
           <div className="widget-stack">

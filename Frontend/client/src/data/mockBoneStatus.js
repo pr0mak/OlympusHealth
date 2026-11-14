@@ -1,0 +1,35 @@
+// Illustrative fixtures only. Scores are presentation values, not clinical assessments.
+const status = (density, structure, strength, formation, breakdown) => ({
+  density, structure, strength, formation, breakdown,
+});
+
+export const mockBoneStatus = {
+  spine_cervical: status(0.985, 8, 7, 6, 4),
+  clavicle_l: status(0.942, 8, 7, 5, 4),
+  clavicle_r: status(0.958, 8, 8, 6, 4),
+  foot_l: status(0.876, 7, 8, 6, 5),
+  foot_r: status(0.889, 8, 8, 6, 4),
+  forearm_l: status(0.812, 8, 7, 5, 4),
+  forearm_r: status(0.827, 8, 8, 6, 4),
+  hand_l: status(0.734, 7, 7, 5, 4),
+  hand_r: status(0.748, 8, 7, 5, 4),
+  mandible: status(1.156, 9, 8, 5, 3),
+  patella_l: status(0.924, 8, 8, 6, 4),
+  patella_r: status(0.936, 8, 8, 6, 4),
+  spine_lumbar: status(1.084, 7, 8, 6, 5),
+  pelvis: status(1.112, 8, 9, 7, 5),
+  ribs_l: status(0.842, 8, 7, 5, 4),
+  ribs_r: status(0.851, 8, 7, 5, 4),
+  lower_leg_l: status(1.128, 8, 9, 7, 5),
+  lower_leg_r: status(1.143, 9, 9, 7, 4),
+  scapula_l: status(0.968, 8, 7, 6, 4),
+  scapula_r: status(0.979, 8, 8, 6, 4),
+  skull: status(1.245, 9, 9, 4, 3),
+  sternum: status(0.908, 8, 7, 5, 4),
+  teeth: status(1.284, 9, 9, 4, 3),
+  femur_l: status(1.152, 8, 9, 7, 5),
+  femur_r: status(1.168, 9, 9, 7, 4),
+  spine_thoracic: status(1.036, 8, 8, 6, 4),
+  humerus_l: status(1.018, 8, 8, 6, 4),
+  humerus_r: status(1.034, 8, 9, 6, 4),
+};
