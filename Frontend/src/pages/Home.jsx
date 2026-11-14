@@ -2,6 +2,7 @@ import { lazy, Suspense, useState } from "react";
 import Widget from "../components/Widget.jsx";
 import TrendChart from "../components/TrendChart.jsx";
 import { createProjection, heartRate } from "../data/mockHealth.js";
+import "../styles/anatomy.css";
 
 const AnatomyViewer = lazy(
   () => import("../components/anatomy/AnatomyViewer.jsx"),
@@ -15,7 +16,7 @@ export default function Home() {
         <Suspense
           fallback={
             <section
-              className="viewer-panel"
+              className="anatomy-viewer"
               aria-label="Loading anatomy viewer"
             />
           }

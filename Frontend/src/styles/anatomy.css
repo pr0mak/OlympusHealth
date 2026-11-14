@@ -1,93 +1,49 @@
 .anatomy-viewer {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  height: clamp(620px, calc(100svh - 220px), 860px);
   min-width: 0;
+  border: 0;
   background: transparent;
 }
-.anatomy-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1.3rem 1.4rem 0.8rem;
-}
-.anatomy-toolbar .eyebrow {
-  margin-bottom: 0.3rem;
-  font-size: 0.6rem;
-}
-.anatomy-toolbar h2 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-}
-.anatomy-layers {
-  display: inline-flex;
-  gap: 0.25rem;
-  padding: 0.2rem;
-  border: 1px solid #ffffff25;
-  border-radius: 8px;
-}
-.anatomy-layers button,
-.anatomy-camera-buttons button,
-.anatomy-message button {
-  padding: 0.5rem 0.7rem;
-  border: 1px solid transparent;
-  border-radius: 5px;
-  color: #c3d0e4;
-  background: transparent;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-.anatomy-layers button[aria-pressed="true"] {
-  color: #a8eddd;
-  border-color: #91e3d166;
-  background: #91e3d112;
-}
-.anatomy-layers button:hover,
-.anatomy-camera-buttons button:hover,
-.anatomy-message button:hover {
-  background: #91e3d11c;
-}
-.anatomy-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0.3rem 1.4rem 0;
-}
-.anatomy-selector label {
-  color: #bac7d6;
-  font-size: 0.7rem;
-}
-.anatomy-selector select {
-  flex: 1;
-  min-width: 0;
-  padding: 0.55rem 0.65rem;
-  background: #10153c;
-  color: #dce8f0;
-  border: 1px solid #ffffff25;
-  border-radius: 6px;
-  font-size: 0.7rem;
-}
-.anatomy-selector select:focus-visible {
-  outline: 2px solid #91e3d1;
-  outline-offset: 2px;
-}
+
 .anatomy-viewport {
   position: relative;
   flex: 1;
-  min-height: 425px;
-  height: 425px;
+  min-height: 0;
   cursor: grab;
   touch-action: none;
 }
-.anatomy-viewport:active {
-  cursor: grabbing;
+.anatomy-viewport:active { cursor: grabbing; }
+.anatomy-viewport--hover { cursor: pointer; }
+.anatomy-viewport:focus-visible { outline: 1px solid #91e3d155; outline-offset: 2px; }
+.anatomy-viewport canvas { display: block; }
+
+.anatomy-layers {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 0.65rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
-.anatomy-viewport--hover {
+.anatomy-layers button {
+  padding: 0.7rem 1.2rem;
+  border: 0;
+  border-radius: 999px;
+  color: #bac7d6;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: color 160ms ease, background 160ms ease;
 }
-.anatomy-viewport canvas {
-  display: block;
-}
+.anatomy-layers button[aria-pressed="true"] { color: #a8eddd; background: #91e3d114; }
+.anatomy-layers button:hover { color: #e3faf3; background: #91e3d11c; }
+
 .anatomy-loading {
   position: absolute;
   inset: 0;
@@ -99,164 +55,21 @@
   color: #c3d0e4;
   font-size: 0.8rem;
 }
-.loading-ring {
-  width: 28px;
-  height: 28px;
-  border: 2px solid #91e3d133;
-  border-top-color: #91e3d1;
-  border-radius: 50%;
-  animation: anatomy-loading-spin 1s linear infinite;
-}
-@keyframes anatomy-loading-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.anatomy-hover-label {
-  position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  max-width: calc(100% - 2rem);
-  transform: translateX(-50%);
-  padding: 0.5rem 0.8rem;
-  border: 1px solid #91e3d155;
-  border-radius: 6px;
-  background: #10153cef;
-  color: #dbf5ee;
-  font-size: 0.7rem;
-  text-align: center;
-  pointer-events: none;
-}
-.anatomy-selection {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.9rem 1.4rem;
-  border-top: 1px solid #ffffff16;
-}
-.anatomy-selection > div {
-  min-width: 0;
-}
-.anatomy-selection-label {
-  display: block;
-  color: #a2b5cf;
-  font-size: 0.6rem;
-  margin-bottom: 0.3rem;
-}
-.anatomy-selection strong {
-  display: block;
-  color: #e1efe9;
-  font-size: 0.8rem;
-  font-weight: 500;
-  overflow-wrap: anywhere;
-}
-.isolate-control {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: #c3d0e4;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-.isolate-control input {
-  accent-color: #91e3d1;
-}
-.anatomy-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  padding: 0.5rem 1.4rem 0.8rem;
-}
-.anatomy-controls > span {
-  color: #a2b5cf;
-  font-size: 0.6rem;
-}
-.anatomy-camera-buttons {
-  display: flex;
-  gap: 0.3rem;
-}
-.anatomy-camera-buttons button,
-.anatomy-message button {
-  border-color: #ffffff25;
-}
-.anatomy-viewer button:disabled {
-  cursor: default;
-  opacity: 0.4;
-}
-.anatomy-credits {
-  padding: 0.6rem 1.4rem 0.9rem;
-  border-top: 1px solid #ffffff10;
-  color: #a2b5cf;
-  font-size: 0.65rem;
-  line-height: 1.7;
-}
-.anatomy-credits summary {
-  width: fit-content;
-  cursor: pointer;
-}
-.anatomy-credits a {
-  color: #a8eddd;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.anatomy-message {
-  display: flex;
-  flex: 1;
-  min-height: 425px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  padding: 2rem;
-  color: #c3d0e4;
-}
-.anatomy-message h3 {
-  font-size: 1rem;
-  font-weight: 500;
-}
-.anatomy-message p {
-  max-width: 35ch;
-  font-size: 0.8rem;
-  line-height: 1.7;
-}
-.anatomy-webgl-error {
-  position: relative;
-  z-index: 2;
-  background: #10153c;
-}
-.selected-part-preview {
-  margin: 0 0 0.7rem;
-  color: #a8eddd;
-  font-size: 0.7rem;
-  line-height: 1.5;
-}
-@media (max-width: 1050px) {
-  .anatomy-toolbar,
-  .anatomy-selection {
-    padding-inline: 1rem;
-  }
-  .anatomy-selector {
-    margin-inline: 1rem;
-  }
-  .anatomy-controls,
-  .anatomy-credits {
-    padding-inline: 1rem;
-  }
-}
+.loading-ring { width: 28px; height: 28px; border: 2px solid #91e3d133; border-top-color: #91e3d1; border-radius: 50%; animation: anatomy-loading-spin 1s linear infinite; }
+@keyframes anatomy-loading-spin { to { transform: rotate(360deg); } }
+.anatomy-hover-label { position: absolute; bottom: 1rem; left: 50%; max-width: calc(100% - 2rem); transform: translateX(-50%); padding: 0.5rem 0.8rem; border-radius: 6px; background: #10153cef; color: #dbf5ee; font-size: 0.7rem; text-align: center; pointer-events: none; }
+.anatomy-message { display: flex; flex: 1; min-height: 0; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem; color: #c3d0e4; }
+.anatomy-message h3 { font-size: 1rem; font-weight: 500; }
+.anatomy-message p { max-width: 35ch; font-size: 0.8rem; line-height: 1.7; }
+.anatomy-message button { padding: 0.6rem 0.9rem; border: 1px solid #ffffff25; border-radius: 6px; color: #c3d0e4; background: transparent; font-size: 0.8rem; cursor: pointer; }
+.selected-part-preview { margin: 0 0 0.7rem; color: #a8eddd; font-size: 0.7rem; line-height: 1.5; }
+
 @media (max-width: 760px) {
-  .anatomy-viewport {
-    min-height: 440px;
-    height: 440px;
-  }
-  .anatomy-controls {
-    padding-top: 0.4rem;
-  }
+  .anatomy-viewer { height: clamp(520px, 78svh, 680px); }
+  .anatomy-layers { gap: 0.35rem; margin-top: 0.4rem; }
+  .anatomy-layers button { padding: 0.7rem 1rem; font-size: 0.8rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .loading-ring {
-    animation: none;
-  }
+  .loading-ring { animation: none; }
+  .anatomy-layers button { transition: none; }
 }

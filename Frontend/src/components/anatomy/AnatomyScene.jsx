@@ -84,8 +84,8 @@ export default function AnatomyScene({ layer, selected, isolate, resetVersion, c
       controls.setLookAt(center.x, center.y, center.z + 3.8, center.x, center.y, center.z, smooth);
     }
     controls.fitToBox(bounds, smooth, {
-      paddingTop: hasFocus ? 0.04 : 0.12,
-      paddingBottom: hasFocus ? 0.04 : 0.12,
+      paddingTop: hasFocus ? 0.04 : 0.06,
+      paddingBottom: hasFocus ? 0.04 : 0.06,
       paddingLeft: hasFocus ? 0.04 : 0.1,
       paddingRight: hasFocus ? 0.04 : 0.1,
     });

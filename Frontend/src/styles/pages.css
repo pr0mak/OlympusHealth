@@ -29,6 +29,9 @@
 .account-nav .active {
   color: #91e3d1;
 }
+.page-footer { flex-wrap: wrap; }
+.model-attribution { flex-basis: 100%; font-size: 0.6rem; line-height: 1.7; }
+.model-attribution a { text-decoration: underline; text-underline-offset: 2px; }
 
 .widget {
   transition:

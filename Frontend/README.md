@@ -49,10 +49,12 @@ No Blender setup, remote model URL, or decoder CDN is required at runtime.
 
 - Switch between Muscles, Skeleton, and Organs. A faint skeleton provides context
   for the muscle and organ views.
-- Drag to rotate, scroll/pinch to zoom, or use the zoom buttons.
-- Hover to identify a structure. Click it or use the Structure selector to select
-  and smoothly frame it. Isolate hides the other structures.
-- Reset view restores the complete body for the active layer.
+- Drag to rotate and scroll/pinch to zoom.
+- Hover to identify a region, then click directly on the model to select and
+  smoothly frame it. The viewer exposes only the three layer buttons below the
+  model; it has no heading, border, dropdown, or extra camera controls.
+- Click empty canvas space, double-click the viewer, press Escape while the
+  viewer is focused, or click a layer button to return to its full-body view.
 - Selection is lifted to Home's React state and displayed in the Health Data
   widget. Its vital readings remain global mock data, not measurements of that
   selected structure.
@@ -63,7 +65,7 @@ layer visibility and pointer events, and frames selection using bounding boxes.
 The model has some grouped structures, such as upper-arm muscles and lumbar spine.
 It is generic reference anatomy and does not represent an individual crew member.
 
-Attribution and CC BY 4.0 license links are available in the viewer. Source revision,
+Attribution and CC BY 4.0 license links are available in the page footer. Source revision,
 asset checksum, and original notices are in `public/models/anatomy/`.
 The GLB is approximately 7.6 MB. Rendering is on demand and pixel ratio is capped
 at 1.5. Full-body rendering still needs WebGL and a capable graphics device.
@@ -93,7 +95,7 @@ upper legs include thigh, hip-flexor, and gluteal muscles; lower legs include fe
 Chest includes the pectoral and intercostal muscles. Unlisted back, trapezius,
 diaphragm, and pelvic-floor meshes remain visible but are not selectable.
 
-Hovering, clicking, isolating, and camera framing operate on the entire region.
+Hovering, clicking, and camera framing operate on the entire region.
 The Health Data widget receives that region's ID and label via `onSelectionChange`.
 Skeleton and Organs keep their existing selections. The asset check also verifies
 group membership, anatomical sides, missing meshes, and duplicate assignments.
