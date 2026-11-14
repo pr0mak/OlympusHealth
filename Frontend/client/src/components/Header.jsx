@@ -1,17 +1,21 @@
+import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Icon from "./Icon.jsx";
+import MissionTimer from "./MissionTimer.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
-export default function Header() {
+export default function Header({ showMission = false }) {
+  const [missionStartedAt] = useState(() => Date.now());
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   function logout() { signOut(); navigate("/sign-in"); }
   return (
-    <header className="site-header">
+    <header className={`site-header${showMission ? " site-header--mission" : ""}`}>
       <Link className="brand" to="/" aria-label="Home">
         <span className="brand-symbol"><Icon name="orbit" /></span>
         <span className="brand-name">My<span>Logo</span></span>
       </Link>
+      {showMission && <MissionTimer startedAt={missionStartedAt} />}
       <nav className="account-nav" aria-label="Account">
         {loading ? <span className="account-muted">Loading account...</span> : user ? (
           <>

@@ -5,6 +5,9 @@
 .site-header .brand-name {
   animation: assemble-wordmark 1400ms 250ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
+.site-header .mission-timer {
+  animation: assemble-header 1400ms 350ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
 .site-header .account-nav > a {
   animation: assemble-header 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
@@ -151,6 +154,7 @@
 @media (prefers-reduced-motion: reduce) {
   .site-header .brand-symbol,
   .site-header .brand-name,
+  .site-header .mission-timer,
   .site-header .account-nav > a,
   .page-footer,
   .orbit-lines ellipse,

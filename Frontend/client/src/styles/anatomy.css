@@ -133,13 +133,6 @@
   font-size: 0.8rem;
   cursor: pointer;
 }
-.selected-part-preview {
-  margin: 0 0 0.7rem;
-  color: var(--cyan-bright);
-  font-size: 0.7rem;
-  line-height: 1.5;
-}
-
 @media (max-width: 760px) {
   .anatomy-viewer {
     height: clamp(520px, 78svh, 680px);

@@ -34,7 +34,7 @@ export default function App() {
     <div className="app-shell">
       <OrbitalBackground />
       <a href="#main-content" className="skip-link">Skip to content</a>
-      <Header />
+      <Header showMission={pathname === '/'} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
