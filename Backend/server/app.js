@@ -9,6 +9,8 @@ const db = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const errorHandler = require("./middleware/errorHandler");
+const dashboardRoutes = require("./routes/DashboardRoutes");
+const verifyToken = require("./middleware/authMiddleware");
 
 const app = express();
 
@@ -54,6 +56,7 @@ app.get("/api/health", (req, res) => {
 
 // Authentication Routes
 app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api", verifyToken, dashboardRoutes);
 
 // 404 Handler
 app.use((req, res) => {
