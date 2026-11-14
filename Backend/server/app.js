@@ -1,5 +1,8 @@
 
 require("dotenv").config();
+const projectionRoutes = require("./routes/projectionRoutes");
+
+const assistantRoutes = require("./routes/assistantRoutes");
 
 const express = require("express");
 const cors = require("cors");
@@ -59,6 +62,10 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api", verifyToken, dashboardRoutes);
 app.use("/api/health", verifyToken, healthRoutes);
+
+app.use("/api/projection", projectionRoutes);
+
+app.use("/api/assistant", assistantRoutes);
 
 // 404 Handler
 app.use((req, res) => {
