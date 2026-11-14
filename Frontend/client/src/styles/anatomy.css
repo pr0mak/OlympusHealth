@@ -163,3 +163,32 @@
     transition: none;
   }
 }
+
+
+
+/* ------------------------------------
+   Alerts widget preview
+   ------------------------------------ */
+
+.alerts-widget-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+  min-height: 80px;
+}
+
+.alerts-widget-preview p {
+  margin: 0;
+  max-width: 340px;
+  color: #a8b8c8;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.alerts-widget-preview-link {
+  display: inline-block;
+  color: #d1dce6;
+  font-size: 0.8rem;
+  font-weight: 500;
+}

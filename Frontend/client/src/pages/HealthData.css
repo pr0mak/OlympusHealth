@@ -794,3 +794,160 @@
     border-top-color: var(--health-border);
   }
 }
+
+
+/* Health measurements editor */
+
+.health-edit-button {
+  padding: 10px 16px;
+  background: #2b4258;
+  color: #e5edf4;
+  border: 1px solid #526b80;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.83rem;
+  cursor: pointer;
+}
+
+.health-edit-button:hover {
+  background: #36516a;
+}
+
+.health-edit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.health-edit-form {
+  margin-top: 24px;
+  padding: 24px;
+  background: #1b2b3c;
+  border: 1px solid #40556b;
+  border-radius: 10px;
+}
+
+.health-edit-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.health-edit-heading h3 {
+  margin: 0 0 6px;
+  color: #edf2f7;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.health-edit-heading p {
+  color: #9daebf;
+  font-size: 0.8rem;
+}
+
+.health-edit-close {
+  border: 0;
+  background: transparent;
+  color: #b9c8d6;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.health-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.health-edit-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #c2d0dd;
+  font-size: 0.83rem;
+}
+
+.health-edit-grid input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  background: #111e2b;
+  color: #edf2f7;
+  border: 1px solid #3c5369;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.health-edit-grid input:focus {
+  outline: 2px solid #8bb5d4;
+  outline-offset: 1px;
+}
+
+.health-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.health-edit-cancel,
+.health-edit-save {
+  padding: 10px 17px;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 0.83rem;
+  cursor: pointer;
+}
+
+.health-edit-cancel {
+  background: transparent;
+  color: #c3d0dc;
+  border: 1px solid #546a7e;
+}
+
+.health-edit-save {
+  background: #dbe6ef;
+  color: #182737;
+  border: 1px solid #dbe6ef;
+  font-weight: 600;
+}
+
+.health-edit-save:hover {
+  background: #f0f5f9;
+}
+
+.health-edit-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.health-edit-error {
+  margin-top: 16px;
+  color: #ff9fa8;
+  font-size: 0.85rem;
+}
+
+.health-edit-success {
+  margin-top: 16px;
+  color: #b1dcc5;
+  font-size: 0.85rem;
+}
+
+.health-edit-button:focus-visible,
+.health-edit-close:focus-visible,
+.health-edit-cancel:focus-visible,
+.health-edit-save:focus-visible {
+  outline: 2px solid #a9cde6;
+  outline-offset: 3px;
+}
+
+@media (max-width: 650px) {
+  .health-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .health-edit-form {
+    padding: 16px;
+  }
+}

@@ -1,8 +1,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
 import { useAuth } from "../context/AuthContext.jsx";
 import { healthApi } from "../services/healthApi.js";
+
 import "./HealthData.css";
 
 const METRICS = [
@@ -44,9 +46,11 @@ const RANGES = [
 
 function formatValue(value, digits = 2) {
   if (value === null || value === undefined) return "—";
-  const n = Number(value);
-  return Number.isFinite(n)
-    ? n.toLocaleString("en-US", {
+
+  const number = Number(value);
+
+  return Number.isFinite(number)
+    ? number.toLocaleString("en-US", {
         maximumFractionDigits: digits
       })
     : "—";
@@ -59,9 +63,11 @@ function formatDate(value) {
 
 function toTime(value) {
   if (!value) return NaN;
+
   const time = new Date(
     String(value).replace(" ", "T")
   ).getTime();
+
   return Number.isFinite(time) ? time : NaN;
 }
 
@@ -72,14 +78,13 @@ function calculateStats(rows, key) {
     .map(Number)
     .filter(Number.isFinite);
 
-  if (values.length === 0) {
-    return null;
-  }
+  if (values.length === 0) return null;
 
   return {
     count: values.length,
-    average: values.reduce((a, b) => a + b, 0)
-      / values.length,
+    average:
+      values.reduce((sum, value) => sum + value, 0) /
+      values.length,
     min: Math.min(...values),
     max: Math.max(...values)
   };
@@ -120,8 +125,6 @@ function MetricCard({ metric, row, selected, onClick }) {
   );
 }
 
-// SVG chart using only recorded measurements.
-// Horizontal spacing follows actual timestamps.
 function HealthLineChart({ rows, metric }) {
   const points = useMemo(() => {
     return rows
@@ -149,6 +152,7 @@ function HealthLineChart({ rows, metric }) {
 
   const W = 760;
   const H = 290;
+
   const left = 52;
   const right = 20;
   const top = 24;
@@ -157,35 +161,38 @@ function HealthLineChart({ rows, metric }) {
   const plotW = W - left - right;
   const plotH = H - top - bottom;
 
-  const values = points.map(p => p.value);
+  const values = points.map(point => point.value);
   const min = Math.min(...values);
   const max = Math.max(...values);
 
   const padding = Math.max((max - min) * 0.15, 0.5);
+
   const yMin = min - padding;
   const yMax = max + padding;
 
   const tMin = points[0].time;
   const tMax = points[points.length - 1].time;
 
-  const x = p => (
+  const x = point =>
     tMin === tMax
       ? left + plotW / 2
-      : left + ((p.time - tMin) / (tMax - tMin)) * plotW
-  );
+      : left +
+        ((point.time - tMin) / (tMax - tMin)) * plotW;
 
-  const y = value => (
-    top + plotH -
-    ((value - yMin) / (yMax - yMin)) * plotH
-  );
+  const y = value =>
+    top +
+    plotH -
+    ((value - yMin) / (yMax - yMin)) * plotH;
 
-  const path = points.map((p, i) =>
-    `${i === 0 ? "M" : "L"} ${x(p)} ${y(p.value)}`
-  ).join(" ");
+  const path = points
+    .map((point, index) =>
+      `${index === 0 ? "M" : "L"} ${x(point)} ${y(point.value)}`
+    )
+    .join(" ");
 
   const ticks = Array.from(
     { length: 5 },
-    (_, i) => yMin + (yMax - yMin) * i / 4
+    (_, index) => yMin + ((yMax - yMin) * index) / 4
   );
 
   return (
@@ -196,8 +203,8 @@ function HealthLineChart({ rows, metric }) {
         role="img"
         aria-label={`${metric.label}: ${points.length} recorded readings`}
       >
-        {ticks.map((tick, i) => (
-          <g key={i}>
+        {ticks.map((tick, index) => (
+          <g key={index}>
             <line
               x1={left}
               y1={y(tick)}
@@ -207,6 +214,7 @@ function HealthLineChart({ rows, metric }) {
               strokeOpacity="0.12"
               strokeDasharray="4 6"
             />
+
             <text
               x={left - 10}
               y={y(tick) + 4}
@@ -231,9 +239,9 @@ function HealthLineChart({ rows, metric }) {
           />
         )}
 
-        {points.map((point, i) => (
+        {points.map((point, index) => (
           <circle
-            key={`${point.id}-${i}`}
+            key={`${point.id}-${index}`}
             cx={x(point)}
             cy={y(point.value)}
             r="4"
@@ -285,6 +293,7 @@ export default function HealthData() {
     loading: authLoading
   } = useAuth();
 
+  // Existing data state
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -293,6 +302,20 @@ export default function HealthData() {
   const [range, setRange] = useState("30");
   const [showAll, setShowAll] = useState(false);
 
+  // Add state
+const [adding, setAdding] = useState(false);
+const [saving, setSaving] = useState(false);
+const [addError, setAddError] = useState("");
+const [addSuccess, setAddSuccess] = useState("");
+
+const [addValues, setAddValues] = useState({
+  heartRate: "",
+  oxygenSaturation: "",
+  bodyTemperature: "",
+  sleepHours: ""
+});
+
+  // Load measurements from MySQL
   useEffect(() => {
     if (authLoading) return;
 
@@ -300,6 +323,7 @@ export default function HealthData() {
       setRows([]);
       setError("");
       setLoading(false);
+      setAdding(false);
       return;
     }
 
@@ -313,7 +337,10 @@ export default function HealthData() {
       try {
         const response = await healthApi.getMeasurements(token);
 
-        if (!response.success || !Array.isArray(response.data)) {
+        if (
+          !response.success ||
+          !Array.isArray(response.data)
+        ) {
           throw new Error("Invalid health API response");
         }
 
@@ -322,10 +349,14 @@ export default function HealthData() {
         }
       } catch (err) {
         if (active) {
-          setError(err.message || "Unable to load health data");
+          setError(
+            err.message || "Unable to load health data"
+          );
         }
       } finally {
-        if (active) setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     }
 
@@ -336,29 +367,31 @@ export default function HealthData() {
     };
   }, [user?.id, token, authLoading]);
 
+  // Sort newest to oldest
   const sortedRows = useMemo(() => {
-    return [...rows].sort((a, b) =>
-      toTime(b.recordedAt) - toTime(a.recordedAt)
+    return [...rows].sort(
+      (a, b) =>
+        toTime(b.recordedAt) - toTime(a.recordedAt)
     );
   }, [rows]);
 
-  const activeMetric = METRICS.find(
-    metric => metric.key === metricKey
-  ) || METRICS[0];
+  const activeMetric =
+    METRICS.find(metric => metric.key === metricKey) ||
+    METRICS[0];
 
-  // Every metric can have a different latest recorded value.
+  // Latest available value for each metric
   const latestByMetric = useMemo(() => {
     return Object.fromEntries(
       METRICS.map(metric => [
         metric.key,
-        sortedRows.find(row =>
-          row[metric.key] !== null &&
-          row[metric.key] !== undefined
+        sortedRows.find(
+          row => row[metric.key] != null
         ) || null
       ])
     );
   }, [sortedRows]);
 
+  // Records for selected chart
   const chartRows = useMemo(() => {
     const eligible = sortedRows.filter(
       row => row[metricKey] != null
@@ -369,14 +402,100 @@ export default function HealthData() {
     return eligible.slice(0, Number(range));
   }, [sortedRows, metricKey, range]);
 
+  // Chart statistics
   const stats = useMemo(
     () => calculateStats(chartRows, metricKey),
     [chartRows, metricKey]
   );
 
+  // Historical table
   const displayedRows = showAll
     ? sortedRows
     : sortedRows.slice(0, 10);
+
+  // ====================================
+  // EDIT MEASUREMENTS
+  // ====================================
+
+  
+function openAdd() {
+  setAddValues({
+    heartRate: "",
+    oxygenSaturation: "",
+    bodyTemperature: "",
+    sleepHours: ""
+  });
+
+  setAddError("");
+  setAddSuccess("");
+  setAdding(true);
+}
+
+function handleAddChange(event) {
+  const { name, value } = event.target;
+
+  setAddValues(previous => ({
+    ...previous,
+    [name]: value
+  }));
+}
+
+async function saveMeasurement(event) {
+  event.preventDefault();
+
+  if (!token || saving) return;
+
+  const data = {};
+
+  for (const [key, value] of Object.entries(addValues)) {
+    if (value.trim() !== "") {
+      data[key] = Number(value);
+    }
+  }
+
+  if (Object.keys(data).length === 0) {
+    setAddError("Enter at least one measurement.");
+    return;
+  }
+
+  setSaving(true);
+  setAddError("");
+  setAddSuccess("");
+
+  try {
+    const response = await healthApi.createMeasurement(
+      token,
+      data
+    );
+
+    if (!response.success) {
+      throw new Error("Failed to add measurement.");
+    }
+
+    // Fetch the latest records from MySQL
+    const updated = await healthApi.getMeasurements(token);
+
+    if (!updated.success || !Array.isArray(updated.data)) {
+      throw new Error("Measurement saved, but refresh failed.");
+    }
+
+    setRows(updated.data);
+    setAdding(false);
+    setAddSuccess("Measurement added successfully.");
+
+  } catch (error) {
+    setAddError(
+      error.message || "Unable to add measurement."
+    );
+  } finally {
+    setSaving(false);
+  }
+}
+
+
+  // ====================================
+  // PAGE
+  // ====================================
 
   return (
     <main
@@ -450,7 +569,10 @@ export default function HealthData() {
           )}
 
           {error && (
-            <div className="health-notice health-error" role="alert">
+            <div
+              className="health-notice health-error"
+              role="alert"
+            >
               {error}
             </div>
           )}
@@ -462,8 +584,9 @@ export default function HealthData() {
             </div>
           )}
 
-          {!loading && !error && sortedRows.length > 0 && (
+          {!loading && !error && (
             <>
+              {/* HEALTH OVERVIEW */}
               <section className="health-section">
                 <div className="health-section-heading">
                   <div>
@@ -472,9 +595,15 @@ export default function HealthData() {
                     </span>
                     <h2>Health Overview</h2>
                   </div>
-                  <span className="health-muted">
-                    Select a card to explore its history
-                  </span>
+
+                  <button
+                    type="button"
+                    className="health-edit-button"
+                    onClick={openAdd}
+                    disabled={saving}
+                  >
+                    + Add Measurements
+                  </button>
                 </div>
 
                 <div className="health-metrics-grid">
@@ -488,15 +617,134 @@ export default function HealthData() {
                     />
                   ))}
                 </div>
+
+                
+                {addSuccess && (
+                  <p
+                    className="health-edit-success"
+                    role="status"
+                  >
+                    {addSuccess}
+                  </p>
+                )}
+
+
+                {adding && (
+  <form
+    className="health-edit-form"
+    onSubmit={saveMeasurement}
+  >
+    <div className="health-edit-heading">
+      <div>
+        <h3>Add new measurement</h3>
+        <p>
+          Add a new health record to your profile.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        className="health-edit-close"
+        onClick={() => setAdding(false)}
+        disabled={saving}
+        aria-label="Close form"
+      >
+        ×
+      </button>
+    </div>
+
+    <div className="health-edit-grid">
+      <label>
+        Heart Rate (bpm)
+        <input
+          type="number"
+          name="heartRate"
+          min="1"
+          max="300"
+          step="1"
+          value={addValues.heartRate}
+          onChange={handleAddChange}
+        />
+      </label>
+
+      <label>
+        Oxygen Saturation (%)
+        <input
+          type="number"
+          name="oxygenSaturation"
+          min="0"
+          max="100"
+          step="0.01"
+          value={addValues.oxygenSaturation}
+          onChange={handleAddChange}
+        />
+      </label>
+
+      <label>
+        Body Temperature (°C)
+        <input
+          type="number"
+          name="bodyTemperature"
+          min="20"
+          max="45"
+          step="0.01"
+          value={addValues.bodyTemperature}
+          onChange={handleAddChange}
+        />
+      </label>
+
+      <label>
+        Sleep Duration (hours)
+        <input
+          type="number"
+          name="sleepHours"
+          min="0"
+          max="24"
+          step="0.01"
+          value={addValues.sleepHours}
+          onChange={handleAddChange}
+        />
+      </label>
+    </div>
+
+    {addError && (
+      <p className="health-edit-error" role="alert">
+        {addError}
+      </p>
+    )}
+
+    <div className="health-edit-actions">
+      <button
+        type="button"
+        className="health-edit-cancel"
+        onClick={() => setAdding(false)}
+        disabled={saving}
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        className="health-edit-save"
+        disabled={saving}
+      >
+        {saving ? "Saving..." : "Save Measurement"}
+      </button>
+    </div>
+  </form>
+)}
               </section>
 
+              {/* HISTORICAL CHART */}
               <section className="health-section health-panel">
                 <div className="health-section-heading">
                   <div>
                     <span className="health-eyebrow">
                       HISTORICAL ANALYTICS
                     </span>
+
                     <h2>{activeMetric.label} Trend</h2>
+
                     <p className="health-muted">
                       {activeMetric.description}
                     </p>
@@ -506,7 +754,7 @@ export default function HealthData() {
                     className="health-select"
                     aria-label="Chart time range"
                     value={range}
-                    onChange={e => setRange(e.target.value)}
+                    onChange={event => setRange(event.target.value)}
                   >
                     {RANGES.map(item => (
                       <option
@@ -561,10 +809,15 @@ export default function HealthData() {
                       unit: ""
                     }
                   ].map(item => (
-                    <div className="health-stat" key={item.label}>
+                    <div
+                      className="health-stat"
+                      key={item.label}
+                    >
                       <span>{item.label}</span>
+
                       <strong>
                         {formatValue(item.value)}
+
                         {item.value != null && (
                           <small>
                             {item.unit ?? activeMetric.unit}
@@ -576,17 +829,21 @@ export default function HealthData() {
                 </div>
               </section>
 
+              {/* MEASUREMENT HISTORY */}
               <section className="health-section health-panel">
                 <div className="health-section-heading">
                   <div>
                     <span className="health-eyebrow">
                       DATABASE HISTORY
                     </span>
+
                     <h2>Measurement History</h2>
+
                     <p className="health-muted">
                       One row per stored measurement.
                     </p>
                   </div>
+
                   <span className="health-count">
                     {sortedRows.length} records
                   </span>
@@ -603,14 +860,29 @@ export default function HealthData() {
                         <th>Sleep</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {displayedRows.map(row => (
                         <tr key={row.id}>
-                          <td>{formatDate(row.recordedAt)}</td>
-                          <td>{formatValue(row.heartRate)} bpm</td>
-                          <td>{formatValue(row.oxygenSaturation)} %</td>
-                          <td>{formatValue(row.bodyTemperature)} °C</td>
-                          <td>{formatValue(row.sleepHours)} h</td>
+                          <td>
+                            {formatDate(row.recordedAt)}
+                          </td>
+
+                          <td>
+                            {formatValue(row.heartRate)} bpm
+                          </td>
+
+                          <td>
+                            {formatValue(row.oxygenSaturation)} %
+                          </td>
+
+                          <td>
+                            {formatValue(row.bodyTemperature)} °C
+                          </td>
+
+                          <td>
+                            {formatValue(row.sleepHours)} h
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -633,11 +905,10 @@ export default function HealthData() {
               <div className="health-data-footnote">
                 <strong>Data provenance:</strong> Values are
                 retrieved from the authenticated user's
-                MySQL health records. No missing values
-                are generated or interpolated. Database
-                timestamps are displayed as stored.
-                Recorded values alone do not establish
-                a medical diagnosis.
+                MySQL health records. No missing values are
+                generated or interpolated. Database timestamps
+                are displayed as stored. Recorded values alone
+                do not establish a medical diagnosis.
               </div>
             </>
           )}
