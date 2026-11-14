@@ -44,7 +44,7 @@
   background: var(--surface-raised);
 }
 .home-overview .widget {
-  border: 1px solid var(--text-primary);
+  border: 1px solid var(--accent);
 }
 .home-overview .widget::before {
   display: none;
