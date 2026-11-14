@@ -29,3 +29,16 @@ export const authApi = {
   login: (data) => apiRequest("/api/auth/login", { method: "POST", body: JSON.stringify(data) }),
   me: (token) => apiRequest("/api/auth/me", { token }),
 };
+
+export const projectionApi = {
+  get: (token, days = 30) => apiRequest(`/api/projection?days=${days}`, { token }),
+  simulate: (token, data) => apiRequest('/api/projection', { token, method: 'POST', body: JSON.stringify(data) }),
+};
+
+export const aiApi = {
+  status: (token, mode = 'demo') => apiRequest(`/api/assistant?mode=${encodeURIComponent(mode)}`, { token }),
+  recommend: (token, body) => apiRequest('/api/assistant', { token, method: 'POST', body: JSON.stringify(body) }),
+  feedback: (token, body) => apiRequest('/api/assistant/feedback', { token, method: 'POST', body: JSON.stringify(body) }),
+  demoTrain: (token, rounds = 30) => apiRequest('/api/assistant/demo/train', { token, method: 'POST', body: JSON.stringify({ rounds }) }),
+};
+projectionApi.catalog = (token) => apiRequest('/api/projection/catalog', { token });

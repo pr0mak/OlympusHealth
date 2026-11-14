@@ -1,68 +1,40 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import PageHeading from "../components/PageHeading.jsx";
-
-const checkIns = [
-  "Review today’s health measurements",
-  "Record your sleep and activity",
-  "Explore your next scenario",
-];
-
-export default function MissionAssistant() {
-  const [completed, setCompleted] = useState([]);
-  return (
-    <main className="dashboard detail-page" id="main-content" tabIndex={-1}>
-      <PageHeading
-        title="Mission Assistant"
-        description="Your workspace for daily check-ins and mission support."
-      />
-      <p className="demo-note">
-        Demo workspace · Assistant responses and mission services are not
-        connected yet.
-      </p>
-      <div className="detail-columns">
-        <section className="content-card" aria-labelledby="check-in-title">
-          <h2 id="check-in-title">Daily check-in</h2>
-          <p className="muted-copy">
-            A sample checklist to organize your overview.
-          </p>
-          <div className="checklist">
-            {checkIns.map((item) => (
-              <label key={item}>
-                <input
-                  type="checkbox"
-                  checked={completed.includes(item)}
-                  onChange={(event) =>
-                    setCompleted((previous) =>
-                      event.target.checked
-                        ? [...previous, item]
-                        : previous.filter((entry) => entry !== item),
-                    )
-                  }
-                />
-                <span>{item}</span>
-              </label>
-            ))}
-          </div>
-          <p className="completion-note" role="status">
-            {completed.length} of {checkIns.length} complete · This visit only
-          </p>
-        </section>
-        <section className="content-card" aria-labelledby="workspace-title">
-          <h2 id="workspace-title">Explore your mission</h2>
-          <p className="muted-copy">
-            Use your health overview and scenario lab as a starting point.
-          </p>
-          <Link className="workspace-link" to="/health-data">
-            <span>Review health data</span>
-            <span aria-hidden="true">↗</span>
-          </Link>
-          <Link className="workspace-link" to="/future-projection">
-            <span>Explore future projections</span>
-            <span aria-hidden="true">↗</span>
-          </Link>
-        </section>
-      </div>
-    </main>
-  );
+import {useEffect,useState} from 'react';
+import {Link} from 'react-router-dom';
+import PageHeading from '../components/PageHeading.jsx';
+import {useAuth} from '../context/AuthContext.jsx';
+import {aiApi} from '../api/client.js';
+import {ExerciseChart,ScoreChart} from '../components/ScienceCharts.jsx';
+const initial={sleepHours:7,fatigueBefore:30,availableMinutes:60,weeklyBudgetMinutes:280,fatigueCeiling:80};
+export default function MissionAssistant(){
+ const {token}=useAuth();
+ const [mode,setMode]=useState('demo'),[form,setForm]=useState(initial),[recommendation,setRecommendation]=useState(null),[status,setStatus]=useState(null),[feedback,setFeedback]=useState({completionPercent:90,fatigueAfter:30}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ const update=(key,value)=>setForm(p=>({...p,[key]:Number(value)}));
+ const invoke=async(fn)=>{setBusy(true);setError('');setNotice('');try{await fn();}catch(e){setError(e.message);}finally{setBusy(false);}};
+ useEffect(()=>{setRecommendation(null);setStatus(null);if(!token)return;let active=true;setError('');aiApi.status(token,mode).then(r=>{if(active)setStatus(r.data);}).catch(e=>{if(active)setError(e.message);});return()=>{active=false;};},[token,mode]);
+ const recommend=()=>invoke(async()=>{const r=await aiApi.recommend(token,{mode,context:{sleepHours:form.sleepHours,fatigueBefore:form.fatigueBefore,availableMinutes:form.availableMinutes},weeklyBudgetMinutes:form.weeklyBudgetMinutes,fatigueCeiling:form.fatigueCeiling});setRecommendation(r.data);setNotice('New plan generated. Submit feedback only after the exercise session.');const s=await aiApi.status(token,mode);setStatus(s.data);});
+ const sendFeedback=()=>invoke(async()=>{const r=await aiApi.feedback(token,{mode,recommendationId:recommendation.recommendationId,...feedback});setStatus(r.data.status);setRecommendation(null);setNotice(`Feedback accepted. Reward proxy: ${r.data.reward}. Generate a new recommendation to see learning adapt.`);});
+ const trainDemo=()=>invoke(async()=>{const r=await aiApi.demoTrain(token,30);setStatus(r.data.status);setRecommendation(null);setNotice('30 explicitly synthetic training rounds added to Demo Mode. These are NOT astronaut observations.');});
+ const setField=(key,v)=>setFeedback(p=>({...p,[key]:Number(v)}));
+ return <main className="dashboard detail-page" id="main-content" tabIndex={-1}>
+  <PageHeading title="AI Assistant · Adaptive Exercise" description="LinUCB selects a program; MPC optimizes its seven-day exercise schedule."/>
+  <p className="demo-note">Prototype AI, not medical advice. The bandit learns a completion/fatigue reward proxy, <strong>not bone-density improvement</strong>. Demo Mode contains synthetic feedback; Live Mode learns from submitted user feedback only.</p>
+  {!token?<section className="content-card"><h2>Sign in required</h2><p><Link to="/sign-in">Sign in</Link> to generate an exercise plan.</p></section>:<>
+   <div className="science-mode" role="group" aria-label="Learning mode"><button type="button" aria-pressed={mode==='demo'} disabled={busy} onClick={()=>setMode('demo')}>Demo · synthetic</button><button type="button" aria-pressed={mode==='live'} disabled={busy} onClick={()=>setMode('live')}>Live · reported feedback</button></div>
+   <section className="content-card scenario-inputs"><h2>Today's context</h2><div className="science-control-grid">
+    <label>Sleep hours<input type="number" min="0" max="16" step="0.5" value={form.sleepHours} onChange={e=>update('sleepHours',e.target.value)}/></label>
+    <label>Fatigue before exercise (0–100)<input type="number" min="0" max="100" value={form.fatigueBefore} onChange={e=>update('fatigueBefore',e.target.value)}/></label>
+    <label>Available minutes today<input type="number" min="0" max="180" value={form.availableMinutes} onChange={e=>update('availableMinutes',e.target.value)}/></label>
+    <label>Weekly exercise budget (min)<input type="number" min="0" max="1260" value={form.weeklyBudgetMinutes} onChange={e=>update('weeklyBudgetMinutes',e.target.value)}/></label>
+    <label>Fatigue ceiling (10–100)<input type="number" min="10" max="100" value={form.fatigueCeiling} onChange={e=>update('fatigueCeiling',e.target.value)}/></label>
+   </div><div className="science-actions"><button className="secondary-button" disabled={busy} onClick={recommend}>{busy?'Processing…':'Generate AI exercise plan'}</button>{mode==='demo'&&<button className="secondary-button" disabled={busy} onClick={trainDemo}>Demo: train 30 synthetic rounds</button>}</div></section>
+   {error&&<p className="projection-error" role="alert">{error}</p>}{notice&&<p className="demo-note" role="status">{notice}</p>}
+   {recommendation&&<div className="science-stack">
+    <section className="content-card"><div className="science-heading"><h2>01 · LinUCB decision</h2><span className="science-chip">{mode.toUpperCase()} · ADAPTIVE BANDIT</span></div><p className="science-choice">{recommendation.selectedArm?.label}</p><p className="muted-copy">{recommendation.reason}</p><h3>UCB scores by program option</h3><ScoreChart scores={recommendation.alternatives||[]}/><p className="projection-subnote">Score = estimated reward + exploration bonus. Higher UCB scores influence which predefined program is selected. Initial untrained scores are exploratory, not a validated recommendation.</p></section>
+    <section className="content-card"><div className="science-heading"><h2>02 · MPC schedule · seven days</h2><span className="science-chip">ILLUSTRATIVE OPTIMIZATION</span></div><p className="muted-copy">Total: {recommendation.exercisePlan?.totalMinutes} minutes. Green = resistance; blue = aerobic training.</p><ExerciseChart days={recommendation.exercisePlan?.days||[]}/><p className="projection-subnote">The planner respects configured time/fatigue constraints in a simplified model. It does not establish a safe clinical dose or a specific bone-density benefit.</p></section>
+    <section className="content-card scenario-inputs"><h2>03 · Session feedback</h2><p className="muted-copy">After the exercise session, report how much you completed and how tired you felt. This updates the bandit for your account and selected mode.</p><div className="science-control-grid"><label>Plan completed (%)<input type="number" min="0" max="100" value={feedback.completionPercent} onChange={e=>setField('completionPercent',e.target.value)}/></label><label>Fatigue after session (0–100)<input type="number" min="0" max="100" value={feedback.fatigueAfter} onChange={e=>setField('fatigueAfter',e.target.value)}/></label></div><button className="secondary-button" disabled={busy} onClick={sendFeedback}>Submit feedback</button><p className="projection-subnote">One feedback submission per recommendation. In Demo Mode, this is marked as synthetic by the Python engine; use Live Mode for genuine self-reported observations.</p></section>
+   </div>}
+   <section className="content-card science-last"><h2>Learning status · {mode}</h2>{status?<><p className="muted-copy">Feedback samples: <strong>{status.feedbackCount}</strong> · State: {status.learningState} · Storage: {status.dataRetention}</p><details><summary>Advanced details: bandit scores, observations & reward history</summary><ScoreChart scores={status.scores||[]}/><div className="science-history">{(status.history||[]).slice(-10).reverse().map(h=><div key={h.round}><span>Round {h.round} · {h.armId} {h.synthetic?'· synthetic':'· reported'}</span><strong>Reward {h.reward?.toFixed(3)}</strong></div>)}</div><p className="projection-subnote">Reward = 0.7 × completion fraction − 0.3 × post-session fatigue fraction. Bandit state resides in Python memory and resets on Python restart.</p></details></>:<p className="muted-copy">Loading learning state…</p>}</section>
+   <section className="content-card science-last"><h2>How the AI makes a decision</h2><p className="muted-copy"><strong>LinUCB</strong> weighs sleep, pre-exercise fatigue and time availability, balancing previous reward observations with exploration across three predefined programs: balanced, resistance-focused and lighter. <strong>MPC</strong> then fits the selected profile into a constrained seven-day schedule. Feedback updates future LinUCB scores. This is an activity-adherence demonstration, not a clinically validated bone-health intervention.</p></section>
+  </>}
+ </main>;
 }
