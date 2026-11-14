@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header.jsx';
+import OrbitalBackground from './components/OrbitalBackground.jsx';
 import Home from './pages/Home.jsx';
 import Register from './pages/Register.jsx';
 import SignIn from './pages/SignIn.jsx';
@@ -29,6 +30,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      <OrbitalBackground />
       <a href="#main-content" className="skip-link">Skip to content</a>
       <Header />
       <Routes>

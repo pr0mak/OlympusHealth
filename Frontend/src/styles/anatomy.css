@@ -15,10 +15,19 @@
   cursor: grab;
   touch-action: none;
 }
-.anatomy-viewport:active { cursor: grabbing; }
-.anatomy-viewport--hover { cursor: pointer; }
-.anatomy-viewport:focus-visible { outline: 1px solid #91e3d155; outline-offset: 2px; }
-.anatomy-viewport canvas { display: block; }
+.anatomy-viewport:active {
+  cursor: grabbing;
+}
+.anatomy-viewport--hover {
+  cursor: pointer;
+}
+.anatomy-viewport:focus-visible {
+  outline: 1px solid var(--accent-border);
+  outline-offset: 2px;
+}
+.anatomy-viewport canvas {
+  display: block;
+}
 
 .anatomy-layers {
   display: flex;
@@ -34,15 +43,28 @@
   padding: 0.7rem 1.2rem;
   border: 0;
   border-radius: 999px;
-  color: #bac7d6;
+  color: var(--text-muted);
   background: transparent;
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-  transition: color 160ms ease, background 160ms ease;
+  transition:
+    color 160ms ease,
+    background 160ms ease;
 }
-.anatomy-layers button[aria-pressed="true"] { color: #a8eddd; background: #91e3d114; }
-.anatomy-layers button:hover { color: #e3faf3; background: #91e3d11c; }
+.anatomy-layers button[aria-pressed="true"] {
+  color: #081420;
+  background: var(--cyan-bright);
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+.anatomy-layers button:hover {
+  color: var(--text-primary);
+  background: var(--accent-glow);
+}
+.anatomy-layers button[aria-pressed="true"]:hover {
+  color: #081420;
+  background: #effcff;
+}
 
 .anatomy-loading {
   position: absolute;
@@ -52,24 +74,90 @@
   justify-items: center;
   gap: 0.75rem;
   pointer-events: none;
-  color: #c3d0e4;
+  color: var(--text-secondary);
   font-size: 0.8rem;
 }
-.loading-ring { width: 28px; height: 28px; border: 2px solid #91e3d133; border-top-color: #91e3d1; border-radius: 50%; animation: anatomy-loading-spin 1s linear infinite; }
-@keyframes anatomy-loading-spin { to { transform: rotate(360deg); } }
-.anatomy-hover-label { position: absolute; bottom: 1rem; left: 50%; max-width: calc(100% - 2rem); transform: translateX(-50%); padding: 0.5rem 0.8rem; border-radius: 6px; background: #10153cef; color: #dbf5ee; font-size: 0.7rem; text-align: center; pointer-events: none; }
-.anatomy-message { display: flex; flex: 1; min-height: 0; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem; color: #c3d0e4; }
-.anatomy-message h3 { font-size: 1rem; font-weight: 500; }
-.anatomy-message p { max-width: 35ch; font-size: 0.8rem; line-height: 1.7; }
-.anatomy-message button { padding: 0.6rem 0.9rem; border: 1px solid #ffffff25; border-radius: 6px; color: #c3d0e4; background: transparent; font-size: 0.8rem; cursor: pointer; }
-.selected-part-preview { margin: 0 0 0.7rem; color: #a8eddd; font-size: 0.7rem; line-height: 1.5; }
+.loading-ring {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--accent-glow);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: anatomy-loading-spin 1s linear infinite;
+}
+@keyframes anatomy-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.anatomy-hover-label {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  max-width: calc(100% - 2rem);
+  transform: translateX(-50%);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  background: var(--tooltip-bg);
+  color: var(--cyan-bright);
+  font-size: 0.7rem;
+  text-align: center;
+  pointer-events: none;
+}
+.anatomy-message {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+.anatomy-message h3 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.anatomy-message p {
+  max-width: 35ch;
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+.anatomy-message button {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  background: transparent;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.selected-part-preview {
+  margin: 0 0 0.7rem;
+  color: var(--cyan-bright);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
 
 @media (max-width: 760px) {
-  .anatomy-viewer { height: clamp(520px, 78svh, 680px); }
-  .anatomy-layers { gap: 0.35rem; margin-top: 0.4rem; }
-  .anatomy-layers button { padding: 0.7rem 1rem; font-size: 0.8rem; }
+  .anatomy-viewer {
+    height: clamp(520px, 78svh, 680px);
+  }
+  .anatomy-layers {
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+  }
+  .anatomy-layers button {
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .loading-ring { animation: none; }
-  .anatomy-layers button { transition: none; }
+  .loading-ring {
+    animation: none;
+  }
+  .anatomy-layers button {
+    transition: none;
+  }
 }

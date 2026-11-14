@@ -2,6 +2,18 @@
 
 React με JavaScript/JSX και Vite.
 
+## Visual theme
+
+The shared color tokens live in `src/styles/style.css`: deep blue-gray backgrounds,
+off-white typography, and red health, violet assistant, and amber projection accents.
+`OrbitalBackground.jsx` provides 16 orbit paths and a fixed star field with no pointer interaction.
+`src/styles/assembly.css` coordinates the slower entrance: model from beyond the right edge,
+staggered widgets, rotating logo, individual navigation links, footer, stars, and traced orbit lines.
+The model entrance lasts 2.6 seconds and starts after
+its asset is ready; widgets have a loading fallback. Reduced-motion preferences
+show everything immediately. Page and anatomy styles share the theme tokens while
+preserving the existing layout and viewer controls.
+
 ## Εκκίνηση
 
 Από τον φάκελο `Frontend`:
