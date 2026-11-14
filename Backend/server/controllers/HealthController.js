@@ -1,115 +1,84 @@
 
 const HealthModel = require("../models/HealthModel");
 
-const allowedFields = [
-  "heartRate",
-  "oxygenSaturation",
-  "bodyTemperature",
-  "bloodGlucose",
-  "sleepHours",
-  "mood",
-  "bodyMass"
-];
-
-const ranges = {
+const RANGES = {
   heartRate: [1, 300],
   oxygenSaturation: [0, 100],
   bodyTemperature: [20, 45],
-  bloodGlucose: [1, 1000],
-  sleepHours: [0, 24],
-  mood: [1, 5],
-  bodyMass: [1, 500],
-  systolic: [1, 300],
-  diastolic: [1, 250]
+  sleepHours: [0, 24]
 };
 
-function validateMeasurement(body) {
-  if (!body || typeof body !== "object" || Array.isArray(body)) {
-    return "Invalid request body";
+function validateMeasurement(data) {
+  if (
+    !data ||
+    typeof data !== "object" ||
+    Array.isArray(data)
+  ) {
+    return "Invalid JSON body";
   }
 
-  const allowed = [...allowedFields, "bloodPressure"];
+  const keys = Object.keys(data);
 
-  for (const key of Object.keys(body)) {
-    if (!allowed.includes(key)) {
+  if (!keys.length) {
+    return "At least one measurement is required";
+  }
+
+  for (const key of keys) {
+    if (!Object.hasOwn(RANGES, key)) {
       return `Unknown field: ${key}`;
     }
-  }
 
-  let count = 0;
-
-  for (const field of allowedFields) {
-    if (body[field] === undefined) continue;
-
-    count++;
-    const value = body[field];
-    const [min, max] = ranges[field];
+    const [min, max] = RANGES[key];
+    const value = data[key];
 
     if (
       typeof value !== "number" ||
       !Number.isFinite(value) ||
       value < min ||
       value > max ||
-      (["heartRate", "mood"].includes(field) &&
-        !Number.isInteger(value))
+      (
+        key === "heartRate" &&
+        !Number.isInteger(value)
+      )
     ) {
-      return `Invalid ${field}`;
+      return `Invalid ${key}`;
     }
   }
-
-  if (body.bloodPressure !== undefined) {
-    const bp = body.bloodPressure;
-
-    if (!bp || typeof bp !== "object" || Array.isArray(bp)) {
-      return "Invalid bloodPressure";
-    }
-
-    for (const key of Object.keys(bp)) {
-      if (!["systolic", "diastolic"].includes(key)) {
-        return `Unknown bloodPressure field: ${key}`;
-      }
-
-      const value = bp[key];
-      const [min, max] = ranges[key];
-
-      if (
-        !Number.isInteger(value) ||
-        value < min ||
-        value > max
-      ) {
-        return `Invalid bloodPressure.${key}`;
-      }
-
-      count++;
-    }
-  }
-
-  if (count === 0) return "At least one measurement is required";
 
   return null;
 }
 
-function formatMeasurement(row) {
+function format(row) {
   if (!row) return null;
 
   return {
     id: row.id,
-    heartRate: row.heart_rate,
-    bloodPressure: {
-      systolic: row.systolic_bp,
-      diastolic: row.diastolic_bp
-    },
-    oxygenSaturation: row.oxygen_saturation,
-    bodyTemperature: row.body_temperature,
-    bloodGlucose: row.blood_glucose,
-    sleepHours: row.sleep_hours,
-    mood: row.mood,
-    bodyMass: row.body_mass,
+    heartRate:
+      row.avg_heart_rate === null
+        ? null
+        : Number(row.avg_heart_rate),
+
+    oxygenSaturation:
+      row.oxygen_saturation === null
+        ? null
+        : Number(row.oxygen_saturation),
+
+    bodyTemperature:
+      row.body_temperature === null
+        ? null
+        : Number(row.body_temperature),
+
+    sleepHours:
+      row.sleep_duration === null
+        ? null
+        : Number(row.sleep_duration),
+
     recordedAt: row.recorded_at
   };
 }
 
-const getHealth = async (req, res, next) => {
+// GET /api/health
+async function getHealth(req, res, next) {
   try {
     const userId = req.user.id;
 
@@ -118,10 +87,10 @@ const getHealth = async (req, res, next) => {
       HealthModel.countByUser(userId)
     ]);
 
-    res.json({
+    return res.json({
       success: true,
       data: {
-        latestMeasurement: formatMeasurement(latest),
+        latestMeasurement: format(latest),
         totalMeasurements: total,
         healthStatus: "not_assessed"
       }
@@ -129,68 +98,77 @@ const getHealth = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+}
 
-const getMeasurements = async (req, res, next) => {
+// GET /api/health/measurements
+async function getMeasurements(req, res, next) {
   try {
-    const rows = await HealthModel.findAllByUser(req.user.id);
+    const rows = await HealthModel.findAllByUser(
+      req.user.id
+    );
 
-    res.json({
+    return res.json({
       success: true,
       count: rows.length,
-      data: rows.map(formatMeasurement)
+      data: rows.map(format)
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
-const createMeasurement = async (req, res, next) => {
+// POST /api/health/measurements
+async function createMeasurement(req, res, next) {
   try {
-    const validationError = validateMeasurement(req.body);
+    const issue = validateMeasurement(req.body);
 
-    if (validationError) {
+    if (issue) {
       return res.status(400).json({
         success: false,
-        message: validationError
+        message: issue
       });
     }
 
-    const id = await HealthModel.create(req.user.id, req.body);
+    const id = await HealthModel.create(
+      req.user.id,
+      req.body
+    );
 
     const row = await HealthModel.findByIdAndUser(
       id,
       req.user.id
     );
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: "Measurement created",
-      data: formatMeasurement(row)
+      data: format(row)
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
-const updateMeasurement = async (req, res, next) => {
+// PUT /api/health/measurements
+async function updateMeasurement(req, res, next) {
   try {
-    const { measurementId, ...data } = req.body;
+    const { measurementId, ...data } = req.body || {};
 
-    if (!Number.isSafeInteger(measurementId) ||
-        measurementId <= 0) {
+    if (
+      !Number.isSafeInteger(measurementId) ||
+      measurementId <= 0
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Valid measurementId is required"
+        message: "Valid measurementId required"
       });
     }
 
-    const validationError = validateMeasurement(data);
+    const issue = validateMeasurement(data);
 
-    if (validationError) {
+    if (issue) {
       return res.status(400).json({
         success: false,
-        message: validationError
+        message: issue
       });
     }
 
@@ -212,15 +190,14 @@ const updateMeasurement = async (req, res, next) => {
       req.user.id
     );
 
-    res.json({
+    return res.json({
       success: true,
-      message: "Measurement updated",
-      data: formatMeasurement(row)
+      data: format(row)
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
 module.exports = {
   getHealth,

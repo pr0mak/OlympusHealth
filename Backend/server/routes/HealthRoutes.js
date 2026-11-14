@@ -1,14 +1,25 @@
-const express = require("express");
-const router = express.Router();
 
-const HealthController = require("../controllers/HealthController");
+const router = require("express").Router();
 
-router.get("/", HealthController.getHealth);
+const controller = require(
+  "../controllers/HealthController"
+);
 
-router.get("/measurements", HealthController.getMeasurements);
+router.get("/", controller.getHealth);
 
-router.post("/measurements", HealthController.createMeasurement);
+router.get(
+  "/measurements",
+  controller.getMeasurements
+);
 
-router.put("/measurements", HealthController.updateMeasurement);
+router.post(
+  "/measurements",
+  controller.createMeasurement
+);
+
+router.put(
+  "/measurements",
+  controller.updateMeasurement
+);
 
 module.exports = router;

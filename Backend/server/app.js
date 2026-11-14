@@ -20,32 +20,28 @@ const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
-// -------------------------------------
 // CORS
-// -------------------------------------
 app.use(cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173"
 }));
 
-// -------------------------------------
-// Body Parsers
-// -------------------------------------
+// Body parsers
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// -------------------------------------
-// Request Logger (Development)
-// -------------------------------------
+// Development request logger
 if (process.env.NODE_ENV !== "production") {
     app.use((req, res, next) => {
-        console.log("REQUEST:", req.method, req.originalUrl);
+        console.log(
+            "REQUEST:",
+            req.method,
+            req.originalUrl
+        );
         next();
     });
 }
 
-// -------------------------------------
-// Authentication Rate Limiter
-// -------------------------------------
+// Authentication rate limiter
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 20,
@@ -57,9 +53,7 @@ const authLimiter = rateLimit({
     }
 });
 
-// -------------------------------------
-// Public Server Health Check
-// -------------------------------------
+// Public server health check
 app.get("/healthz", (req, res) => {
     return res.status(200).json({
         success: true,
@@ -68,38 +62,38 @@ app.get("/healthz", (req, res) => {
     });
 });
 
-// -------------------------------------
 // Authentication
-// -------------------------------------
 app.use("/api/auth", authLimiter, authRoutes);
 
-// -------------------------------------
-// Protected Dashboard
-// -------------------------------------
-app.use("/api", verifyToken, dashboardRoutes);
+// Health Data - Protected
+app.use(
+    "/api/health",
+    verifyToken,
+    healthRoutes
+);
 
-// -------------------------------------
-// Protected Health Data
-// -------------------------------------
-app.use("/api/health", verifyToken, healthRoutes);
+// Future Projection - Protected
+app.use(
+    "/api/projection",
+    verifyToken,
+    projectionRoutes
+);
 
-// -------------------------------------
-// Projection
-// Authentication is handled inside
-// projectionRoutes.js
-// -------------------------------------
-app.use("/api/projection", projectionRoutes);
+// AI Assistant - Protected
+app.use(
+    "/api/assistant",
+    verifyToken,
+    assistantRoutes
+);
 
-// -------------------------------------
-// AI Assistant
-// Authentication is handled inside
-// assistantRoutes.js
-// -------------------------------------
-app.use("/api/assistant", assistantRoutes);
+// Dashboard - Protected
+app.use(
+    "/api",
+    verifyToken,
+    dashboardRoutes
+);
 
-// -------------------------------------
 // 404 Handler
-// -------------------------------------
 app.use((req, res) => {
     return res.status(404).json({
         success: false,
@@ -107,26 +101,25 @@ app.use((req, res) => {
     });
 });
 
-// -------------------------------------
-// Global Error Handler
-// -------------------------------------
+// Global error handler
 app.use(errorHandler);
 
-// -------------------------------------
-// Server Configuration
-// -------------------------------------
+// Server configuration
 const PORT = Number(process.env.PORT || 3001);
 
 async function startServer() {
     try {
+        // Validate JWT secret
         if (
             !process.env.JWT_SECRET ||
             process.env.JWT_SECRET.length < 32
         ) {
-            throw new Error("Missing or weak JWT_SECRET");
+            throw new Error(
+                "Missing or weak JWT_SECRET"
+            );
         }
 
-        // Test MySQL connection
+        // Check MySQL connection
         await db.query("SELECT 1");
 
         console.log("MySQL connected successfully");
