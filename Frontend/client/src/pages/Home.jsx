@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import Widget from "../components/Widget.jsx";
+import HealthDataPreview from "../components/HealthDataPreview.jsx";
 import TrendChart from "../components/TrendChart.jsx";
 import { createProjection, heartRate } from "../data/mockHealth.js";
 
