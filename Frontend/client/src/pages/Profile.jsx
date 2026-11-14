@@ -47,10 +47,6 @@ export default function Profile() {
           />
         </div>
 
-        <p className="muted-copy">
-          Your account information is loaded
-          securely from GET /api/auth/me.
-        </p>
 
         <dl className="account-profile">
           <dt>User ID</dt>
