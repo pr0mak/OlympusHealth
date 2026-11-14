@@ -158,6 +158,28 @@ summary:focus-visible {
   color: var(--cyan);
   filter: drop-shadow(0 0 12px #75e3f540);
 }
+.site-header--mission {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.site-header--mission .brand { justify-self: start; }
+.site-header--mission .account-nav { justify-self: end; }
+.mission-timer {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+  font-size: 1rem;
+}
+.mission-timer-name { color: var(--text-primary); font-weight: 500; }
+.mission-timer-days { color: var(--text-muted); }
+.mission-timer-clock {
+  color: var(--text-primary);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+}
 .brand-symbol svg {
   width: 32px;
   height: 32px;
@@ -340,6 +362,15 @@ h1 {
   .widget {
     padding-inline: 1.15rem;
   }
+}
+@media (max-width: 900px) {
+  .site-header--mission {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    padding-block: 1.1rem;
+  }
+  .site-header--mission .account-nav { grid-column: 2; grid-row: 1; }
+  .mission-timer { grid-column: 1 / -1; grid-row: 2; }
 }
 @media (max-width: 760px) {
   .site-header {

@@ -43,6 +43,41 @@
   border-color: var(--accent);
   background: var(--surface-raised);
 }
+.home-overview .widget {
+  border: 1px solid var(--accent);
+}
+.home-overview .widget::before {
+  display: none;
+}
+@media (min-width: 761px) {
+  .home-overview {
+    --overview-model-height: clamp(620px, calc(100svh - 220px), 860px);
+    /* Allow for the full-body camera's space above the head. */
+    --overview-head-inset: calc((var(--overview-model-height) - 3.2rem) * 0.06);
+  }
+  .home-overview .anatomy-viewer {
+    height: var(--overview-model-height);
+  }
+  .home-overview .widget-stack {
+    height: calc(var(--overview-model-height) - var(--overview-head-inset));
+    margin-top: var(--overview-head-inset);
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    align-self: start;
+  }
+  .home-overview .widget {
+    min-height: 0;
+    padding-block: 0.9rem;
+  }
+  .home-overview .widget-header,
+  .home-overview .widget-open { flex-shrink: 0; }
+  .home-overview .widget-preview {
+    margin-block: 0.5rem;
+    min-height: 0;
+    overflow: auto;
+  }
+  .home-overview .preview-metric strong { font-size: 2.2rem; }
+  .home-overview .trend-chart--compact svg { height: 32px; }
+}
 .widget-header {
   align-items: center;
   justify-content: space-between;

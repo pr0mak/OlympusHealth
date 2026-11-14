@@ -74,9 +74,9 @@ No Blender setup, remote model URL, or decoder CDN is required at runtime.
   model; it has no heading, border, dropdown, or extra camera controls.
 - Click empty canvas space, double-click the viewer, press Escape while the
   viewer is focused, or click a layer button to return to its full-body view.
-- Selection is lifted to Home's React state and displayed in the Health Data
-  widget. Its vital readings remain global mock data, not measurements of that
-  selected structure.
+- Selection stays in the anatomy viewer for highlighting and camera framing.
+  It does not add a label to the Health Data widget, whose vital readings remain
+  global mock data.
 
 `AnatomyScene.jsx` clones the cached scene, assigns materials per mesh, controls
 layer visibility and pointer events, and frames selection using bounding boxes.
@@ -115,7 +115,8 @@ Chest includes the pectoral and intercostal muscles. Unlisted back, trapezius,
 diaphragm, and pelvic-floor meshes remain visible but are not selectable.
 
 Hovering, clicking, and camera framing operate on the entire region.
-The Health Data widget receives that region's ID and label via `onSelectionChange`.
+The viewer offers an optional `onSelectionChange` callback for future region-specific information;
+Home currently leaves it disconnected from the Health Data preview.
 Skeleton and Organs keep their existing selections. The asset check also verifies
 group membership, anatomical sides, missing meshes, and duplicate assignments.
 

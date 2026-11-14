@@ -9,7 +9,6 @@ const AnatomyViewer = lazy(
 );
 
 export default function Home() {
-  const [selectedPart, setSelectedPart] = useState(null);
   const [assembled, setAssembled] = useState(false);
   const assemblePage = useCallback(() => setAssembled(true), []);
 
@@ -30,15 +29,10 @@ export default function Home() {
             />
           }
         >
-          <AnatomyViewer onSelectionChange={setSelectedPart} onModelReady={assemblePage} />
+          <AnatomyViewer onModelReady={assemblePage} />
         </Suspense>
         <aside className="widget-stack" aria-label="Health and mission widgets">
           <Widget id="health-data" title="Health Data" to="/health-data">
-            {selectedPart && (
-              <p className="selected-part-preview">
-                Selected structure: {selectedPart.label}
-              </p>
-            )}
             <div className="preview-metric">
               <strong>
                 72 <small>bpm</small>
