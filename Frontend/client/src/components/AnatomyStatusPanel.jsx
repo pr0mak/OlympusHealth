@@ -1,3 +1,5 @@
+import BackLink from "./BackLink.jsx";
+
 export default function AnatomyStatusPanel({ selection, kind, subtitle, onClear, children }) {
   return (
     <section className="anatomy-status" aria-labelledby="anatomy-status-title">
@@ -8,9 +10,7 @@ export default function AnatomyStatusPanel({ selection, kind, subtitle, onClear,
       <h2 id="anatomy-status-title" aria-live="polite">{selection.label}</h2>
       <p className="anatomy-status-subtitle">{subtitle || `Current ${kind.toLowerCase()} condition`}</p>
       {children}
-      <button className="anatomy-status-back" type="button" onClick={onClear}>
-        <span aria-hidden="true">←</span> Back to overview
-      </button>
+      <BackLink onClick={onClear} />
     </section>
   );
 }

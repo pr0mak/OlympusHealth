@@ -1,5 +1,6 @@
+import BackLink from "../components/BackLink.jsx";
 
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -28,9 +29,7 @@ export default function Profile() {
       id="main-content"
       tabIndex={-1}
     >
-      <Link to="/" className="back-link">
-        ← Back to overview
-      </Link>
+      <BackLink />
 
       <section className="content-card auth-card">
         <p className="eyebrow">

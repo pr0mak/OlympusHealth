@@ -1,3 +1,4 @@
+import BackLink from "../components/BackLink.jsx";
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -131,9 +132,7 @@ export default function Alerts() {
       tabIndex={-1}
       className="dashboard detail-page astra-alerts-page"
     >
-      <Link to="/" className="back-link">
-        ← Back to overview
-      </Link>
+      <BackLink />
 
       <div className="alerts-heading">
         <div>

@@ -1,3 +1,4 @@
+import BackLink from "../components/BackLink.jsx";
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -512,9 +513,7 @@ async function saveMeasurement(event) {
       id="main-content"
       tabIndex={-1}
     >
-      <Link to="/" className="back-link">
-        ← Back to overview
-      </Link>
+      <BackLink />
 
       <div className="health-page-heading">
         <div>

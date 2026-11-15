@@ -1,3 +1,4 @@
+import BackLink from "./BackLink.jsx";
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -75,33 +76,21 @@ export default function AuthForm({ register = false }) {
 
   return (
     <main
-  className={`dashboard auth-page ${
+  className={`dashboard auth-entry-page ${
     register ? "astra-register-page" : "astra-signin-page"
   }`}
   id="main-content"
   tabIndex={-1}
 >
-      <Link to="/" className="back-link">
-        ← Back to overview
-      </Link>
+      <BackLink />
 
       <section
         className="content-card auth-card"
         aria-labelledby="auth-title"
       >
-        <p className="eyebrow">
-          Your mission starts here
-        </p>
-
         <h1 id="auth-title">
           {register ? "Create your account" : "Sign in"}
         </h1>
-
-        <p className="muted-copy">
-          {register
-            ? "Set up your astronaut profile."
-            : "Access your astronaut profile."}
-        </p>
 
         <form
           className="auth-form"
@@ -109,7 +98,7 @@ export default function AuthForm({ register = false }) {
         >
           {/* Username */}
           <label htmlFor="username">
-            Username
+            <span className="auth-field-label">Username</span>
 
             <input
               id="username"
@@ -126,7 +115,7 @@ export default function AuthForm({ register = false }) {
 
           {/* Password */}
           <label htmlFor="password">
-            Password
+            <span className="auth-field-label">Password</span>
 
             <input
               id="password"
@@ -150,7 +139,7 @@ export default function AuthForm({ register = false }) {
 
               {/* Confirm Password */}
               <label htmlFor="confirm-password">
-                Confirm password
+                <span className="auth-field-label">Confirm password</span>
 
                 <input
                   id="confirm-password"
@@ -164,7 +153,7 @@ export default function AuthForm({ register = false }) {
 
               {/* Gender */}
               <label htmlFor="gender">
-                Gender
+                <span className="auth-field-label">Gender</span>
 
                 <select
                   id="gender"
@@ -186,7 +175,7 @@ export default function AuthForm({ register = false }) {
 
               {/* Age */}
               <label htmlFor="age">
-                Age
+                <span className="auth-field-label">Age</span>
 
                 <input
                   id="age"
