@@ -1,6 +1,6 @@
 import BackLink from "../components/BackLink.jsx";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext.jsx";
@@ -15,14 +15,14 @@ const METRICS = [
     label: "Heart Rate",
     unit: "bpm",
     description: "Recorded average heart rate",
-    color: "var(--blue)"
+    color: "var(--health)"
   },
   {
     key: "oxygenSaturation",
     label: "Oxygen Saturation",
     unit: "%",
     description: "Recorded blood oxygen saturation",
-    color: "#34d399"
+    color: "var(--blue)"
   },
   {
     key: "bodyTemperature",
@@ -310,6 +310,23 @@ const [adding, setAdding] = useState(false);
 const [saving, setSaving] = useState(false);
 const [addError, setAddError] = useState("");
 const [addSuccess, setAddSuccess] = useState("");
+const measurementFormRef = useRef(null);
+
+const scrollToMeasurementForm = useCallback(() => {
+  measurementFormRef.current?.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "instant"
+      : "smooth",
+    block: "center"
+  });
+}, []);
+
+useEffect(() => {
+  if (!adding) return;
+
+  const frame = window.requestAnimationFrame(scrollToMeasurementForm);
+  return () => window.cancelAnimationFrame(frame);
+}, [adding, scrollToMeasurementForm]);
 
 const [addValues, setAddValues] = useState({
   heartRate: "",
@@ -439,6 +456,7 @@ function openAdd() {
   setAddError("");
   setAddSuccess("");
   setAdding(true);
+  if (adding) window.requestAnimationFrame(scrollToMeasurementForm);
 }
 
 function handleAddChange(event) {
@@ -609,6 +627,8 @@ async function saveMeasurement(event) {
                     className="health-edit-button"
                     onClick={openAdd}
                     disabled={saving}
+                    aria-expanded={adding}
+                    aria-controls={adding ? "add-measurement-form" : undefined}
                   >
                     + Add Measurements
                   </button>
@@ -639,6 +659,8 @@ async function saveMeasurement(event) {
 
                 {adding && (
   <form
+    id="add-measurement-form"
+    ref={measurementFormRef}
     className="health-edit-form"
     onSubmit={saveMeasurement}
   >

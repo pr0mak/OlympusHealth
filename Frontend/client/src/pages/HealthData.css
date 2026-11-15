@@ -800,9 +800,9 @@
 
 .health-edit-button {
   padding: 10px 16px;
-  background: #2b4258;
-  color: #e5edf4;
-  border: 1px solid #526b80;
+  background: #fcfbf9;
+  color: #081420;
+  border: 1px solid #fcfbf9;
   border-radius: 8px;
   font: inherit;
   font-size: 0.83rem;
@@ -810,7 +810,8 @@
 }
 
 .health-edit-button:hover {
-  background: #36516a;
+  background: #f2f0ea;
+  border-color: #f2f0ea;
 }
 
 .health-edit-button:disabled {
