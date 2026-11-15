@@ -1,7 +1,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import PageHeading from "../components/PageHeading.jsx";
+import BackLink from "../components/BackLink.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { futureProjectionApi } from "../api/client.js";
 import "./FutureProjection.css";
@@ -10,17 +10,19 @@ const GROUPS = [
   {
     id: "generic_health",
     title: "Vital Signs",
+    color: "var(--health)",
     icon: "♡",
     metrics: [
-      ["avg_heart_rate", "Heart Rate", "bpm"],
-      ["oxygen_saturation", "Oxygen Saturation", "%"],
-      ["body_temperature", "Body Temperature", "°C"],
-      ["sleep_duration", "Sleep Duration", "h"]
+      ["avg_heart_rate", "Heart Rate", "bpm", "var(--health)"],
+      ["oxygen_saturation", "Oxygen Saturation", "%", "var(--blue)"],
+      ["body_temperature", "Body Temperature", "°C", "#fbbf24"],
+      ["sleep_duration", "Sleep Duration", "h", "#a78bfa"]
     ]
   },
   {
     id: "muscle_health",
     title: "Muscle Health",
+    color: "var(--violet)",
     icon: "◈",
     metrics: [
       ["muscle_atrophy", "Muscle Atrophy", "%"],
@@ -32,6 +34,7 @@ const GROUPS = [
   {
     id: "bone_health",
     title: "Bone Health",
+    color: "var(--amber)",
     icon: "◇",
     metrics: [
       ["bone_density", "Bone Density", ""],
@@ -43,6 +46,7 @@ const GROUPS = [
   {
     id: "organ_health",
     title: "Organ Health",
+    color: "var(--blue)",
     icon: "✦",
     metrics: [
       ["arrhythmia", "Arrhythmia", ""],
@@ -53,6 +57,7 @@ const GROUPS = [
   {
     id: "space_radiation",
     title: "Space Radiation",
+    color: "var(--fire)",
     icon: "☼",
     metrics: [
       ["daily_radiation_dose", "Daily Radiation Dose", ""],
@@ -235,7 +240,7 @@ function FatigueComparisonChart({ data }) {
             stroke="var(--border)" strokeDasharray="4 6" />
         ))}
         <path d={makePath("withoutExercise")} fill="none"
-          stroke="var(--cyan)" strokeWidth="2.8" strokeDasharray="7 5"
+          stroke="var(--fire)" strokeWidth="2.8" strokeDasharray="7 5"
           strokeLinecap="round" strokeLinejoin="round" />
         <path d={makePath("withExercise")} fill="none"
           stroke="var(--violet)" strokeWidth="2.8"
@@ -243,7 +248,7 @@ function FatigueComparisonChart({ data }) {
         {points.length <= 35 && points.map((point, index) => (
           <g key={point.day ?? index}>
             <circle cx={x(index)} cy={y(point.withoutExercise)} r="3"
-              fill="var(--cyan)">
+              fill="var(--fire)">
               <title>{`Day ${point.day}: Without exercise ${fmt(point.withoutExercise)}`}</title>
             </circle>
             <circle cx={x(index)} cy={y(point.withExercise)} r="3"
@@ -261,7 +266,7 @@ function FatigueComparisonChart({ data }) {
         </text>
       </svg>
       <div className="fp-legend">
-        <span><i className="fp-dot fp-dot--cyan" />Without exercise</span>
+        <span><i className="fp-dot fp-dot--fire" />Without exercise</span>
         <span><i className="fp-dot fp-dot--violet" />With exercise plan</span>
       </div>
       <div className="fp-chart-range">
@@ -389,7 +394,7 @@ function ProjectionGraph({ current, points, unit }) {
 
         <path
           d={path}
-          stroke="var(--amber)"
+          stroke="var(--fp-accent)"
           strokeWidth="2.8"
           fill="none"
           strokeDasharray="7 5"
@@ -400,7 +405,7 @@ function ProjectionGraph({ current, points, unit }) {
           cx={x(0)}
           cy={y(series[0])}
           r="5"
-          fill="var(--cyan)"
+          fill="var(--fp-accent)"
         />
 
         {points.map((p, i) => (
@@ -409,7 +414,7 @@ function ProjectionGraph({ current, points, unit }) {
             cx={x(i + 1)}
             cy={y(Number(p.value))}
             r="3"
-            fill="var(--amber)"
+            fill="var(--fp-accent)"
           >
             <title>
               {`${p.date}: ${fmt(p.value)} ${unit}`}
@@ -489,17 +494,15 @@ function MetricCard({ group, metric, token, days }) {
     result?.points?.length > 0;
 
   return (
-    <article className="fp-metric-card">
+    <article className="fp-metric-card" style={{ "--fp-accent": metric[3] || group.color }}>
       <div className="fp-metric-top">
         <h3>{title}</h3>
 
-        <span className="fp-pill">
-          {projected
-            ? "PROJECTED"
-            : loading
-              ? "LOADING"
-              : "NO FORECAST"}
-        </span>
+        {!projected && (
+          <span className="fp-pill">
+            {loading ? "LOADING" : "NO FORECAST"}
+          </span>
+        )}
       </div>
 
       <div className="fp-metric-value">
@@ -637,10 +640,10 @@ export default function FutureProjection() {
       id="main-content"
       tabIndex={-1}
     >
-      <PageHeading
-        title="Future Projection"
-        description="Explore your health indicators and prepare for the days ahead."
-      />
+      <header className="detail-heading">
+        <BackLink />
+        <h1>Future Projection</h1>
+      </header>
 
       {!token ? (
         <section className="content-card fp-panel">
@@ -655,7 +658,7 @@ export default function FutureProjection() {
       ) : (
         <>
           <div className="fp-summary">
-            <div className="fp-summary-card">
+            <div className="fp-summary-card" style={{ "--fp-accent": "var(--health)" }}>
               <span className="fp-kicker">
                 HEALTH MONITORING
               </span>
@@ -665,7 +668,7 @@ export default function FutureProjection() {
               <p>Across five measurement categories</p>
             </div>
 
-            <div className="fp-summary-card">
+            <div className="fp-summary-card" style={{ "--fp-accent": "var(--violet)" }}>
               <span className="fp-kicker">
                 ACTIVITY PLAN
               </span>
@@ -677,7 +680,7 @@ export default function FutureProjection() {
               <p>Upcoming exercise schedule</p>
             </div>
 
-            <div className="fp-summary-card">
+            <div className="fp-summary-card" style={{ "--fp-accent": "var(--blue)" }}>
               <span className="fp-kicker">
                 PLANNED ACTIVITY
               </span>
@@ -693,6 +696,7 @@ export default function FutureProjection() {
           <section
             className="fp-section"
             aria-labelledby="fp-health-heading"
+            style={{ "--fp-accent": group.color }}
           >
             <div className="fp-section-heading">
               <div>
@@ -708,9 +712,6 @@ export default function FutureProjection() {
                 </p>
               </div>
 
-              <span className="fp-status">
-                FUTURE OUTLOOK
-              </span>
             </div>
 
             <div
@@ -728,6 +729,7 @@ export default function FutureProjection() {
                       : "fp-tab"
                   }
                   onClick={() => setGroupId(item.id)}
+                  style={{ "--fp-accent": item.color }}
                   aria-pressed={groupId === item.id}
                 >
                   <span aria-hidden="true">
@@ -772,7 +774,7 @@ export default function FutureProjection() {
             <div className="fp-notice">
               <strong>About future trajectories</strong>
               <p>
-                Dashed amber lines represent exploratory
+                Dashed colored lines represent exploratory
                 statistical projections calculated from
                 recent MySQL readings. They are not
                 clinically validated predictions.
@@ -801,9 +803,6 @@ export default function FutureProjection() {
                 </p>
               </div>
 
-              <span className="fp-status">
-                PLANNING MODEL
-              </span>
             </div>
 
             <div className="fp-panel fp-settings-panel">
