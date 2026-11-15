@@ -5,7 +5,6 @@ export default function AnatomyStatusPanel({ selection, kind, subtitle, onClear,
     <section className="anatomy-status" aria-labelledby="anatomy-status-title">
       <div className="anatomy-status-topline">
         <span className="eyebrow">{kind} status</span>
-        <span className="anatomy-status-demo">Demo data</span>
       </div>
       <h2 id="anatomy-status-title" aria-live="polite">{selection.label}</h2>
       <p className="anatomy-status-subtitle">{subtitle || `Current ${kind.toLowerCase()} condition`}</p>
