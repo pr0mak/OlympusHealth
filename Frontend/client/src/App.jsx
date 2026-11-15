@@ -48,7 +48,7 @@ export default function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/health-data" element={<HealthData />} />
-          <Route path="/future-projection" element={<FutureProjection />} />
+          <Route path="/future-projection" element={<FutureProjection ready={entered} />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

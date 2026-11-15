@@ -13,7 +13,8 @@
     "check:bones": "node scripts/check-bone-status.mjs",
     "check:organs": "node scripts/check-organ-status.mjs",
     "check:startup": "node scripts/check-startup.mjs",
-    "check:radiation": "node scripts/check-radiation.mjs"
+    "check:radiation": "node scripts/check-radiation.mjs",
+    "check:projection-chapters": "node scripts/check-projection-chapters.mjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",
