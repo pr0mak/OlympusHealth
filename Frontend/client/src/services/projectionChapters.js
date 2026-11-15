@@ -6,7 +6,7 @@ export function chapterReducer(state, action) {
     if (state.active === action.chapter) return state;
     if (state.phase === "closing") return { ...state, next: action.chapter };
     if (!state.active) return { phase: "open", active: action.chapter, next: null };
-    return { phase: "closing", active: null, next: action.chapter };
+    return { phase: "closing", active: null, next: action.chapter, outgoing: state.active };
   }
   if (action.type === "finish" && (state.phase === "intro" || state.phase === "closing")) {
     return { phase: "open", active: state.next, next: null };

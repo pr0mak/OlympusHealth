@@ -18,15 +18,18 @@ state = select(state, "health");
 assert.equal(state.active, null);
 assert.equal(state.phase, "closing");
 assert.equal(state.next, "health");
+assert.equal(state.outgoing, "activity", "Keep the outgoing card in the page layout until its slide finishes.");
 state = finish(state);
 assert.equal(state.active, "health");
 assert.equal(state.next, null);
+assert.equal(state.outgoing, undefined, "The hidden card must stop determining the open card's height.");
 assert.equal(select(state, "health"), state, "Clicking the open chapter must not reset it.");
 
 // Rapid changes use the latest choice, including returning to the outgoing chapter.
 state = select(state, "activity");
 state = select(state, "health");
 assert.equal(state.active, null);
+assert.equal(state.outgoing, "health", "Rapid selections must preserve the outgoing card while closing.");
 assert.equal(finish(state).active, "health");
 state = select(state, "activity");
 assert.equal(finish(state).active, "activity");

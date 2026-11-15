@@ -3,24 +3,32 @@
   --chapter-gap: 72px;
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  min-height: 100svh;
+  min-height: min(480px, 70svh);
   overflow: clip;
   isolation: isolate;
 }
 
 .fp-chapter {
-  position: relative;
-  grid-area: 1 / 1;
+  position: absolute;
+  inset: 0 var(--chapter-gap);
   min-width: 0;
-  min-height: 100svh;
-  margin-inline: var(--chapter-gap);
   overflow: hidden;
   border: 1px solid var(--chapter-accent);
   border-radius: 14px;
   background: var(--background);
   transition: transform var(--chapter-slide-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Only the visible or outgoing chapter sets the page height. */
+.fp-chapter[data-layout="true"] {
+  position: relative;
+  grid-area: 1 / 1;
+  inset: auto;
+  margin-inline: var(--chapter-gap);
+  align-self: start;
 }
 
 .fp-chapter--left {
@@ -75,7 +83,7 @@
 .fp-chapter-content .fp-summary--activity { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .fp-chapter-content .fp-section:last-child { margin-bottom: 0; }
 .fp-chapter-content .fp-metric-grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
 }
 .fp-chapter-content .fp-settings-grid {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));

@@ -1,5 +1,5 @@
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import BackLink from "../components/BackLink.jsx";
 import ProjectionChapters from "../components/ProjectionChapters.jsx";
@@ -333,6 +333,19 @@ function ExerciseBars({ schedule }) {
 }
 
 function ProjectionGraph({ current, points, unit }) {
+  const graphRef = useRef(null);
+  const [chartWidth, setChartWidth] = useState(700);
+
+  useEffect(() => {
+    const element = graphRef.current;
+    if (!element) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setChartWidth(Math.max(160, Math.round(entry.contentRect.width)));
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [points]);
+
   const series = [
     Number(current.value),
     ...points.map(p => Number(p.value))
@@ -345,12 +358,12 @@ function ProjectionGraph({ current, points, unit }) {
     return <div className="fp-empty">Projection unavailable.</div>;
   }
 
-  const w = 700;
-  const h = 150;
+  const w = chartWidth;
+  const h = 280;
   const left = 26;
-  const right = 674;
+  const right = w - 26;
   const top = 16;
-  const bottom = 120;
+  const bottom = h - 36;
 
   const low = Math.min(...series);
   const high = Math.max(...series);
@@ -374,7 +387,7 @@ function ProjectionGraph({ current, points, unit }) {
     .join(" ");
 
   return (
-    <div className="fp-graph-wrap">
+    <div className="fp-graph-wrap" ref={graphRef}>
       <svg
         className="fp-linegraph"
         viewBox={`0 0 ${w} ${h}`}
