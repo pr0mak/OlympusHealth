@@ -1,4 +1,4 @@
-# ASTRA — Interactive Astronaut Health Monitoring
+# ASTRA : Interactive Astronaut Health Monitoring
 
 **NASA Space Apps Challenge 2026**  
 **Explore the body. Understand the data. Plan for the mission.**
@@ -28,11 +28,11 @@ Each organ can have its own set of relevant indicators. The result is an intuiti
 
 ### Three Core Modules
 
-**Health Data** — Explore the 3D body, select a region, and review its associated measurements and charts.
+**Health Data**  Explore the 3D body, select a region, and review its associated measurements and charts.
 
-**Future Projection** — Examine historical health records and exploratory **7-, 14-, or 30-day projections** for supported metrics. This section also includes exercise planning and visualizations of planned activity.
+**Future Projection**  Examine historical health records and exploratory **7-, 14-, or 30-day projections** for supported metrics. This section also includes exercise planning and visualizations of planned activity.
 
-**Alerts** — Surface health-related notifications and highlight values or trends that may deserve attention. Alert behavior depends on the rules and measurements available in the application.
+**Alerts**  Surface health-related notifications and highlight values or trends that may deserve attention. Alert behavior depends on the rules and measurements available in the application.
 
 ## Scientific Computation and Exercise Planning
 
@@ -106,6 +106,7 @@ python -m pip install -r requirements.txt
 python -m uvicorn astra.api:app --reload --port 8000
 
 # Terminal 2 — Express backend (from Backend/server/)
+node seed.js
 node app.js
 
 # Terminal 3 — React frontend (from Frontend/client/)
