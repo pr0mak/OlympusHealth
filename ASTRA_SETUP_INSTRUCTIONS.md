@@ -49,7 +49,7 @@ and navigate to:
 You should see the `astra_app` user with `localhost`
 as its host, as shown below.
 
-![MySQL User Setup](./images/mysql-user-setup.png)
+![MySQL User Setup](<img width="1487" height="587" alt="image" src="https://github.com/user-attachments/assets/bbd58f31-286b-4e50-a4fd-82737ad99719" />)
 
 If the user appears in the list, the MySQL account
 has been created successfully.
