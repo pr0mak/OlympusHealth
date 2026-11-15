@@ -188,7 +188,7 @@
 
 .alerts-widget-preview-link {
   display: inline-block;
-  color: #d1dce6;
+  color: var(--fire);
   font-size: 0.8rem;
   font-weight: 500;
 }

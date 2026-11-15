@@ -15,18 +15,24 @@
   --text-secondary: #c9cbd2;
   --text-muted: #9daaba;
   --text-subtle: #7d8fa5;
-  --cyan: #75e3f5;
+  --blue: #326bc1;
+  --cyan: var(--blue);
   --cyan-bright: #f1eee7;
-  --health: #ff8790;
+  --health: #ff535f;
+  --fire: #ff943d;
+  --fire-border: #ff943db3;
+  --fire-divider: #ff943d33;
+  --projection: var(--text-primary);
+  --card-border-width: 2px;
   --violet: #b9a3ff;
   --amber: #f3c48a;
   --error: #ff9eaa;
   --border: #243144;
   --border-soft: #1a2636;
   --border-strong: #3c516b;
-  --accent-border: #75e3f559;
-  --accent-dim: #75e3f50d;
-  --accent-glow: #75e3f522;
+  --accent-border: #326bc159;
+  --accent-dim: #326bc10d;
+  --accent-glow: #326bc122;
   --tooltip-bg: #0a1422f5;
   --accent: var(--cyan);
   background: var(--background);
@@ -164,7 +170,7 @@ summary:focus-visible {
   display: grid;
   place-items: center;
   color: var(--cyan);
-  filter: drop-shadow(0 0 12px #75e3f540);
+  filter: drop-shadow(0 0 12px #326bc140);
 }
 .site-header--mission {
   display: grid;
@@ -199,6 +205,7 @@ summary:focus-visible {
   font-size: 1.15rem;
   font-weight: 650;
   letter-spacing: -0.04em;
+  white-space: nowrap;
 }
 .brand-name > span {
   color: var(--text-muted);
@@ -228,7 +235,7 @@ summary:focus-visible {
 }
 
 .username-link:hover {
-  color: rgb(40, 135, 190);
+  color: var(--blue);
   text-decoration: underline;
 }
 
@@ -256,7 +263,7 @@ summary:focus-visible {
 }
 .sign-in-link:hover {
   background: #f0fcff;
-  box-shadow: 0 0 28px #75e3f525;
+  box-shadow: 0 0 28px #326bc125;
 }
 .sign-in-link > span {
   color: #245c6b;
@@ -313,7 +320,7 @@ h1 {
   display: flex;
   flex-direction: column;
   padding: 1.35rem 1.5rem 1.05rem;
-  border: 1px solid var(--border);
+  border: var(--card-border-width) solid var(--border);
   border-radius: 14px;
   background: linear-gradient(
     140deg,
@@ -344,11 +351,23 @@ h1 {
 .widget--health-data .preview-metric strong {
   color: var(--health);
 }
+.widget--alerts {
+  --accent: var(--fire);
+}
+.widget--alerts .widget-header h2 {
+  color: var(--fire);
+}
+.widget--alerts .widget-open {
+  border-top-color: var(--fire-divider);
+}
+.widget--alerts:focus-visible {
+  outline-color: var(--fire);
+}
 .widget--mission-assistant {
   --accent: var(--violet);
 }
 .widget--future-projection {
-  --accent: var(--amber);
+  --accent: var(--blue);
 }
 .widget-header {
   display: flex;

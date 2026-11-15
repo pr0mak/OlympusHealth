@@ -14,7 +14,7 @@ const METRICS = [
     label: "Heart Rate",
     unit: "bpm",
     description: "Recorded average heart rate",
-    color: "#38bdf8"
+    color: "var(--blue)"
   },
   {
     key: "oxygenSaturation",
@@ -519,7 +519,7 @@ async function saveMeasurement(event) {
       <div className="health-page-heading">
         <div>
           <p className="health-eyebrow">
-            ASTRA / PERSONAL HEALTH MONITORING
+            Olympus Health / PERSONAL HEALTH MONITORING
           </p>
 
           <h1>Health Data</h1>

@@ -1,5 +1,6 @@
 
 .fp-page {
+  --amber: var(--projection);
   --fp-panel: var(--surface, #0d1420);
   --fp-border: var(--border, #243144);
 }
@@ -26,7 +27,7 @@
     var(--surface-raised),
     var(--surface)
   );
-  border: 1px solid var(--border);
+  border: var(--card-border-width) solid var(--border);
   border-radius: 14px;
   box-shadow: 0 14px 36px #0002;
 }
