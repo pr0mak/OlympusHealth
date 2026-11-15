@@ -22,4 +22,10 @@ router.put(
   controller.updateMeasurement
 );
 
+const {
+  getMeasurements: getRadiationMeasurements
+} = require("../controllers/RadiationController");
+
+router.get("/radiation", getRadiationMeasurements);
+
 module.exports = router;
