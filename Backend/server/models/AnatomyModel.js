@@ -1,4 +1,3 @@
-
 const pool = require("../config/db");
 
 // Valid muscle regions
@@ -56,7 +55,7 @@ async function getMuscle(userId, regionKey) {
   const [rows] = await pool.execute(
     `SELECT
        region_key,
-       estimated_recovery AS recoveryHours,
+       estimated_recovery,
        soreness,
        fatigue,
        strength,
@@ -82,11 +81,11 @@ async function getBone(userId, regionKey) {
   const [rows] = await pool.execute(
     `SELECT
        region_key,
-       bone_density AS density,
-       bone_structure AS structure,
-       bone_strength AS strength,
-       bone_building AS formation,
-       bone_breakdown AS breakdown
+       bone_density,
+       bone_structure,
+       bone_strength,
+       bone_building,
+       bone_breakdown
      FROM bone_status
      WHERE user_id = ?
        AND region_key = ?
