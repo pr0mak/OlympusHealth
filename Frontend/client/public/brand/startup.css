@@ -1,0 +1,48 @@
+/* Loaded in index.html so the intro is visible while the JavaScript loads. */
+html { background: #070c15; }
+#startup-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  background: transparent;
+}
+.startup-logo {
+  display: block;
+  width: clamp(190px, 28vw, 280px);
+  height: auto;
+  filter: drop-shadow(0 0 24px #75e3f51a);
+}
+.startup-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+html[data-startup-state="loading"] body,
+html[data-startup-state="leaving"] body { overflow: hidden; }
+html[data-startup-state="loading"] .site-content,
+html[data-startup-state="leaving"] .site-content { visibility: hidden; opacity: 0; }
+/* Pause, rather than replace, all existing website entrance animations. */
+html[data-startup-state="loading"] .site-content *,
+html[data-startup-state="leaving"] .site-content *,
+html[data-startup-state="loading"] .orbital-background *,
+html[data-startup-state="leaving"] .orbital-background * {
+  animation-play-state: paused !important;
+}
+html[data-startup-state="leaving"] #startup-screen {
+  animation: startup-dismiss 420ms ease both;
+  pointer-events: none;
+}
+html[data-startup-state="complete"] #startup-screen { display: none; }
+@keyframes startup-dismiss {
+  to { opacity: 0; transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-startup-state="leaving"] #startup-screen { animation: none; }
+}

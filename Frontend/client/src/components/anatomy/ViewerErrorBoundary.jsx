@@ -7,6 +7,10 @@ export default class ViewerErrorBoundary extends Component {
     return { failed: true };
   }
 
+  componentDidCatch() {
+    this.props.onError?.();
+  }
+
   render() {
     if (this.state.failed) {
       return (

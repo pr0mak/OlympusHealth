@@ -11,7 +11,8 @@
     "check:anatomy-models": "node scripts/check-anatomy-models.mjs",
     "check:muscles": "node scripts/check-muscle-status.mjs",
     "check:bones": "node scripts/check-bone-status.mjs",
-    "check:organs": "node scripts/check-organ-status.mjs"
+    "check:organs": "node scripts/check-organ-status.mjs",
+    "check:startup": "node scripts/check-startup.mjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

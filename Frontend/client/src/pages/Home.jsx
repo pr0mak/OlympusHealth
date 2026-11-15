@@ -21,7 +21,7 @@ const AnatomyViewer = lazy(
   () => import("../components/anatomy/AnatomyViewer.jsx")
 );
 
-export default function Home() {
+export default function Home({ onStartupReady }) {
   const { user, loading: authLoading } = useAuth();
   const anatomy = getAnatomy(user?.gender);
   const modelIdentity = `${user?.id ?? "guest"}:${anatomy.sex}`;
@@ -37,6 +37,10 @@ export default function Home() {
   const assemblePage = useCallback(() => {
     setAssembled(true);
   }, []);
+  const finishModelLoading = useCallback(() => {
+    assemblePage();
+    onStartupReady?.();
+  }, [assemblePage, onStartupReady]);
 
   const clearSelection = useCallback(() => {
     setSelection(null);
@@ -81,7 +85,8 @@ export default function Home() {
             <AnatomyViewer
               key={modelIdentity}
               gender={user?.gender}
-              onModelReady={assemblePage}
+              onModelReady={finishModelLoading}
+              onModelError={finishModelLoading}
               selected={selectedPart?.key ?? null}
               onSelectionChange={selectPart}
             />
