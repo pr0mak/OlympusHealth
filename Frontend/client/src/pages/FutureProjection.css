@@ -5,6 +5,25 @@
   --fp-border: var(--border, #243144);
 }
 
+.fp-page .detail-heading {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.fp-page .detail-heading .back-link {
+  align-self: center;
+  margin-bottom: 0;
+}
+
+.fp-page .detail-heading h1 {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+}
+
 .fp-page .fp-kicker {
   color: var(--fp-accent);
   font-size: .68rem;
