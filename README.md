@@ -44,26 +44,20 @@ ASTRA separates presentation from computation. Its Python service handles statis
 
 The planner optimizes a simplified scheduling model; it does not claim to predict clinical bone-health improvements caused by exercise.
 
-
 ## Technology Stack
 
 | Layer | Technologies | Role |
 |---|---|---|
-| **Interactive 3D Anatomy** | Three.js, React | Interactive 3D anatomical visualization, selectable body regions, and health-related exploration. |
-| **Frontend** | React, Vite, JavaScript (JSX), CSS | Responsive user interface, health dashboards, interactive charts, and user controls. |
-| **Frontend Routing** | React Router | Client-side navigation between Dashboard, Health Data, Alerts, Future Projection, Mission Assistant, and Profile. |
-| **Application Backend** | Node.js, Express.js | RESTful API development, request handling, business logic, and communication between services. |
-| **Database** | MySQL | Persistent storage of user accounts, physiological measurements, bone health, muscle health, organ health, and radiation records. |
-| **Authentication & Security** | JWT, bcrypt, CORS, express-rate-limit | Token-based authentication, password hashing, protected endpoints, and API security. |
-| **Health Monitoring & Alerts** | JavaScript, Express.js, MySQL | Rule-based health monitoring, measurement thresholds, and High/Medium/Low priority alerts. |
-| **AI & Computational Engine** | Python, FastAPI, Pydantic | Health projections, exercise recommendations, data validation, and computational API services. |
-| **Numerical Computing & Optimization** | NumPy, SciPy, SLSQP | Numerical calculations and constrained optimization for exercise planning. |
-| **Adaptive Exercise Planning** | LinUCB, Model Predictive Control (MPC) | Contextual exercise recommendations, adaptive decision-making, and fatigue-aware exercise scheduling. |
-| **API Communication** | REST APIs, HTTP, JSON, Fetch API | Data exchange between the React frontend, Express backend, and Python computational engine. |
-| **Data Visualization** | Three.js, SVG, CSS | 3D anatomical visualization, physiological trend charts, and statistical summaries. |
-| **API Testing & Development** | Postman | Testing REST API endpoints, HTTP methods (GET, POST, PUT), JWT authorization, and JSON request/response handling. |
-| **Version Control** | Git, GitHub | Source code management, version tracking, and team collaboration. |
-
+| **3D Anatomy** | **Three.js, React** | Interactive muscular, skeletal, and organ views with selectable regions |
+| **Frontend** | **React, Vite, JavaScript/JSX, CSS, React Router** | Responsive pages, health charts, controls, and client-side navigation |
+| **Backend** | **Node.js, Express.js** | REST APIs, business logic, request validation, and coordination between services |
+| **Database** | **MySQL** | User accounts and historical physiological measurements |
+| **Authentication** | **JWT** | Token-based protected access |
+| **Computational Engine** | **Python, FastAPI, Pydantic** | Health forecasting, computational endpoints, and validated inputs |
+| **Optimization** | **NumPy, SciPy, SLSQP, MPC** | Numerical calculations and constrained exercise scheduling |
+| **Data Prototyping** | **Monte Carlo Sampling** | Generate synthetic records for MVP workflows under explicit sampling assumptions |
+| **Integration** | **HTTP, JSON, REST APIs** | Communication between React, Express, and FastAPI |
+| **Development & Testing** | **Git, GitHub, Postman** | Collaboration, version control, and API verification |
 
 ### Architecture
 
@@ -88,17 +82,19 @@ The React frontend communicates with the Express API, which accesses MySQL and s
 
 ## Data and Prototype Methodology
 
-Individual astronaut health datasets are difficult to obtain at scale. For an early-stage prototype, ASTRA uses **application test records** to demonstrate the full pipeline, while published spaceflight research supplies scientific context for selected health indicators.
+A major challenge during development was **limited access to sufficiently large, individual-level astronaut health datasets**. We worked with a small collection of reference material from NASA and publicly available scientific sources, but its coverage was not enough to train and evaluate complex, data-hungry machine-learning models reliably.
 
-Our data workflow distinguishes:
+To support a functioning hackathon MVP, we used a **Monte Carlo sample generator** to produce additional **synthetic demonstration records** from our limited reference inputs and chosen sampling assumptions. This helped us populate the application, test its data flow, and demonstrate health visualizations and short-horizon forecasts despite the scarcity of observations. The generated records are **simulated examples, not additional measurements collected by NASA or astronauts**.
 
-- **Published reference results:** Values documented in traceable scientific studies, including spaceflight bone-health literature. Published cohort summaries are not presented as measurements of the current user.
-- **Demo records:** Synthetic or manually supplied example inputs used to exercise the interface, forecasting pipeline, and charts. They are application test data, not new NASA observations.
-- **Computed outputs:** Forecast trajectories and exercise schedules derived mathematically from the data and model assumptions.
+The application keeps three types of information distinct:
 
-**Monte Carlo sampling** is a possible extension for generating additional *synthetic demo records*: sample inputs from explicitly chosen distributions, enforce plausible bounds, and label the resulting records as simulated. Such sampling can help test interfaces and API behavior, but it does not create additional real astronaut observations or validate a health prediction. This workflow should only be described as implemented once the generator and its parameters are included in the repository.
+- **Research references:** Published findings used to inform the scientific context of selected health indicators.
+- **Synthetic prototype records:** Monte Carlo-generated or manually supplied examples used for demonstration and software testing.
+- **Computed outputs:** Statistical projections and exercise schedules produced by the forecasting and optimization modules.
 
-Examples of research relevant to the bone-health component include [Axpe et al. (2020)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6975633/) and [Gabel et al. (2022), TBone](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/). These links identify published literature, not a claim that all application records were downloaded from a NASA database.
+Because simulated records cannot replace independent real-world observations, we chose **transparent statistical forecasting and constrained optimization** over claiming a fully trained, clinically validated physiological AI model. This lets ASTRA demonstrate the complete product experience while leaving room for future calibration with larger astronaut datasets.
+
+Relevant published bone-health references include [Axpe et al. (2020)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6975633/) and [Gabel et al. (2022), TBone](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/). Source publications, synthetic records, and model outputs are not treated as interchangeable.
 
 ## Run Locally
 
