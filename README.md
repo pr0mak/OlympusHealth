@@ -2,9 +2,6 @@
 
 **NASA Space Apps Challenge 2026**  
 **Team: Olympus Mons**  
-**Explore the body. Understand the data. Plan for the mission.**
-
-> **Prototype notice:** ASTRA is a hackathon research prototype, not a clinically validated medical tool. Demo records can be synthetic; projections and alerts are not medical diagnoses.
 
 ## The Challenge
 
@@ -89,7 +86,7 @@ The React frontend does **not** connect to MySQL directly. Express verifies the 
 
 The following diagram shows the project's MySQL tables and relationships, including the user-centered health tables, anatomy-specific measurements, and additional organ-specific structures.
 
-![ASTRA MySQL database schema](![alt text](image-1.png))
+<img width="1082" height="916" alt="image" src="https://github.com/user-attachments/assets/21d95cfc-07fb-4d34-804a-9ae2493d0dd8" />
 
 *Figure: ASTRA database schema, visualized in MySQL Workbench.*
 
@@ -133,7 +130,9 @@ Relevant bone-health literature includes [Axpe et al. (2020)](https://pmc.ncbi.n
 
 For step-by-step installation, MySQL setup, `.env` configuration, demo account credentials, and initial setup commands, use:
 
-**[ASTRA Quick Start Guide](./ASTRA_QUICK_START.md)**
+
+**[ASTRA — Quick Start Guide](https://github.com/pr0mak/SpaceAppChallenge/blob/main/ASTRA_SETUP_INSTRUCTIONS.md)**
+
 
 Once configured, launch the three services in separate terminals from the repository root:
 
@@ -163,13 +162,21 @@ python -m uvicorn astra.api:app --reload --port 8000
 
 ASTRA was developed by **Olympus Mons** for the **NASA Space Apps Challenge 2026**.
 
-| Team member | Role / Space Apps handle |
-|---|---|
-| **Michail Marakis** | Team Owner · `@mike7` |
-| **Periklis Papakostas** | `@periklis` |
-| **Prodromos-Aris Makarounas** | `@prodromos` |
-| **Stavros Rodopoulos** | `@shadowcross` |
-| **Nikolaos Poulopoulos** | `@nikwilldoit` |
+> [Michail Marakis](https://github.com/Michail-Marakis), BSc Student  
+> Department of Informatics, Athens University of Economics and Business
+
+> [Periklis Papakostas](https://github.com/CodePeriklis), BSc Student  
+> Department of Informatics, Athens University of Economics and Business
+
+> [Prodromos-Aris Makarounas](https://github.com/pr0mak), BSc Student  
+> Department of Informatics, Athens University of Economics and Business
+
+> [Stavros Rodopoulos](https://github.com/ShadowtheCross), BSc Student  
+> Department of Informatics, Athens University of Economics and Business
+
+> [Nikolaos Poulopoulos](https://github.com/nikwilldoit), BSc Student  
+> Department of Informatics, Athens University of Economics and Business
+
 
 ## Built for the Hackathon
 
