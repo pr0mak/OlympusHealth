@@ -1,6 +1,6 @@
-# ASTRA — Copyright and Licensing Notice
+# ASTRA - Copyright and Licensing Notice
 
-**Project:** ASTRA — Interactive Astronaut Health Monitoring  
+**Project:** ASTRA - Interactive Astronaut Health Monitoring  
 **Event:** NASA Space Apps Challenge 2026  
 **Copyright:** © 2026 ASTRA Project Contributors
 
