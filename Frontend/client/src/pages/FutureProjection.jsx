@@ -1,7 +1,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import PageHeading from "../components/PageHeading.jsx";
+import BackLink from "../components/BackLink.jsx";
+import ProjectionChapters from "../components/ProjectionChapters.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { futureProjectionApi } from "../api/client.js";
 import "./FutureProjection.css";
@@ -10,17 +11,19 @@ const GROUPS = [
   {
     id: "generic_health",
     title: "Vital Signs",
+    color: "var(--health)",
     icon: "♡",
     metrics: [
-      ["avg_heart_rate", "Heart Rate", "bpm"],
-      ["oxygen_saturation", "Oxygen Saturation", "%"],
-      ["body_temperature", "Body Temperature", "°C"],
-      ["sleep_duration", "Sleep Duration", "h"]
+      ["avg_heart_rate", "Heart Rate", "bpm", "var(--health)"],
+      ["oxygen_saturation", "Oxygen Saturation", "%", "var(--blue)"],
+      ["body_temperature", "Body Temperature", "°C", "#fbbf24"],
+      ["sleep_duration", "Sleep Duration", "h", "#a78bfa"]
     ]
   },
   {
     id: "muscle_health",
     title: "Muscle Health",
+    color: "var(--violet)",
     icon: "◈",
     metrics: [
       ["muscle_atrophy", "Muscle Atrophy", "%"],
@@ -32,6 +35,7 @@ const GROUPS = [
   {
     id: "bone_health",
     title: "Bone Health",
+    color: "var(--amber)",
     icon: "◇",
     metrics: [
       ["bone_density", "Bone Density", ""],
@@ -43,6 +47,7 @@ const GROUPS = [
   {
     id: "organ_health",
     title: "Organ Health",
+    color: "var(--blue)",
     icon: "✦",
     metrics: [
       ["arrhythmia", "Arrhythmia", ""],
@@ -53,6 +58,7 @@ const GROUPS = [
   {
     id: "space_radiation",
     title: "Space Radiation",
+    color: "var(--fire)",
     icon: "☼",
     metrics: [
       ["daily_radiation_dose", "Daily Radiation Dose", ""],
@@ -235,7 +241,7 @@ function FatigueComparisonChart({ data }) {
             stroke="var(--border)" strokeDasharray="4 6" />
         ))}
         <path d={makePath("withoutExercise")} fill="none"
-          stroke="var(--cyan)" strokeWidth="2.8" strokeDasharray="7 5"
+          stroke="var(--fire)" strokeWidth="2.8" strokeDasharray="7 5"
           strokeLinecap="round" strokeLinejoin="round" />
         <path d={makePath("withExercise")} fill="none"
           stroke="var(--violet)" strokeWidth="2.8"
@@ -243,7 +249,7 @@ function FatigueComparisonChart({ data }) {
         {points.length <= 35 && points.map((point, index) => (
           <g key={point.day ?? index}>
             <circle cx={x(index)} cy={y(point.withoutExercise)} r="3"
-              fill="var(--cyan)">
+              fill="var(--fire)">
               <title>{`Day ${point.day}: Without exercise ${fmt(point.withoutExercise)}`}</title>
             </circle>
             <circle cx={x(index)} cy={y(point.withExercise)} r="3"
@@ -261,7 +267,7 @@ function FatigueComparisonChart({ data }) {
         </text>
       </svg>
       <div className="fp-legend">
-        <span><i className="fp-dot fp-dot--cyan" />Without exercise</span>
+        <span><i className="fp-dot fp-dot--fire" />Without exercise</span>
         <span><i className="fp-dot fp-dot--violet" />With exercise plan</span>
       </div>
       <div className="fp-chart-range">
@@ -389,7 +395,7 @@ function ProjectionGraph({ current, points, unit }) {
 
         <path
           d={path}
-          stroke="var(--amber)"
+          stroke="var(--fp-accent)"
           strokeWidth="2.8"
           fill="none"
           strokeDasharray="7 5"
@@ -400,7 +406,7 @@ function ProjectionGraph({ current, points, unit }) {
           cx={x(0)}
           cy={y(series[0])}
           r="5"
-          fill="var(--cyan)"
+          fill="var(--fp-accent)"
         />
 
         {points.map((p, i) => (
@@ -409,7 +415,7 @@ function ProjectionGraph({ current, points, unit }) {
             cx={x(i + 1)}
             cy={y(Number(p.value))}
             r="3"
-            fill="var(--amber)"
+            fill="var(--fp-accent)"
           >
             <title>
               {`${p.date}: ${fmt(p.value)} ${unit}`}
@@ -489,17 +495,15 @@ function MetricCard({ group, metric, token, days }) {
     result?.points?.length > 0;
 
   return (
-    <article className="fp-metric-card">
+    <article className="fp-metric-card" style={{ "--fp-accent": metric[3] || group.color }}>
       <div className="fp-metric-top">
         <h3>{title}</h3>
 
-        <span className="fp-pill">
-          {projected
-            ? "PROJECTED"
-            : loading
-              ? "LOADING"
-              : "NO FORECAST"}
-        </span>
+        {!projected && (
+          <span className="fp-pill">
+            {loading ? "LOADING" : "NO FORECAST"}
+          </span>
+        )}
       </div>
 
       <div className="fp-metric-value">
@@ -538,7 +542,7 @@ function MetricCard({ group, metric, token, days }) {
   );
 }
 
-export default function FutureProjection() {
+export default function FutureProjection({ ready = true }) {
   const { token, loading: authLoading } = useAuth();
 
   const [groupId, setGroupId] = useState(GROUPS[0].id);
@@ -637,10 +641,10 @@ export default function FutureProjection() {
       id="main-content"
       tabIndex={-1}
     >
-      <PageHeading
-        title="Future Projection"
-        description="Explore your health indicators and prepare for the days ahead."
-      />
+      <header className="detail-heading">
+        <BackLink />
+        <h1>Future Projection</h1>
+      </header>
 
       {!token ? (
         <section className="content-card fp-panel">
@@ -654,383 +658,388 @@ export default function FutureProjection() {
         </section>
       ) : (
         <>
-          <div className="fp-summary">
-            <div className="fp-summary-card">
-              <span className="fp-kicker">
-                HEALTH MONITORING
-              </span>
-              <strong>
-                19 <small>indicators</small>
-              </strong>
-              <p>Across five measurement categories</p>
-            </div>
-
-            <div className="fp-summary-card">
-              <span className="fp-kicker">
-                ACTIVITY PLAN
-              </span>
-              <strong>
-                {mpc?.planning_days ?? settings.planning_days}
-                {" "}
-                <small>days</small>
-              </strong>
-              <p>Upcoming exercise schedule</p>
-            </div>
-
-            <div className="fp-summary-card">
-              <span className="fp-kicker">
-                PLANNED ACTIVITY
-              </span>
-              <strong>
-                {mpc ? fmt(total, 1) : "—"}
-                {" "}
-                <small>min</small>
-              </strong>
-              <p>Model-generated activity duration</p>
-            </div>
-          </div>
-
-          <section
-            className="fp-section"
-            aria-labelledby="fp-health-heading"
-          >
-            <div className="fp-section-heading">
-              <div>
-                <span className="fp-kicker">
-                  01 / HEALTH INTELLIGENCE
-                </span>
-                <h2 id="fp-health-heading">
-                  Health Trajectories
-                </h2>
-                <p>
-                  Explore estimated trends starting from the
-                  latest recorded measurement.
-                </p>
-              </div>
-
-              <span className="fp-status">
-                FUTURE OUTLOOK
-              </span>
-            </div>
-
-            <div
-              className="fp-category-tabs"
-              role="group"
-              aria-label="Health category"
-            >
-              {GROUPS.map(item => (
-                <button
-                  type="button"
-                  key={item.id}
-                  className={
-                    groupId === item.id
-                      ? "fp-tab fp-tab--active"
-                      : "fp-tab"
-                  }
-                  onClick={() => setGroupId(item.id)}
-                  aria-pressed={groupId === item.id}
+          <ProjectionChapters
+            ready={ready}
+            health={
+              <>
+                <div className="fp-summary fp-summary--health">
+                  <div className="fp-summary-card" style={{ "--fp-accent": "var(--health)" }}>
+                    <span className="fp-kicker">
+                      HEALTH MONITORING
+                    </span>
+                    <strong>
+                      19 <small>indicators</small>
+                    </strong>
+                    <p>Across five measurement categories</p>
+                  </div>
+                </div>
+                <section
+                  className="fp-section"
+                  aria-labelledby="fp-health-heading"
+                  style={{ "--fp-accent": group.color }}
                 >
-                  <span aria-hidden="true">
-                    {item.icon}
-                  </span>
-                  {" "}
-                  {item.title}
-                </button>
-              ))}
-            </div>
+                  <div className="fp-section-heading">
+                    <div>
+                      <span className="fp-kicker">
+                        01 / HEALTH INTELLIGENCE
+                      </span>
+                      <h2 id="fp-health-heading">
+                        Health Trajectories
+                      </h2>
+                      <p>
+                        Explore estimated trends starting from the
+                        latest recorded measurement.
+                      </p>
+                    </div>
 
-            <div className="fp-horizon">
-              <label htmlFor="fp-horizon">
-                Projection horizon
-              </label>
+                  </div>
 
-              <select
-                id="fp-horizon"
-                value={forecastDays}
-                onChange={e =>
-                  setForecastDays(Number(e.target.value))
-                }
-              >
-                <option value={7}>Next 7 days</option>
-                <option value={14}>Next 14 days</option>
-                <option value={30}>Next 30 days</option>
-              </select>
-            </div>
+                  <div
+                    className="fp-category-tabs"
+                    role="group"
+                    aria-label="Health category"
+                  >
+                    {GROUPS.map(item => (
+                      <button
+                        type="button"
+                        key={item.id}
+                        className={
+                          groupId === item.id
+                            ? "fp-tab fp-tab--active"
+                            : "fp-tab"
+                        }
+                        onClick={() => setGroupId(item.id)}
+                        style={{ "--fp-accent": item.color }}
+                        aria-pressed={groupId === item.id}
+                      >
+                        <span aria-hidden="true">
+                          {item.icon}
+                        </span>
+                        {" "}
+                        {item.title}
+                      </button>
+                    ))}
+                  </div>
 
-            <div className="fp-metric-grid" key={groupId}>
-              {group.metrics.map(metric => (
-                <MetricCard
-                  key={metric[0]}
-                  group={group}
-                  metric={metric}
-                  token={token}
-                  days={forecastDays}
-                />
-              ))}
-            </div>
+                  <div className="fp-horizon">
+                    <label htmlFor="fp-horizon">
+                      Projection horizon
+                    </label>
 
-            <div className="fp-notice">
-              <strong>About future trajectories</strong>
-              <p>
-                Dashed amber lines represent exploratory
-                statistical projections calculated from
-                recent MySQL readings. They are not
-                clinically validated predictions.
-                Metrics with insufficient history or
-                without an appropriate model do not
-                display invented future values.
-              </p>
-            </div>
-          </section>
-
-          <section
-            className="fp-section"
-            aria-labelledby="fp-exercise-heading"
-          >
-            <div className="fp-section-heading">
-              <div>
-                <span className="fp-kicker">
-                  02 / ACTIVITY INTELLIGENCE
-                </span>
-                <h2 id="fp-exercise-heading">
-                  Exercise Planner
-                </h2>
-                <p>
-                  Build an upcoming activity schedule
-                  within your chosen limits.
-                </p>
-              </div>
-
-              <span className="fp-status">
-                PLANNING MODEL
-              </span>
-            </div>
-
-            <div className="fp-panel fp-settings-panel">
-              <h3>Plan settings</h3>
-
-              <div className="fp-settings-grid">
-                {[
-                  ["planning_days", "Planning horizon (days)", 2, 30, 1],
-                  ["weekly_budget_minutes", "Weekly time budget (min)", 0, 1260, 10],
-                  ["max_minutes_per_day", "Daily maximum (min)", 1, 180, 5],
-                  ["target_minutes_per_day", "Daily target (min)", 0, 180, 5],
-                  ["initial_fatigue", "Starting fatigue (model index)", 0, 100, 1],
-                  ["fatigue_limit", "Fatigue ceiling (model index)", 0, 100, 1]
-                ].map(([key, label, min, max, step]) => (
-                  <label key={key}>
-                    {label}
-                    <input
-                      type="number"
-                      min={min}
-                      max={max}
-                      step={step}
-                      value={settings[key]}
-                      onChange={e =>
-                        update(key, Number(e.target.value))
-                      }
-                    />
-                  </label>
-                ))}
-
-                <label>
-                  Resistance share (%)
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="5"
-                    value={Math.round(
-                      settings.resistance_fraction * 100
-                    )}
-                    onChange={e =>
-                      update(
-                        "resistance_fraction",
-                        Number(e.target.value) / 100
-                      )
-                    }
-                  />
-                </label>
-
-                {[
-                  ["resistance_intensity", "Resistance intensity"],
-                  ["aerobic_intensity", "Aerobic intensity"]
-                ].map(([key, label]) => (
-                  <label key={key}>
-                    {label}
                     <select
-                      value={settings[key]}
+                      id="fp-horizon"
+                      value={forecastDays}
                       onChange={e =>
-                        update(key, e.target.value)
+                        setForecastDays(Number(e.target.value))
                       }
                     >
-                      <option value="low">Low</option>
-                      <option value="moderate">Moderate</option>
-                      <option value="high">High</option>
+                      <option value={7}>Next 7 days</option>
+                      <option value={14}>Next 14 days</option>
+                      <option value={30}>Next 30 days</option>
                     </select>
-                  </label>
-                ))}
-              </div>
-
-              <div className="fp-actions">
-                <button
-                  type="button"
-                  className="fp-primary"
-                  disabled={loading || authLoading}
-                  onClick={() => generate()}
-                >
-                  {loading
-                    ? "Preparing plan…"
-                    : "Generate Exercise Plan"}
-                </button>
-
-                <button
-                  type="button"
-                  className="fp-secondary"
-                  disabled={loading}
-                  onClick={() => {
-                    setSettings(DEFAULTS);
-                    generate(DEFAULTS);
-                  }}
-                >
-                  Reset settings
-                </button>
-              </div>
-
-              {error && (
-                <p className="fp-error" role="alert">
-                  {error}
-                </p>
-              )}
-            </div>
-
-            {mpc && (
-              <>
-                <div className="fp-two-columns">
-                  <div className="fp-panel">
-                    <div className="fp-panel-heading">
-                      <h3>Daily Activity</h3>
-                      <span className="fp-pill">
-                        DURATION
-                      </span>
-                    </div>
-
-                    <ExerciseBars schedule={schedule} />
                   </div>
 
-                  <div className="fp-panel">
-                    <div className="fp-panel-heading">
-                      <h3>Estimated Recovery Load</h3>
-                      <span className="fp-pill">
-                        MODEL ESTIMATE
-                      </span>
-                    </div>
+                  <div className="fp-metric-grid" key={groupId}>
+                    {group.metrics.map(metric => (
+                      <MetricCard
+                        key={metric[0]}
+                        group={group}
+                        metric={metric}
+                        token={token}
+                        days={forecastDays}
+                      />
+                    ))}
+                  </div>
 
-                    <LineGraph
-                      values={schedule.map(
-                        day => day.predicted_fatigue
-                      )}
-                      labels={schedule.map(
-                        day => `Day ${day.day}`
-                      )}
-                      color="var(--amber)"
-                    />
-
-                    <p className="fp-footnote">
-                      Estimated fatigue is a hypothetical
-                      planning index, not a measured
-                      health indicator.
+                  <div className="fp-notice">
+                    <strong>About future trajectories</strong>
+                    <p>
+                      Dashed colored lines represent exploratory
+                      statistical projections calculated from
+                      recent MySQL readings. They are not
+                      clinically validated predictions.
+                      Metrics with insufficient history or
+                      without an appropriate model do not
+                      display invented future values.
                     </p>
                   </div>
-                </div>
-
-                <div className="fp-panel">
-                  <div className="fp-panel-heading">
-                    <h3>Exercise Impact · Fatigue Comparison</h3>
-                    <span className="fp-pill">ILLUSTRATIVE MODEL</span>
-                  </div>
-                  <FatigueComparisonChart data={fatigueComparison} />
-                </div>
-
-                <div className="fp-panel">
-                  <div className="fp-panel-heading">
-                    <h3>Your Upcoming Schedule</h3>
-                    <span className="fp-pill">
-                      {mpc.planning_days} DAYS
+                </section>
+              </>
+            }
+            activity={
+              <>
+                <div className="fp-summary fp-summary--activity">
+                  <div className="fp-summary-card" style={{ "--fp-accent": "var(--violet)" }}>
+                    <span className="fp-kicker">
+                      ACTIVITY PLAN
                     </span>
+                    <strong>
+                      {mpc?.planning_days ?? settings.planning_days}
+                      {" "}
+                      <small>days</small>
+                    </strong>
+                    <p>Upcoming exercise schedule</p>
+                  </div>
+                  <div className="fp-summary-card" style={{ "--fp-accent": "var(--blue)" }}>
+                    <span className="fp-kicker">
+                      PLANNED ACTIVITY
+                    </span>
+                    <strong>
+                      {mpc ? fmt(total, 1) : "—"}
+                      {" "}
+                      <small>min</small>
+                    </strong>
+                    <p>Model-generated activity duration</p>
+                  </div>
+                </div>
+                <section
+                  className="fp-section"
+                  aria-labelledby="fp-exercise-heading"
+                >
+                  <div className="fp-section-heading">
+                    <div>
+                      <span className="fp-kicker">
+                        02 / ACTIVITY INTELLIGENCE
+                      </span>
+                      <h2 id="fp-exercise-heading">
+                        Exercise Planner
+                      </h2>
+                      <p>
+                        Build an upcoming activity schedule
+                        within your chosen limits.
+                      </p>
+                    </div>
+
                   </div>
 
-                  <div className="fp-table-scroll">
-                    <table className="fp-schedule-table">
-                      <thead>
-                        <tr>
-                          <th>Day</th>
-                          <th>Resistance</th>
-                          <th>Aerobic</th>
-                          <th>Total</th>
-                          <th>Estimated fatigue</th>
-                        </tr>
-                      </thead>
+                  <div className="fp-panel fp-settings-panel">
+                    <h3>Plan settings</h3>
 
-                      <tbody>
-                        {schedule.map(day => (
-                          <tr key={day.day}>
-                            <td>
-                              <strong>Day {day.day}</strong>
-                            </td>
+                    <div className="fp-settings-grid">
+                      {[
+                        ["planning_days", "Planning horizon (days)", 2, 30, 1],
+                        ["weekly_budget_minutes", "Weekly time budget (min)", 0, 1260, 10],
+                        ["max_minutes_per_day", "Daily maximum (min)", 1, 180, 5],
+                        ["target_minutes_per_day", "Daily target (min)", 0, 180, 5],
+                        ["initial_fatigue", "Starting fatigue (model index)", 0, 100, 1],
+                        ["fatigue_limit", "Fatigue ceiling (model index)", 0, 100, 1]
+                      ].map(([key, label, min, max, step]) => (
+                        <label key={key}>
+                          {label}
+                          <input
+                            type="number"
+                            min={min}
+                            max={max}
+                            step={step}
+                            value={settings[key]}
+                            onChange={e =>
+                              update(key, Number(e.target.value))
+                            }
+                          />
+                        </label>
+                      ))}
 
-                            <td>
-                              {fmt(day.resistance.minutes, 1)} min
-                              <small>
-                                {day.resistance.intensity}
-                              </small>
-                            </td>
+                      <label>
+                        Resistance share (%)
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          step="5"
+                          value={Math.round(
+                            settings.resistance_fraction * 100
+                          )}
+                          onChange={e =>
+                            update(
+                              "resistance_fraction",
+                              Number(e.target.value) / 100
+                            )
+                          }
+                        />
+                      </label>
 
-                            <td>
-                              {fmt(day.aerobic.minutes, 1)} min
-                              <small>
-                                {day.aerobic.intensity}
-                              </small>
-                            </td>
+                      {[
+                        ["resistance_intensity", "Resistance intensity"],
+                        ["aerobic_intensity", "Aerobic intensity"]
+                      ].map(([key, label]) => (
+                        <label key={key}>
+                          {label}
+                          <select
+                            value={settings[key]}
+                            onChange={e =>
+                              update(key, e.target.value)
+                            }
+                          >
+                            <option value="low">Low</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="high">High</option>
+                          </select>
+                        </label>
+                      ))}
+                    </div>
 
-                            <td>
-                              <strong>
-                                {fmt(day.total_minutes, 1)} min
-                              </strong>
-                            </td>
+                    <div className="fp-actions">
+                      <button
+                        type="button"
+                        className="fp-primary"
+                        disabled={loading || authLoading}
+                        onClick={() => generate()}
+                      >
+                        {loading
+                          ? "Preparing plan…"
+                          : "Generate Exercise Plan"}
+                      </button>
 
-                            <td>
-                              {fmt(day.predicted_fatigue, 1)} / 100
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                      <button
+                        type="button"
+                        className="fp-secondary"
+                        disabled={loading}
+                        onClick={() => {
+                          setSettings(DEFAULTS);
+                          generate(DEFAULTS);
+                        }}
+                      >
+                        Reset settings
+                      </button>
+                    </div>
+
+                    {error && (
+                      <p className="fp-error" role="alert">
+                        {error}
+                      </p>
+                    )}
                   </div>
+
+                  {mpc && (
+                    <>
+                      <div className="fp-two-columns">
+                        <div className="fp-panel">
+                          <div className="fp-panel-heading">
+                            <h3>Daily Activity</h3>
+                            <span className="fp-pill">
+                              DURATION
+                            </span>
+                          </div>
+
+                          <ExerciseBars schedule={schedule} />
+                        </div>
+
+                        <div className="fp-panel">
+                          <div className="fp-panel-heading">
+                            <h3>Estimated Recovery Load</h3>
+                            <span className="fp-pill">
+                              MODEL ESTIMATE
+                            </span>
+                          </div>
+
+                          <LineGraph
+                            values={schedule.map(
+                              day => day.predicted_fatigue
+                            )}
+                            labels={schedule.map(
+                              day => `Day ${day.day}`
+                            )}
+                            color="var(--amber)"
+                          />
+
+                          <p className="fp-footnote">
+                            Estimated fatigue is a hypothetical
+                            planning index, not a measured
+                            health indicator.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="fp-panel">
+                        <div className="fp-panel-heading">
+                          <h3>Exercise Impact · Fatigue Comparison</h3>
+                          <span className="fp-pill">ILLUSTRATIVE MODEL</span>
+                        </div>
+                        <FatigueComparisonChart data={fatigueComparison} />
+                      </div>
+
+                      <div className="fp-panel">
+                        <div className="fp-panel-heading">
+                          <h3>Your Upcoming Schedule</h3>
+                          <span className="fp-pill">
+                            {mpc.planning_days} DAYS
+                          </span>
+                        </div>
+
+                        <div className="fp-table-scroll">
+                          <table className="fp-schedule-table">
+                            <thead>
+                              <tr>
+                                <th>Day</th>
+                                <th>Resistance</th>
+                                <th>Aerobic</th>
+                                <th>Total</th>
+                                <th>Estimated fatigue</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {schedule.map(day => (
+                                <tr key={day.day}>
+                                  <td>
+                                    <strong>Day {day.day}</strong>
+                                  </td>
+
+                                  <td>
+                                    {fmt(day.resistance.minutes, 1)} min
+                                    <small>
+                                      {day.resistance.intensity}
+                                    </small>
+                                  </td>
+
+                                  <td>
+                                    {fmt(day.aerobic.minutes, 1)} min
+                                    <small>
+                                      {day.aerobic.intensity}
+                                    </small>
+                                  </td>
+
+                                  <td>
+                                    <strong>
+                                      {fmt(day.total_minutes, 1)} min
+                                    </strong>
+                                  </td>
+
+                                  <td>
+                                    {fmt(day.predicted_fatigue, 1)} / 100
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {!mpc && !loading && !error && !hasRun && (
+                    <div className="fp-empty">
+                      Generate an exercise plan to see your schedule.
+                    </div>
+                  )}
+                </section>
+
+                <div className="fp-notice">
+                  <strong>Model transparency</strong>
+                  <p>
+                    The exercise optimizer currently uses your
+                    selected scheduling constraints and
+                    illustrative fatigue dynamics.
+                    Although recent health measurements are sent
+                    to the engine, they do not yet influence
+                    the optimization.
+                    This is not a validated medical forecast
+                    or an individual exercise prescription.
+                  </p>
                 </div>
               </>
-            )}
-
-            {!mpc && !loading && !error && !hasRun && (
-              <div className="fp-empty">
-                Generate an exercise plan to see your schedule.
-              </div>
-            )}
-          </section>
-
-          <div className="fp-notice">
-            <strong>Model transparency</strong>
-            <p>
-              The exercise optimizer currently uses your
-              selected scheduling constraints and
-              illustrative fatigue dynamics.
-              Although recent health measurements are sent
-              to the engine, they do not yet influence
-              the optimization.
-              This is not a validated medical forecast
-              or an individual exercise prescription.
-            </p>
-          </div>
+            }
+          />
         </>
       )}
     </main>

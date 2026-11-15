@@ -1,0 +1,26 @@
+.alerts-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--priority-color);
+}
+
+.alerts-preview--high { --priority-color: var(--alert-high); }
+.alerts-preview--medium { --priority-color: var(--alert-medium); }
+.alerts-preview--low { --priority-color: var(--alert-low); }
+
+.alerts-preview > div { min-width: 0; }
+.alerts-preview-priority {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.alerts-preview strong { font-size: 0.95rem; }
+.alerts-preview p {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}

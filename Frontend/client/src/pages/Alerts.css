@@ -64,7 +64,7 @@
   align-items: center;
   gap: 16px;
   padding: 19px 20px;
-  background: #192536;
+  background: #24364a;
   border: var(--card-border-width) solid var(--fire-border);
   border-radius: 9px;
 }
@@ -76,26 +76,26 @@
 }
 
 .alerts-summary-item strong {
-  color: #eef2f6;
+  color: var(--priority-color);
   font-size: 1.7rem;
   font-weight: 600;
 }
 
 .alerts-summary-item span {
-  color: #a3b1be;
+  color: var(--priority-color);
   font-size: 0.78rem;
 }
 
-.alert-icon--high {
-  color: var(--fire);
+.alerts-summary-item--high {
+  --priority-color: var(--alert-high);
 }
 
-.alert-icon--medium {
-  color: #ff8968;
+.alerts-summary-item--medium {
+  --priority-color: var(--alert-medium);
 }
 
-.alert-icon--low {
-  color: #ffb9a5;
+.alerts-summary-item--low {
+  --priority-color: var(--alert-low);
 }
 
 .alerts-section-heading {
@@ -120,7 +120,7 @@
 
 .alerts-table-section {
   padding: 24px;
-  background: #151f2d;
+  background: #223448;
   border: var(--card-border-width) solid var(--fire-border);
   border-radius: 11px;
 }
@@ -140,7 +140,7 @@
 .alerts-table th {
   padding: 15px 16px;
   color: #9babb9;
-  background: #1d2a3a;
+  background: #2d4056;
   font-size: 0.78rem;
   font-weight: 550;
   border-bottom: 1px solid var(--fire-divider);
@@ -193,18 +193,19 @@
 }
 
 .alert-priority--high {
-  color: var(--fire);
+  color: var(--alert-high);
 }
 
 .alert-priority--medium {
-  color: #ff8968;
+  color: var(--alert-medium);
 }
 
 .alert-priority--low {
-  color: #ffb9a5;
+  color: var(--alert-low);
 }
 
 .alerts-message {
+  background: #2a4058;
   padding: 30px 20px;
   color: #aab9c7;
   border: var(--card-border-width) solid var(--fire-border);
@@ -253,14 +254,14 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #192536;
-  border: var(--card-border-width) solid var(--fire-border);
+  background: #24364a;
+  border: var(--card-border-width) solid var(--priority-color);
   border-radius: 9px;
   padding: 19px 20px;
 }
 
 .astra-alerts-page .alerts-table-section {
-  background: #151f2d;
+  background: #223448;
   border: var(--card-border-width) solid var(--fire-border);
   border-radius: 11px;
   padding: 24px;
@@ -273,7 +274,7 @@
 }
 
 .astra-alerts-page .alerts-table th {
-  background: #1d2a3a;
+  background: #2d4056;
   color: #9babb9;
   padding: 15px 16px;
   text-align: left;
