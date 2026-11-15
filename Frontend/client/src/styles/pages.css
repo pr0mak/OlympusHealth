@@ -173,13 +173,25 @@
   margin-bottom: 1.5rem;
 }
 .back-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
   margin-bottom: 1.5rem;
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  border: 1px solid #fff;
+  border-radius: 7px;
+  background: #fff;
+  color: #081420;
+}
+.back-link-arrow {
+  flex: 0 0 22px;
 }
 .back-link:hover {
-  color: var(--cyan);
+  background: #f0fcff;
+  border-color: #f0fcff;
 }
 .section-nav {
   display: flex;
@@ -401,6 +413,31 @@ tbody tr:last-child > * {
 }
 .auth-page {
   width: min(100% - 3rem, 480px);
+}
+.auth-entry-page .auth-card {
+  width: min(100%, 480px);
+  margin-inline: auto;
+}
+.auth-entry-page .auth-card h1 {
+  margin: 0 0 1.75rem;
+  text-align: center;
+}
+.auth-entry-page .auth-form > label {
+  position: relative;
+  display: block;
+  margin: 0.5rem 0 0;
+}
+.auth-entry-page .auth-field-label {
+  position: absolute;
+  top: 0;
+  left: 0.65rem;
+  transform: translateY(-50%);
+  padding: 0 0.35rem;
+  background: linear-gradient(to bottom, var(--surface) 50%, var(--input-bg) 50%);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 .auth-card {
   padding: 2rem;

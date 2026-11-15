@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import './styles/style.css'
 import './styles/pages.css'
 import './styles/assembly.css'
+import './components/AuthLight.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
