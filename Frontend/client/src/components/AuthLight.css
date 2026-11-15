@@ -1,4 +1,4 @@
-/* Temporary reversed palette for the register and sign-in forms. */
+/* Light palette shared by the authentication forms and profile. */
 .auth-entry-page {
   color-scheme: light;
   --surface: #fcfbf9;
@@ -17,6 +17,43 @@
 .auth-entry-page .auth-card {
   background: var(--surface);
   border-color: rgba(8, 20, 32, 0.18);
+}
+
+.profile-page .profile-heading {
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-page .profile-heading h1 {
+  margin: 0;
+  text-align: center;
+}
+
+.profile-page .profile-logo {
+  width: 96px;
+  height: 96px;
+  filter: brightness(0);
+}
+
+.profile-page .account-profile {
+  grid-template-columns: max-content minmax(0, max-content);
+  justify-content: center;
+  align-items: baseline;
+  gap: 1rem 1.5rem;
+  margin: 1.75rem 0 0;
+  text-align: left;
+}
+
+.profile-page .account-profile dt {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.profile-page .account-profile dd {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .auth-entry-page .primary-button {

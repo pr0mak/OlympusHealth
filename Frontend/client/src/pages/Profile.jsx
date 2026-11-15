@@ -25,25 +25,20 @@ export default function Profile() {
 
   return (
     <main
-      className="dashboard auth-page"
+      className="dashboard auth-entry-page profile-page"
       id="main-content"
       tabIndex={-1}
     >
       <BackLink />
 
-      <section className="content-card auth-card">
-        <p className="eyebrow">
-          Authenticated astronaut
-        </p>
-
+      <section className="content-card auth-card" aria-labelledby="profile-title">
         <div className="profile-heading">
-          <h1>Welcome, {user.username}!</h1>
-
           <img
-            src="/astropic.png"
+            src={`${import.meta.env.BASE_URL}astropic.png`}
             alt="Astronaut logo"
             className="profile-logo"
           />
+          <h1 id="profile-title">Welcome, {user.username}!</h1>
         </div>
 
 
