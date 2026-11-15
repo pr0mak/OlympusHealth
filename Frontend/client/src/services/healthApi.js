@@ -8,6 +8,9 @@ export const healthApi = {
   getMeasurements: (token) =>
     apiRequest("/api/health/measurements", { token }),
 
+  getRadiationMeasurements: (token, { signal } = {}) =>
+    apiRequest("/api/health/radiation", { token, signal }),
+
   createMeasurement: (token, data) =>
   apiRequest("/api/health/measurements", {
     token,

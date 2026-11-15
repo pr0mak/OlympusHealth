@@ -1,0 +1,186 @@
+.radiation-drawer {
+  --radiation-rail-width: 56px;
+  --radiation-side-gap: 40px;
+  --radiation-vertical-gap: 96px;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: clip;
+  contain: layout paint;
+  pointer-events: none;
+}
+.radiation-tab {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: var(--radiation-rail-width);
+  height: 100%;
+  padding: 22px 10px 16px;
+  overflow: hidden;
+  border: 0;
+  border-right: 1px solid #e06b55;
+  border-radius: 0;
+  color: #ffe385;
+  background: linear-gradient(160deg, #a62631, #701c26);
+  cursor: pointer;
+}
+.radiation-tab::before,
+.radiation-dialog::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 7px;
+  background: repeating-linear-gradient(135deg, #edcc51 0 9px, #161713 9px 18px);
+}
+.radiation-tab > span:last-child {
+  writing-mode: vertical-rl;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.radiation-symbol { flex-shrink: 0; color: #f6d45a; font: 2rem/1 "Segoe UI Symbol", sans-serif; }
+.radiation-tab:hover { background: linear-gradient(160deg, #bb303b, #86222c); }
+.radiation-dialog .radiation-tab:focus-visible { outline: 2px solid #f6d45a; outline-offset: -5px; }
+.radiation-dialog :focus-visible { outline: 2px solid #f6d45a; outline-offset: 4px; }
+
+.radiation-dialog {
+  position: fixed;
+  inset: 0;
+  width: calc(100% - 80px);
+  height: calc(100% - var(--radiation-vertical-gap) - var(--radiation-vertical-gap));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  border: 1px solid #6f6030;
+  border-radius: 18px;
+  color: #eeeae0;
+  background: #11130f;
+  box-shadow: 0 30px 120px #0009;
+  /* Leave exactly the rail visible at the edge; it is part of this same card. */
+  transform: translateX(calc(100% + var(--radiation-side-gap) - var(--radiation-rail-width)));
+  transition: transform 560ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+}
+.radiation-dialog[data-state="open"] { transform: translateX(0); }
+.radiation-dialog::backdrop {
+  background: #030609a6;
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+.radiation-dialog[data-state="open"]::backdrop { opacity: 1; }
+.radiation-dialog-content {
+  width: calc(100% - var(--radiation-rail-width));
+  height: 100%;
+  margin-left: var(--radiation-rail-width);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(20px, 3vw, 36px);
+}
+.radiation-dialog[data-state="closed"] .radiation-dialog-content { visibility: hidden; }
+.radiation-dialog-header,
+.radiation-dialog-heading,
+.radiation-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.radiation-dialog-header { margin-bottom: 24px; }
+.radiation-dialog-heading { justify-content: flex-start; }
+.radiation-dialog-heading > .radiation-symbol {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 1px solid #6f6030;
+  border-radius: 12px;
+  background: #edcc510b;
+}
+.radiation-kicker { display: block; margin-bottom: 6px; color: #d6bd65; font-size: 0.65rem; letter-spacing: 0.14em; }
+.radiation-dialog h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); font-weight: 500; letter-spacing: -0.035em; }
+.radiation-dialog h3 { margin: 0; font-size: 1.05rem; font-weight: 500; }
+.radiation-close {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #5d5537;
+  border-radius: 50%;
+  color: #f6d45a;
+  background: #f6d45a0a;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.radiation-close:hover { background: #f6d45a1a; }
+.radiation-account { display: flex; flex-wrap: wrap; gap: 14px 32px; margin-bottom: 24px; padding-block: 15px; border-block: 1px solid #eeeae01a; }
+.radiation-account > span { display: flex; flex-direction: column; gap: 6px; color: #aaa998; font-size: 0.7rem; }
+.radiation-account strong { color: #e5e2d7; font-weight: 500; font-size: 0.8rem; }
+.radiation-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 24px; }
+.radiation-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid #4c4934;
+  border-radius: 12px;
+  text-align: left;
+  color: #d8d5c8;
+  background: #191c15;
+  cursor: pointer;
+}
+.radiation-metric > span { font-size: 0.78rem; line-height: 1.5; }
+.radiation-metric > strong { color: #f6d45a; font: 500 clamp(1.5rem, 2.5vw, 2rem)/1.25 Consolas, monospace; overflow-wrap: anywhere; }
+.radiation-metric > strong small { color: #c1b994; font: 400 0.8rem/1.4 system-ui, sans-serif; }
+.radiation-metric > small { color: #9f9f8d; font-size: 0.66rem; }
+.radiation-metric:hover,
+.radiation-metric[aria-pressed="true"] { border-color: #d6bd65; background: #24271a; }
+.radiation-section { margin-top: 24px; padding: 22px; border: 1px solid #eeeae01a; border-radius: 12px; background: #151711; }
+.radiation-section-heading > span { color: #aaa998; font-size: 0.75rem; }
+.radiation-section-heading label { display: flex; flex-direction: column; gap: 6px; color: #aaa998; font-size: 0.65rem; }
+.radiation-section select { max-width: 100%; padding: 8px 10px; border: 1px solid #5b563a; border-radius: 6px; color: #e8dfbd; background: #202218; font-size: 0.75rem; }
+.radiation-chart { display: block; width: 100%; max-height: 300px; margin-block: 18px; color: #e8dfbd; overflow: visible; }
+.radiation-chart text { fill: #aaa998; font: 11px system-ui, sans-serif; }
+.radiation-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding-top: 16px; border-top: 1px solid #eeeae01a; }
+.radiation-stats > div { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.radiation-stats span { color: #aaa998; font-size: 0.7rem; }
+.radiation-stats strong { color: #e8dfbd; font: 500 1rem/1.5 Consolas, monospace; overflow-wrap: anywhere; }
+.radiation-stats small { font: 400 0.68rem/1.5 system-ui, sans-serif; }
+.radiation-table-scroll { overflow: auto; max-height: 320px; margin-top: 18px; }
+.radiation-dialog table { width: 100%; border-collapse: collapse; white-space: nowrap; text-align: left; }
+.radiation-dialog th { color: #c6bd94; font-size: 0.68rem; font-weight: 500; }
+.radiation-dialog td { color: #d8d5c8; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+.radiation-dialog th,
+.radiation-dialog td { padding: 12px 14px; border-bottom: 1px solid #eeeae012; }
+.radiation-dialog th:first-child,
+.radiation-dialog td:first-child { padding-left: 0; }
+.radiation-text-button { margin-top: 12px; padding: 8px 0; border: 0; color: #f6d45a; background: transparent; font-size: 0.78rem; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+.radiation-notice { margin-block: 24px; padding: 20px; border: 1px solid #5d5537; border-radius: 10px; color: #d1c9ac; line-height: 1.7; }
+.radiation-notice a { color: #f6d45a; text-decoration: underline; }
+.radiation-footnote { margin: 20px 0 0; color: #999984; font-size: 0.7rem; line-height: 1.8; }
+@media (max-width: 700px) {
+  .radiation-drawer { --radiation-rail-width: 44px; --radiation-side-gap: 12px; }
+  .radiation-dialog { width: calc(100% - 24px); border-radius: 12px; }
+  .radiation-dialog-content { padding: 22px 16px; }
+  .radiation-dialog-heading > .radiation-symbol { width: 44px; height: 44px; font-size: 1.6rem; }
+  .radiation-dialog-header { gap: 8px; }
+  .radiation-metrics { grid-template-columns: 1fr; gap: 10px; }
+  .radiation-metric { padding: 15px; gap: 8px; }
+  .radiation-section { padding: 16px; }
+  .radiation-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .radiation-section-heading { flex-wrap: wrap; }
+  .radiation-tab { padding-inline: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .radiation-tab,
+  .radiation-dialog,
+  .radiation-dialog::backdrop { transition: none; }
+}
