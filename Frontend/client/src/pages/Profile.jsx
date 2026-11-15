@@ -41,8 +41,8 @@ export default function Profile() {
           <h1>Welcome, {user.username}!</h1>
 
           <img
-            src="/astropic.png"
-            alt="Astronaut logo"
+            src={`${import.meta.env.BASE_URL}brand/astra-logo.png`}
+            alt="ASTRA logo"
             className="profile-logo"
           />
         </div>
