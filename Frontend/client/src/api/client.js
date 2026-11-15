@@ -23,7 +23,7 @@ export async function apiRequest(path, { token, ...options } = {}) {
     });
   } catch {
     throw new Error(
-      "Cannot connect to the ASTRA backend. Check that Express is running on port 3001."
+      "Cannot connect to the Olympus Health backend. Check that Express is running on port 3001."
     );
   }
 

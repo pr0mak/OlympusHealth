@@ -44,7 +44,7 @@
   background: var(--surface-raised);
 }
 .home-overview .widget {
-  border: 1px solid var(--accent);
+  border: var(--card-border-width) solid var(--accent);
   min-height: 0;
   padding: 0.8rem 1rem;
   border-radius: 12px;
@@ -136,7 +136,7 @@
   line-height: 1.8;
   font-size: 0.78rem;
 }
-.health-data-page { --accent-border: #ff879059; --accent-dim: #ff87900d; }
+.health-data-page { --accent-border: #ff535f59; --accent-dim: #ff535f0d; }
 .health-data-page .trend-chart, .health-data-page .metric-card > strong,
 .health-data-page .card-heading h2 { color: var(--health); }
 .health-data-page .demo-note { border-left-color: var(--health); }
@@ -404,7 +404,7 @@ tbody tr:last-child > * {
 }
 .auth-card {
   padding: 2rem;
-  box-shadow: 0 24px 70px #0000004d, inset 0 1px 0 #75e3f50d;
+  box-shadow: 0 24px 70px #0000004d, inset 0 1px 0 #326bc10d;
 }
 .auth-card h1 {
   font-size: 1.8rem;

@@ -138,7 +138,7 @@ export default function Alerts() {
       <div className="alerts-heading">
         <div>
           <p className="alerts-eyebrow">
-            ASTRA / HEALTH MONITORING
+            Olympus Health / HEALTH MONITORING
           </p>
           <h1>Alerts</h1>
           <p className="alerts-subtitle">

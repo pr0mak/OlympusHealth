@@ -31,7 +31,7 @@ export default function App() {
   const entered = startupPhase === 'complete';
 
   useEffect(() => {
-    document.title = `${pageTitles[pathname] ?? 'Page not found'} | Space Apps Challenge`;
+    document.title = `${pageTitles[pathname] ?? 'Page not found'} | Olympus Health`;
     window.scrollTo(0, 0);
     if (entered) document.getElementById('main-content')?.focus({ preventScroll: true });
   }, [pathname, entered]);

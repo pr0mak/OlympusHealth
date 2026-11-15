@@ -34,7 +34,7 @@
 
 .astra-register-page .eyebrow {
   margin: 0 0 9px;
-  color: var(--cyan, #75e3f5);
+  color: var(--cyan, #326bc1);
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -110,7 +110,7 @@
 
 .astra-register-page .auth-form input:focus,
 .astra-register-page .auth-form select:focus {
-  outline: 2px solid var(--cyan, #75e3f5);
+  outline: 2px solid var(--cyan, #326bc1);
   outline-offset: 1px;
   border-color: var(--reg-border-strong);
 }
@@ -195,7 +195,7 @@
 }
 
 .astra-register-page .primary-button:focus-visible {
-  outline: 2px solid var(--cyan, #75e3f5);
+  outline: 2px solid var(--cyan, #326bc1);
   outline-offset: 3px;
 }
 

@@ -31,7 +31,7 @@ export default function Header({ showMission = false }) {
       <Link
         className="brand"
         to="/"
-        aria-label="ASTRA home"
+        aria-label="Olympus Health home"
       >
         <span className="brand-symbol">
           <img
@@ -43,7 +43,7 @@ export default function Header({ showMission = false }) {
         </span>
 
         <span className="brand-name">
-          ASTRA
+          Olympus Health
         </span>
       </Link>
 

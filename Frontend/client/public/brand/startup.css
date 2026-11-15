@@ -13,7 +13,7 @@ html { background: #070c15; }
   display: block;
   width: clamp(190px, 28vw, 280px);
   height: auto;
-  filter: drop-shadow(0 0 24px #75e3f51a);
+  filter: drop-shadow(0 0 24px #326bc11a);
 }
 .startup-status {
   position: absolute;

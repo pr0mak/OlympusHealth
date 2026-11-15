@@ -225,7 +225,7 @@
 .health-tab:focus-visible,
 .health-metric-card:focus-visible,
 .health-show-more:focus-visible {
-  outline: 2px solid #9eb6ca;
+  outline: 2px solid var(--blue);
   outline-offset: 3px;
 }
 
@@ -553,7 +553,7 @@
   --health-border: rgba(177, 198, 217, 0.14);
   --health-text: #edf2f7;
   --health-muted: #aab9c8;
-  --health-accent: #8bb5d4;
+  --health-accent: var(--blue);
 
   color: var(--health-text);
 }
@@ -616,7 +616,7 @@
 
 .health-metric-card--active {
   background: #263a4e;
-  border-color: rgba(139, 181, 212, 0.65);
+  border-color: #326bc1a6;
 }
 
 .health-metric-label {
@@ -686,7 +686,7 @@
 }
 
 .health-tab--active::after {
-  background: #91bad7;
+  background: var(--blue);
 }
 
 /* Chart */
@@ -781,7 +781,7 @@
 .health-select:focus-visible,
 .health-tab:focus-visible,
 .health-show-more:focus-visible {
-  outline: 2px solid #a9cde6;
+  outline: 2px solid var(--blue);
   outline-offset: 3px;
 }
 
@@ -880,7 +880,7 @@
 }
 
 .health-edit-grid input:focus {
-  outline: 2px solid #8bb5d4;
+  outline: 2px solid var(--blue);
   outline-offset: 1px;
 }
 
@@ -938,7 +938,7 @@
 .health-edit-close:focus-visible,
 .health-edit-cancel:focus-visible,
 .health-edit-save:focus-visible {
-  outline: 2px solid #a9cde6;
+  outline: 2px solid var(--blue);
   outline-offset: 3px;
 }
 

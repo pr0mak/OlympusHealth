@@ -21,7 +21,7 @@
 }
 
 .alerts-eyebrow {
-  color: #8e9dad;
+  color: var(--fire);
   font-size: 0.7rem;
   letter-spacing: 0.04em;
 }
@@ -32,7 +32,7 @@
 }
 
 .alerts-heading-icon {
-  color: #9eb5c5;
+  color: var(--fire);
 }
 
 .alerts-account {
@@ -42,8 +42,8 @@
   padding: 15px 0;
   margin-bottom: 28px;
   color: #9eacba;
-  border-top: 1px solid #2c3745;
-  border-bottom: 1px solid #2c3745;
+  border-top: 1px solid var(--fire-divider);
+  border-bottom: 1px solid var(--fire-divider);
   font-size: 0.83rem;
 }
 
@@ -65,7 +65,7 @@
   gap: 16px;
   padding: 19px 20px;
   background: #192536;
-  border: 1px solid #2e3b4b;
+  border: var(--card-border-width) solid var(--fire-border);
   border-radius: 9px;
 }
 
@@ -87,15 +87,15 @@
 }
 
 .alert-icon--high {
-  color: #ec7d89;
+  color: var(--fire);
 }
 
 .alert-icon--medium {
-  color: #d9b17c;
+  color: #ff8968;
 }
 
 .alert-icon--low {
-  color: #a4bece;
+  color: #ffb9a5;
 }
 
 .alerts-section-heading {
@@ -121,7 +121,7 @@
 .alerts-table-section {
   padding: 24px;
   background: #151f2d;
-  border: 1px solid #2e3b4b;
+  border: var(--card-border-width) solid var(--fire-border);
   border-radius: 11px;
 }
 
@@ -143,12 +143,12 @@
   background: #1d2a3a;
   font-size: 0.78rem;
   font-weight: 550;
-  border-bottom: 1px solid #394859;
+  border-bottom: 1px solid var(--fire-divider);
 }
 
 .alerts-table td {
   padding: 20px 16px;
-  border-bottom: 1px solid #2b3949;
+  border-bottom: 1px solid var(--fire-divider);
   vertical-align: middle;
   font-size: 0.85rem;
 }
@@ -193,28 +193,28 @@
 }
 
 .alert-priority--high {
-  color: #ef929c;
+  color: var(--fire);
 }
 
 .alert-priority--medium {
-  color: #e2bd88;
+  color: #ff8968;
 }
 
 .alert-priority--low {
-  color: #b7cad8;
+  color: #ffb9a5;
 }
 
 .alerts-message {
   padding: 30px 20px;
   color: #aab9c7;
-  border: 1px solid #334253;
+  border: var(--card-border-width) solid var(--fire-border);
   border-radius: 9px;
   text-align: center;
 }
 
 .alerts-message--error {
   color: #ffb3b3;
-  border-color: #97515c;
+  border-color: var(--fire);
 }
 
 .alerts-disclaimer {
@@ -254,14 +254,14 @@
   align-items: center;
   gap: 16px;
   background: #192536;
-  border: 1px solid #2e3b4b;
+  border: var(--card-border-width) solid var(--fire-border);
   border-radius: 9px;
   padding: 19px 20px;
 }
 
 .astra-alerts-page .alerts-table-section {
   background: #151f2d;
-  border: 1px solid #2e3b4b;
+  border: var(--card-border-width) solid var(--fire-border);
   border-radius: 11px;
   padding: 24px;
 }
@@ -282,7 +282,7 @@
 .astra-alerts-page .alerts-table td {
   padding: 20px 16px;
   color: #dce5ee;
-  border-bottom: 1px solid #2b3949;
+  border-bottom: 1px solid var(--fire-divider);
 }
 
 .astra-alerts-page .alerts-heading h1 {
