@@ -105,7 +105,7 @@ For complete setup instructions, including MySQL configuration,
 database initialization, environment variables, and demo login
 credentials, follow the guide below:
 
-**[ASTRA — Quick Start Guide](./ASTRA_QUICK_START.md)**
+**[ASTRA - Quick Start Guide](./ASTRA_QUICK_START.md)**
 
 Once configured, start the three services in separate terminals:
 
