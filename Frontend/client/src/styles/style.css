@@ -82,6 +82,14 @@ summary:focus-visible {
     var(--background);
 }
 
+.site-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100svh;
+  min-width: 0;
+}
+
 /* Decorative stars and orbit paths never intercept input. */
 .app-shell::before {
   content: "";

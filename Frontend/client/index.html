@@ -1,14 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-startup-state="loading">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="%BASE_URL%brand/astra-favicon.svg" />
+    <link rel="stylesheet" href="%BASE_URL%brand/startup.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#070c15" />
     <meta name="description" content="Space Apps Challenge astronaut health monitoring frontend." />
     <title>Space Apps Challenge</title>
   </head>
   <body>
+    <div id="startup-screen" role="status" aria-live="polite">
+      <img class="startup-logo" src="%BASE_URL%brand/astra-loading.svg" width="512" height="512" alt="" />
+      <span class="startup-status">Loading ASTRA…</span>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

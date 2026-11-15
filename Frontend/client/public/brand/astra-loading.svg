@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <title>ASTRA loading</title>
+  <style>
+    .figure, .track, .satellite { stroke: #f2f0ea; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+    .figure, .track { stroke-dasharray: 1; stroke-dashoffset: 1; animation: form 800ms cubic-bezier(.25,.6,.3,1) both; }
+    .figure-body { animation-delay: 120ms; }
+    .figure-arms { animation-delay: 200ms; }
+    .figure-legs { animation-delay: 300ms; }
+    .track-outer { animation-delay: 1150ms; animation-duration: 900ms; }
+    .track-inner { animation-delay: 1350ms; animation-duration: 900ms; }
+    .orbit { transform-origin: 256px 256px; }
+    .orbit-outer { animation: revolve 8500ms linear 2250ms infinite; }
+    .orbit-inner { animation: revolve 6500ms linear 2250ms infinite reverse; }
+    .satellite { fill: #070c15; opacity: 0; animation: appear 350ms ease 1850ms both; }
+    .spark { fill: #75e3f5; opacity: 0; animation: appear 500ms ease 2050ms both; }
+    @keyframes form { to { stroke-dashoffset: 0; } }
+    @keyframes appear { to { opacity: 1; } }
+    @keyframes revolve { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .figure, .track, .satellite, .spark, .orbit { animation: none; stroke-dashoffset: 0; opacity: 1; }
+    }
+  </style>
+  <!-- Independently drawn figure and two orbit groups, based on the site logo. -->
+  <g class="orbit orbit-outer">
+    <circle class="track track-outer" pathLength="1" cx="256" cy="256" r="194"/>
+    <circle class="satellite" cx="119" cy="119" r="14"/>
+    <circle class="satellite" cx="393" cy="393" r="14"/>
+    <path class="spark" d="m95 61 4 7 8 1-6 6 1 8-7-4-7 4 1-8-6-6 8-1Z"/>
+  </g>
+  <g>
+    <rect class="figure" pathLength="1" x="236" y="116" width="40" height="61" rx="20"/>
+    <path class="figure figure-body" pathLength="1" d="M235 180h42c19 0 33 14 33 33v67c0 11-7 18-17 18h-7M235 180c-19 0-33 14-33 33v67c0 11 7 18 17 18h7"/>
+    <path class="figure figure-arms" pathLength="1" d="M226 211v82h60v-82M226 282h60"/>
+    <path class="figure figure-legs" pathLength="1" d="M230 294v96c0 11 6 17 13 17s13-6 13-17v-79M256 390c0 11 6 17 13 17s13-6 13-17v-96"/>
+  </g>
+  <g class="orbit orbit-inner">
+    <g transform="rotate(-34 256 256)">
+      <ellipse class="track track-inner" pathLength="1" cx="256" cy="256" rx="222" ry="59"/>
+      <circle class="satellite" cx="437" cy="290" r="13"/>
+      <circle class="satellite" cx="75" cy="222" r="13"/>
+    </g>
+    <path class="spark" d="m412 75 4 7 8 1-6 6 1 8-7-4-7 4 1-8-6-6 8-1Z"/>
+  </g>
+</svg>
