@@ -2,16 +2,20 @@
   --chapter-rail: 48px;
   --chapter-gap: 72px;
   position: relative;
+  display: grid;
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  height: max(480px, calc(100svh - 270px));
+  min-height: 100svh;
   overflow: clip;
   isolation: isolate;
 }
 
 .fp-chapter {
-  position: absolute;
-  inset: 0 var(--chapter-gap);
+  position: relative;
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 100svh;
+  margin-inline: var(--chapter-gap);
   overflow: hidden;
   border: 1px solid var(--chapter-accent);
   border-radius: 14px;
@@ -35,10 +39,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 18px;
   width: var(--chapter-rail);
-  padding: 16px 6px;
+  padding: clamp(48px, 18svh, 180px) 6px 24px;
   border: 0;
   color: #081420;
   background: var(--chapter-accent);
@@ -61,11 +65,7 @@
 .fp-chapter-tab:focus-visible { outline: 2px solid #081420; outline-offset: -6px; }
 
 .fp-chapter-content {
-  height: 100%;
   padding: clamp(18px, 2.5vw, 36px);
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  scrollbar-gutter: stable;
 }
 .fp-chapter-content:focus { outline: none; }
 .fp-chapter--left .fp-chapter-content { margin-right: var(--chapter-rail); }
@@ -87,7 +87,6 @@
   .fp-chapters {
     --chapter-rail: 36px;
     --chapter-gap: 46px;
-    height: max(440px, calc(100svh - 230px));
   }
   .fp-chapter { border-radius: 10px; }
   .fp-chapter-content { padding: 16px 12px; }
