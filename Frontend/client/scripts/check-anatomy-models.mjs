@@ -6,6 +6,7 @@ import { Box3, Vector3 } from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { muscleGroups } from "../src/data/muscleGroups.js";
+import { boneGroups } from "../src/data/boneGroups.js";
 import { mockOrganStatus } from "../src/data/mockOrganStatus.js";
 
 const models = [
@@ -62,13 +63,29 @@ try {
       if (part.system === "organs") assert(mockOrganStatus[part.key], `Missing organ panel: ${part.key}`);
     }
     for (const group of muscleGroups) assert(anatomy.byKey[group.key]);
+    const bones = anatomy.parts.filter(part => part.system === "skeleton");
+    assert.equal(bones.length, 8);
+    assert.equal(new Set(anatomy.parts.map(part => part.key)).size, anatomy.parts.length);
+    for (const group of boneGroups) {
+      assert.deepEqual(anatomy.byKey[group.key].meshKeys, group.meshKeys);
+      for (const key of group.meshKeys) {
+        assert.equal(anatomy.meshByKey[key].system, "skeleton");
+        assert.equal(anatomy.selectionByMeshKey[key], group.key);
+      }
+    }
+    for (const part of catalog.filter(part => part.system === "skeleton")) {
+      assert(anatomy.selectionByMeshKey[part.key], "Missing bone selection: " + part.key);
+      if (!["pelvis", "skull"].includes(part.key)) {
+        assert(!anatomy.byKey[part.key], "Individual bone selection remains: " + part.key);
+      }
+    }
     for (const part of catalog.filter(part => part.sex)) {
       assert.equal(Boolean(anatomy.byKey[part.key]), part.sex === model.sex,
         `Sex-specific selection mismatch: ${model.sex}/${part.key}`);
     }
     const organCount = anatomy.parts.filter(part => part.system === "organs").length;
     assert.deepEqual(anatomy.byKey.back.meshKeys, ["back_muscles_l", "back_muscles_r", "trapezius_l", "trapezius_r"]);
-    console.log(`${model.sex}: checksum, ${meshes.size} decoded meshes, ${muscleGroups.length} muscle regions, ${organCount} organ panels, click bounds and model routing verified.`);
+    console.log(`${model.sex}: checksum, ${meshes.size} decoded meshes, ${muscleGroups.length} muscle regions, ${boneGroups.length} bone regions, ${organCount} organ panels, click bounds and model routing verified.`);
   }
 } finally {
   await server.close();

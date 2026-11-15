@@ -117,7 +117,24 @@ diaphragm, and pelvic-floor meshes remain visible but are not selectable.
 Hovering, clicking, and camera framing operate on the entire region.
 The viewer offers an optional `onSelectionChange` callback for future region-specific information;
 Home currently leaves it disconnected from the Health Data preview.
-Skeleton and Organs keep their existing selections. The asset check also verifies
+Organs keep their existing selections. Skeleton selections use the grouped regions below. The asset check also verifies
 group membership, anatomical sides, missing meshes, and duplicate assignments.
 
 Χρησιμοποίησε σύγχρονη έκδοση Node.js LTS συμβατή με το Vite. Το setup ελέγχθηκε με Node.js 24.
+
+### Skeleton selection regions
+
+Both male and female models use eight regions from src/data/boneGroups.js:
+
+- Right arm and left arm, each including collarbone, shoulder blade, upper arm, forearm, and hand.
+- Right leg and left leg, each including thigh, kneecap, lower leg, and foot.
+- Pelvis & Sacrum, unchanged.
+- Spine, combining cervical, thoracic, and lumbar sections.
+- Ribs, combining both sides and the sternum.
+- Skull, combining the cranium, jaw, and teeth (the whole skeletal head).
+
+Hovering, highlighting, clicking, and camera framing use the whole region. Limb IDs
+start with skeleton_ to avoid collisions with muscle IDs. Bone status panels use
+region-level demo fixtures; source meshes, muscles, organs, and model assets stay unchanged.
+Run npm run check:bones and npm run check:anatomy-models to verify groups, panels,
+and focus bounds for both models.

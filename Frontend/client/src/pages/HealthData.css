@@ -548,8 +548,8 @@
    ========================================== */
 
 .astra-health-page {
-  --health-surface: #1b2b3c;
-  --health-surface-hover: #223448;
+  --health-surface: #24364a;
+  --health-surface-hover: #2c425a;
   --health-border: rgba(177, 198, 217, 0.14);
   --health-text: #edf2f7;
   --health-muted: #aab9c8;
@@ -602,6 +602,7 @@
 /* Metric cards */
 
 .health-metric-card {
+  --metric-text-color: var(--metric-color);
   background: var(--health-surface);
   border: 1px solid var(--health-border);
   border-radius: 9px;
@@ -614,42 +615,44 @@
   border-color: rgba(177, 198, 217, 0.28);
 }
 
-.health-metric-card--active {
-  background: #263a4e;
-  border-color: #326bc1a6;
+.health-metric-card--active,
+.health-metric-card--active:hover {
+  --metric-text-color: #1b2b3c;
+  background: var(--metric-color);
+  border-color: var(--metric-color);
 }
 
 .health-metric-label {
-  color: #b7c5d1;
+  color: var(--metric-text-color);
   font-weight: 500;
 }
 
 .health-metric-value {
-  color: #f5f8fb;
+  color: var(--metric-text-color);
   font-weight: 600;
   letter-spacing: -0.035em;
 }
 
 .health-metric-value small {
-  color: #a7b8c8;
+  color: var(--metric-text-color);
 }
 
 .health-metric-detail {
-  color: #99aaba;
+  color: var(--metric-text-color);
 }
 
 .health-metric-action {
-  color: #a7c4da;
+  color: var(--metric-text-color);
 }
 
 .health-metric-card--active .health-metric-action {
-  color: #d1e5f3;
+  color: var(--metric-text-color);
 }
 
 /* Panels */
 
 .health-panel {
-  background: #19293a;
+  background: #223448;
   border: 1px solid var(--health-border);
   border-radius: 10px;
 }
@@ -657,7 +660,7 @@
 /* Range selector */
 
 .health-select {
-  background: #26394d;
+  background: #30465e;
   color: #edf2f7;
   border: 1px solid rgba(177, 198, 217, 0.25);
   border-radius: 7px;
@@ -701,7 +704,7 @@
 
 .health-chart-empty,
 .health-notice {
-  background: #213247;
+  background: #2a4058;
   color: #b2c1ce;
   border: 1px solid var(--health-border);
 }
@@ -732,7 +735,7 @@
 }
 
 .health-history-table thead {
-  background: #243548;
+  background: #2d4056;
 }
 
 .health-history-table th {
@@ -761,7 +764,7 @@
 }
 
 .health-show-more:hover {
-  background: #26394d;
+  background: #30465e;
 }
 
 /* Data footnote */
@@ -822,7 +825,7 @@
 .health-edit-form {
   margin-top: 24px;
   padding: 24px;
-  background: #1b2b3c;
+  background: var(--health-surface);
   border: 1px solid #40556b;
   border-radius: 10px;
 }
@@ -873,7 +876,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 12px 13px;
-  background: #111e2b;
+  background: #192b3d;
   color: #edf2f7;
   border: 1px solid #3c5369;
   border-radius: 7px;

@@ -1,5 +1,6 @@
 import catalog from "./anatomyCatalog.json";
 import { muscleGroups } from "./muscleGroups.js";
+import { boneGroups } from "./boneGroups.js";
 
 export const ANATOMY_LAYERS = [
   { id: "muscles", label: "Muscles" },
@@ -12,11 +13,12 @@ function createAnatomy(sex) {
     .filter(part => (!part.sex || part.sex === sex)
       && ANATOMY_LAYERS.some(layer => layer.id === part.system))
     .sort((a, b) => a.label.localeCompare(b.label));
-  // Shared muscle-region IDs work with both source models.
+  // Shared muscle and bone regions work with both source models.
   const parts = [
     ...muscleGroups,
+    ...boneGroups,
     ...meshes
-      .filter(part => part.system !== "muscles")
+      .filter(part => part.system === "organs")
       .map(part => ({ ...part, meshKeys: [part.key] })),
   ];
 

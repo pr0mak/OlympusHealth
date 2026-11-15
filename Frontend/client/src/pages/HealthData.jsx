@@ -121,9 +121,6 @@ function MetricCard({ metric, row, selected, onClick }) {
           : "No recorded value"}
       </span>
 
-      <span className="health-metric-action">
-        View trend ↗
-      </span>
     </button>
   );
 }
@@ -535,16 +532,7 @@ async function saveMeasurement(event) {
 
       <div className="health-page-heading">
         <div>
-          <p className="health-eyebrow">
-            Olympus Health / PERSONAL HEALTH MONITORING
-          </p>
-
           <h1>Health Data</h1>
-
-          <p className="health-description">
-            Explore recorded physiological measurements,
-            trends and historical data.
-          </p>
         </div>
       </div>
 
@@ -769,15 +757,7 @@ async function saveMeasurement(event) {
               <section className="health-section health-panel">
                 <div className="health-section-heading">
                   <div>
-                    <span className="health-eyebrow">
-                      HISTORICAL ANALYTICS
-                    </span>
-
                     <h2>{activeMetric.label} Trend</h2>
-
-                    <p className="health-muted">
-                      {activeMetric.description} · Average and trend for the selected time window.
-                    </p>
                   </div>
 
                   <select
