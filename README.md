@@ -49,8 +49,6 @@ Olympus Health separates presentation from computation. Its Python service provi
 
 **Model Predictive Control (MPC).** A Python optimizer using **SciPy / SLSQP** explores a seven-day exercise schedule subject to time and modeled-fatigue constraints, including resistance and aerobic exercise. The planner optimizes a simplified scheduling model; it does not establish that the prescribed training causes specific clinical improvements.
 
-**Adaptive recommendations.** The prototype also includes a **LinUCB** recommendation component. Its demo feedback loop should not be represented as trained or validated on astronaut medical outcomes.
-
 ## Technology Stack
 
 | Layer | Technologies | Role |
@@ -62,7 +60,6 @@ Olympus Health separates presentation from computation. Its Python service provi
 | **Authentication & Security** | JWT, bcrypt, CORS, express-rate-limit | Password hashing, authorized access, and request controls |
 | **Computational Engine** | Python, FastAPI, Pydantic | Model endpoints, validation, forecasting, and planning |
 | **Numerical Computing & Optimization** | NumPy, SciPy, SLSQP, MPC | Numerical methods and constrained exercise scheduling |
-| **Adaptive Decision-Making** | LinUCB | Prototype contextual exercise recommendation logic |
 | **Data Prototyping** | Monte Carlo sampling | Synthetic records for MVP demonstrations under documented assumptions |
 | **Integration** | HTTP, JSON, REST APIs, Fetch API | Communication among frontend, Express API, and Python service |
 | **Development & Testing** | Git, GitHub, Postman | Source control, collaboration, and API verification |
@@ -77,7 +74,6 @@ flowchart TB
     API --> AL[Rule-based Alerts]
     PY --> FC[Health Projections]
     PY --> MPC[MPC Exercise Planning]
-    PY --> LB[LinUCB Recommendation Prototype]
 ```
 
 The React frontend does **not** connect to MySQL directly. Express verifies the user's JWT, filters data by the authenticated `user_id`, and queries the database. Scientific computations run in the separate Python service.
