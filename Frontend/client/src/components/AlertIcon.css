@@ -1,0 +1,13 @@
+:root {
+  --alert-high: var(--health);
+  --alert-medium: var(--fire);
+  --alert-low: #fbbf24;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+}
+
+.alert-icon--high { color: var(--alert-high); }
+.alert-icon--medium { color: var(--alert-medium); }
+.alert-icon--low { color: var(--alert-low); }

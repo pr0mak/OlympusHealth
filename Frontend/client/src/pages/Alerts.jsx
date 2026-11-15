@@ -1,3 +1,4 @@
+import AlertIcon from "../components/AlertIcon.jsx";
 import BackLink from "../components/BackLink.jsx";
 
 import { useEffect, useMemo, useState } from "react";
@@ -22,27 +23,6 @@ const PRIORITIES = {
     order: 2
   }
 };
-
-function AlertIcon({ priority }) {
-  return (
-    <svg
-      width="23"
-      height="23"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={`alert-icon alert-icon--${priority}`}
-    >
-      <path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
-      <path d="M12 9v4" />
-      <path d="M12 17h.01" />
-    </svg>
-  );
-}
 
 function PriorityLabel({ priority }) {
   const config = PRIORITIES[priority] || PRIORITIES.low;
@@ -136,17 +116,11 @@ export default function Alerts() {
 
       <div className="alerts-heading">
         <div>
-          <p className="alerts-eyebrow">
-            Olympus Health / HEALTH MONITORING
-          </p>
           <h1>Alerts</h1>
-          <p className="alerts-subtitle">
-            Health observations and data review.
-          </p>
         </div>
 
         <div className="alerts-heading-icon" aria-hidden="true">
-          <AlertIcon priority="low" />
+          <AlertIcon priority={sortedAlerts[0]?.priority || "low"} />
         </div>
       </div>
 

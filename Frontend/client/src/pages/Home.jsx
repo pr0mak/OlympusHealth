@@ -8,6 +8,7 @@ import {
 
 import Widget from "../components/Widget.jsx";
 import HealthDataPreview from "../components/HealthDataPreview.jsx";
+import AlertsPreview from "../components/AlertsPreview.jsx";
 import OverviewSidebar from "../components/OverviewSidebar.jsx";
 import TrendChart from "../components/TrendChart.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -124,16 +125,7 @@ export default function Home({ onStartupReady }) {
               title="Alerts"
               to="/alerts"
             >
-              <div className="alerts-widget-preview">
-                <p>
-                  Review health observations and alerts
-                  based on your recorded data.
-                </p>
-
-                <span className="alerts-widget-preview-link">
-                  View alerts →
-                </span>
-              </div>
+              <AlertsPreview />
             </Widget>
 
             {/* FUTURE PROJECTION */}
