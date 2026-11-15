@@ -96,29 +96,48 @@ Because simulated records cannot replace independent real-world observations, we
 
 Relevant published bone-health references include [Axpe et al. (2020)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6975633/) and [Gabel et al. (2022), TBone](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/). Source publications, synthetic records, and model outputs are not treated as interchangeable.
 
-## Run Locally
 
-Configure the MySQL connection and the required environment variables for each service, then start:
+## Installation & Quick Start
+
+ASTRA requires Node.js, Python 3, and MySQL Server.
+
+For complete setup instructions, including MySQL configuration,
+database initialization, environment variables, and demo login
+credentials, follow the guide below:
+
+**[ASTRA — Quick Start Guide](./ASTRA_QUICK_START.md)**
+
+Once configured, start the three services in separate terminals:
+
+### Terminal 1 — Backend
 
 ```bash
-# Terminal 1 — Python engine (from astra-ai/)
-python -m pip install -r requirements.txt
-python -m uvicorn astra.api:app --reload --port 8000
-
-# Terminal 2 — Express backend (from Backend/server/)
-node seed.js
-node app.js
-
-# Terminal 3 — React frontend (from Frontend/client/)
-npm install
+cd Backend/server
 npm run dev
 ```
 
+### Terminal 2 — Frontend
+
+```bash
+cd Frontend
+npm run dev
+```
+
+### Terminal 3 — Python Engine
+
+```bash
+cd astra-ai
+python -m uvicorn astra.api:app --reload --port 8000
+```
+
+### Local URLs
+
 | Service | URL |
 |---|---|
-| Frontend | `http://localhost:5173` |
-| Express API | `http://localhost:3001` |
-| FastAPI documentation | `http://localhost:8000/docs` |
+| ASTRA Application | http://localhost:5173 |
+| Express API Health Check | http://localhost:3001/healthz |
+| FastAPI Documentation | http://127.0.0.1:8000/docs |
+```
 
 ## Built for the Hackathon
 
