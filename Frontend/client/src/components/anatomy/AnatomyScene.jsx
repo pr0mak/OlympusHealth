@@ -2,16 +2,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useThree } from '@react-three/fiber';
 import { CameraControls, CameraControlsImpl, useGLTF } from '@react-three/drei';
 import { Box3, DoubleSide, MeshStandardMaterial, Raycaster, Vector2 } from 'three';
-import { anatomyByKey, anatomyMeshByKey, selectionByMeshKey, MODEL_URL } from '../../data/anatomy.js';
 import { configureHomeView, recenterAtHomeScale } from './cameraConstraints.js';
 
 const { ACTION } = CameraControlsImpl;
 const mouseButtons = { left: ACTION.ROTATE, middle: ACTION.NONE, right: ACTION.NONE, wheel: ACTION.DOLLY };
 const touches = { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE };
 
-export default function AnatomyScene({ layer, selected, isolate, resetVersion, controlsRef, onSelect, onHover, onReady }) {
+export default function AnatomyScene({ anatomy, layer, selected, isolate, resetVersion, controlsRef, onSelect, onHover, onReady }) {
+  const { modelUrl, meshByKey, byKey, selectionByMeshKey } = anatomy;
   // Meshopt is bundled with the loader: no external decoder or model CDN is needed.
-  const { scene } = useGLTF(MODEL_URL, false, true);
+  const { scene } = useGLTF(modelUrl, false, true);
   const { camera, gl, invalidate, size } = useThree();
   const [hovered, setHovered] = useState(null);
   const homeViewRef = useRef(null);
@@ -28,7 +28,7 @@ export default function AnatomyScene({ layer, selected, isolate, resetVersion, c
     const selectionMeshes = new Map();
     root.traverse((object) => {
       if (!object.isMesh) return;
-      const info = anatomyMeshByKey[object.name];
+      const info = meshByKey[object.name];
       object.material = new MeshStandardMaterial({
         color: info?.color ?? '#d7d1bd',
         roughness: 0.55,
@@ -45,7 +45,7 @@ export default function AnatomyScene({ layer, selected, isolate, resetVersion, c
     });
     root.updateMatrixWorld(true);
     return { root, meshes, selectionMeshes, fullBounds: new Box3().setFromObject(root) };
-  }, [scene]);
+  }, [scene, meshByKey, selectionByMeshKey]);
 
   useEffect(() => {
     // Report selection regions, not individual muscle mesh names, to the UI.
@@ -62,7 +62,7 @@ export default function AnatomyScene({ layer, selected, isolate, resetVersion, c
 
   useEffect(() => {
     meshes.forEach((mesh, key) => {
-      const info = anatomyMeshByKey[key];
+      const info = meshByKey[key];
       const selectionKey = mesh.userData.selectionKey;
       const isSelected = Boolean(selected) && selectionKey === selected;
       const isHovered = Boolean(hovered) && selectionKey === hovered;
@@ -78,7 +78,7 @@ export default function AnatomyScene({ layer, selected, isolate, resetVersion, c
       material.needsUpdate = true;
     });
     invalidate();
-  }, [hovered, invalidate, isolate, layer, meshes, selected]);
+  }, [hovered, invalidate, isolate, layer, meshes, selected, meshByKey]);
 
   useEffect(() => {
     const canvas = gl.domElement;
@@ -149,9 +149,9 @@ export default function AnatomyScene({ layer, selected, isolate, resetVersion, c
 
   function getPart(event) {
     // Visible primary-layer geometry blocks clicks through to structures behind it,
-    // even when that geometry is context-only (for example, ungrouped back muscles).
-    if (anatomyMeshByKey[event.object.name]?.system === layer) event.stopPropagation();
-    const part = anatomyByKey[event.object.userData.selectionKey];
+    // even when that geometry is context-only (for example, the diaphragm).
+    if (meshByKey[event.object.name]?.system === layer) event.stopPropagation();
+    const part = byKey[event.object.userData.selectionKey];
     return part?.system === layer ? part : null;
   }
 

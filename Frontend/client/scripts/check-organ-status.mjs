@@ -7,7 +7,7 @@ import { mockOrganStatus } from "../src/data/mockOrganStatus.js";
 import { initialSidebarState, sidebarTransition } from "../src/components/sidebarTransition.js";
 
 const catalog = JSON.parse(await readFile(new URL("../src/data/anatomyCatalog.json", import.meta.url), "utf8"));
-const organs = catalog.filter(part => part.system === "organs" && part.sex !== "female");
+const organs = catalog.filter(part => part.system === "organs");
 assert.deepEqual(Object.keys(mockOrganStatus).sort(), organs.map(({ key }) => key).sort(),
   "Every selectable organ must have a demo profile.");
 for (const [key, status] of Object.entries(mockOrganStatus)) {

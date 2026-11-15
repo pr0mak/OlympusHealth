@@ -3,6 +3,7 @@ export const mockMuscleStatus = {
   left_arm: { soreness: 3, fatigue: 5, recoveryHours: 10, strength: 8, endurance: 7 },
   right_arm: { soreness: 4, fatigue: 6, recoveryHours: 12, strength: 8, endurance: 6 },
   chest: { soreness: 5, fatigue: 4, recoveryHours: 14, strength: 8, endurance: 7 },
+  back: { soreness: 4, fatigue: 5, recoveryHours: 12, strength: 8, endurance: 7 },
   abdominals: { soreness: 2, fatigue: 3, recoveryHours: 6, strength: 7, endurance: 8 },
   left_upper_leg: { soreness: 6, fatigue: 5, recoveryHours: 18, strength: 9, endurance: 7 },
   right_upper_leg: { soreness: 5, fatigue: 6, recoveryHours: 16, strength: 8, endurance: 7 },

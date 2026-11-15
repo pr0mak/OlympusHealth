@@ -1,11 +1,12 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, useProgress } from '@react-three/drei';
-import { ANATOMY_LAYERS, anatomyByKey, MODEL_URL } from '../../data/anatomy.js';
+import { ANATOMY_LAYERS, getAnatomy } from '../../data/anatomy.js';
 import AnatomyScene from './AnatomyScene.jsx';
 import ViewerErrorBoundary from './ViewerErrorBoundary.jsx';
 
-export default function AnatomyViewer({ onSelectionChange, onModelReady, selected = null }) {
+export default function AnatomyViewer({ onSelectionChange, onModelReady, selected = null, gender }) {
+  const anatomy = getAnatomy(gender);
   const [layer, setLayer] = useState('muscles');
   const [hoveredLabel, setHoveredLabel] = useState(null);
   const [ready, setReady] = useState(false);
@@ -26,7 +27,7 @@ export default function AnatomyViewer({ onSelectionChange, onModelReady, selecte
   }, [layer]);
 
   function selectPart(key) {
-    onSelectionChange?.(anatomyByKey[key] ?? null);
+    onSelectionChange?.(anatomy.byKey[key] ?? null);
   }
 
   function resetView() {
@@ -36,14 +37,14 @@ export default function AnatomyViewer({ onSelectionChange, onModelReady, selecte
   }
 
   function retry() {
-    useGLTF.clear(MODEL_URL);
+    useGLTF.clear(anatomy.modelUrl);
     setReady(false);
     resetView();
     setAttempt((version) => version + 1);
   }
 
   return (
-    <section className="anatomy-viewer" data-model-ready={ready} aria-label="Interactive 3D anatomy viewer">
+    <section className="anatomy-viewer" data-model-ready={ready} data-model-sex={anatomy.sex} aria-label={`Interactive ${anatomy.sex} 3D anatomy viewer`}>
       <ViewerErrorBoundary key={attempt} onRetry={retry}>
         <div id="anatomy-viewport" ref={viewportRef} className={`anatomy-viewport${hoveredLabel ? ' anatomy-viewport--hover' : ''}`}
           tabIndex={0} role="group" aria-label="Anatomy model. Click a region to select it; press Escape to return to the full body."
@@ -53,7 +54,7 @@ export default function AnatomyViewer({ onSelectionChange, onModelReady, selecte
             gl={{ alpha: true, antialias: true }} onPointerMissed={resetView}
             fallback={<span>Interactive 3D anatomy model. Click a region to inspect it.</span>}>
             <Suspense fallback={null}>
-              <AnatomyScene layer={layer} selected={selected} isolate={false} resetVersion={resetVersion} controlsRef={controlsRef}
+              <AnatomyScene anatomy={anatomy} layer={layer} selected={selected} isolate={false} resetVersion={resetVersion} controlsRef={controlsRef}
                 onSelect={selectPart} onHover={setHoveredLabel} onReady={onReady} />
             </Suspense>
           </Canvas>
@@ -65,7 +66,7 @@ export default function AnatomyViewer({ onSelectionChange, onModelReady, selecte
       <div className="anatomy-layers" role="group" aria-label="Anatomical layer">
         {ANATOMY_LAYERS.map((item) => <button key={item.id} type="button" aria-pressed={layer === item.id} onClick={() => { setLayer(item.id); resetView(); }}>{item.label}</button>)}
       </div>
-      <span className="visually-hidden" role="status">{selected ? `Selected structure: ${anatomyByKey[selected]?.label ?? ''}` : ''}</span>
+      <span className="visually-hidden" role="status">{selected ? `Selected structure: ${anatomy.byKey[selected]?.label ?? ''}` : ''}</span>
     </section>
   );
 }

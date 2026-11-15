@@ -82,12 +82,12 @@ for (const notice of ["LICENSE-MODELS.md", "ATTRIBUTION.md", "SOURCE.md"]) {
 }
 assert.equal(
   muscleGroups.length,
-  9,
-  "Expected exactly nine selectable muscle regions.",
+  10,
+  "Expected exactly ten selectable muscle regions, including the back.",
 );
 assert.equal(
   new Set(muscleGroups.map((group) => group.key)).size,
-  9,
+  muscleGroups.length,
   "Region IDs must be unique.",
 );
 const groupedMeshKeys = new Set();
@@ -149,7 +149,7 @@ console.log(
   "Anatomy asset verified: Meshopt decode, 128 unique source meshes, finite bounds, core structures, checksum, and notices.",
 );
 console.log(
-  `Muscle selection verified: 9 regions, ${groupedMeshKeys.size} member meshes, ${contextMuscles.size} context-only meshes, correct sides, no overlaps.`,
+  `Muscle selection verified: ${muscleGroups.length} regions, ${groupedMeshKeys.size} member meshes, ${contextMuscles.size} context-only meshes, correct sides, no overlaps.`,
 );
 console.log("Meshes per system:", counts);
 console.log(

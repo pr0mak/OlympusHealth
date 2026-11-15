@@ -31,6 +31,12 @@ export const muscleGroups = [
     "intercostals_l",
     "intercostals_r",
   ]),
+  region("back", "Back", [
+    "back_muscles_l",
+    "back_muscles_r",
+    "trapezius_l",
+    "trapezius_r",
+  ]),
   region("abdominals", "Abdominals", ["abdominal_muscles"]),
   region("left_upper_leg", "Left leg above the knee", [
     "quadriceps_l",
@@ -61,10 +67,6 @@ export const muscleGroups = [
 
 // These structures provide visual context but are not selectable in Muscles.
 export const ungroupedMuscleKeys = [
-  "back_muscles_l",
-  "back_muscles_r",
-  "trapezius_l",
-  "trapezius_r",
   "diaphragm",
   "pelvic_floor",
 ];

@@ -6,6 +6,7 @@ import { muscleGroups } from "../src/data/muscleGroups.js";
 const chest = muscleGroups.find(({ key }) => key === "chest");
 const arm = muscleGroups.find(({ key }) => key === "left_arm");
 const neck = muscleGroups.find(({ key }) => key === "neck");
+const back = muscleGroups.find(({ key }) => key === "back");
 const select = (state, selection) => sidebarTransition(state, { type: "select", selection });
 const exit = (state) => sidebarTransition(state, { type: "exit-complete" });
 const enter = (state) => sidebarTransition(state, { type: "entry-complete" });
@@ -60,6 +61,11 @@ assert.equal(state.displayed, null);
 assert.equal(state.phase, "idle");
 assert.equal(sidebarTransition(initialSidebarState, { type: "entry-complete" }), initialSidebarState);
 assert.equal(sidebarTransition(initialSidebarState, { type: "exit-complete" }), initialSidebarState);
+
+assert(back && back.meshKeys.includes("back_muscles_l") && back.meshKeys.includes("back_muscles_r"));
+state = enter(exit(select(initialSidebarState, back)));
+assert.equal(state.displayed, back, "Back selection must display its own muscle panel.");
+assert.equal(state.phase, "idle");
 
 assert.deepEqual(Object.keys(mockMuscleStatus).sort(), muscleGroups.map(({ key }) => key).sort());
 for (const status of Object.values(mockMuscleStatus)) {

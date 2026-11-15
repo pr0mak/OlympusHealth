@@ -51,7 +51,8 @@ export default function App() {
         <span>NASA Space Apps Challenge 2026</span>
         <span>Astronaut Health Monitoring</span>
         {pathname === '/' && <span className="model-attribution">
-          Anatomy: BodyParts3D © The Database Center for Life Science; adapted by{' '}
+          Anatomy: BodyParts3D © The Database Center for Life Science;
+          female anatomy: Human Reference Atlas / HuBMAP and MakeHuman; adapted by{' '}
           <a href="https://github.com/MervinR07/open-anatomy-3d" target="_blank" rel="noreferrer">Open Anatomy 3D</a>{' · '}
           <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>{' · '}
           Appearance customized. <a href={`${import.meta.env.BASE_URL}models/anatomy/ATTRIBUTION.md`} target="_blank" rel="noreferrer">Full credits</a>
