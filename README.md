@@ -127,7 +127,7 @@ Relevant bone-health literature includes [Axpe et al. (2020)](https://pmc.ncbi.n
 For step-by-step installation, MySQL setup, `.env` configuration, demo account credentials, and initial setup commands, use:
 
 
-**[Olympus Health — Quick Start Guide](https://github.com/pr0mak/SpaceAppChallenge/blob/main/Olympus Health_SETUP_INSTRUCTIONS.md)**
+**[Olympus Health - Quick Start Guide](https://github.com/pr0mak/SpaceAppChallenge/blob/main/Olympus_Health_INSTRUCTIONS.md)**
 
 
 Once configured, launch the three services in separate terminals from the repository root:
