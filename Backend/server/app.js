@@ -1,9 +1,11 @@
+
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 
+// Database
 const db = require("./config/db");
 
 // Routes
@@ -21,26 +23,43 @@ const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
+// ==========================================
 // CORS
+// ==========================================
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
   })
 );
 
-// Body parsers
+// ==========================================
+// BODY PARSERS
+// ==========================================
+
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// Development request logger
+// ==========================================
+// DEVELOPMENT REQUEST LOGGER
+// ==========================================
+
 if (process.env.NODE_ENV !== "production") {
   app.use((req, res, next) => {
-    console.log("REQUEST:", req.method, req.originalUrl);
+    console.log(
+      "REQUEST:",
+      req.method,
+      req.originalUrl
+    );
+
     next();
   });
 }
 
-// Authentication rate limiter
+// ==========================================
+// AUTHENTICATION RATE LIMITER
+// ==========================================
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 20,
@@ -52,7 +71,10 @@ const authLimiter = rateLimit({
   },
 });
 
-// Public server health check
+// ==========================================
+// PUBLIC HEALTH CHECK
+// ==========================================
+
 app.get("/healthz", (req, res) => {
   return res.status(200).json({
     success: true,
@@ -61,32 +83,80 @@ app.get("/healthz", (req, res) => {
   });
 });
 
-// Authentication
-app.use("/api/auth", authLimiter, authRoutes);
+// ==========================================
+// AUTHENTICATION ROUTES
+// ==========================================
 
-// Anatomy - Protected
-app.use("/api/anatomy", verifyToken, anatomyRoutes);
+app.use(
+  "/api/auth",
+  authLimiter,
+  authRoutes
+);
 
-// Health Data - Protected
-app.use("/api/health", verifyToken, healthRoutes);
+// ==========================================
+// ANATOMY ROUTES - PROTECTED
+// ==========================================
 
-// Scientific projection - Protected
-app.use("/api/projection", verifyToken, projectionRoutes);
+app.use(
+  "/api/anatomy",
+  verifyToken,
+  anatomyRoutes
+);
 
-// Future Projection - Protected
+// ==========================================
+// HEALTH DATA ROUTES - PROTECTED
+// ==========================================
+
+app.use(
+  "/api/health",
+  verifyToken,
+  healthRoutes
+);
+
+// ==========================================
+// SCIENTIFIC PROJECTION - PROTECTED
+// ==========================================
+
+app.use(
+  "/api/projection",
+  verifyToken,
+  projectionRoutes
+);
+
+// ==========================================
+// FUTURE PROJECTION - PROTECTED
+// ==========================================
+
 app.use(
   "/api/future-projection",
   verifyToken,
   futureProjectionRoutes
 );
 
-// Dashboard - Protected
-app.use("/api", verifyToken, dashboardRoutes);
+// ==========================================
+// ALERT ROUTES - PROTECTED
+// ==========================================
 
-// Alerts - Protected
-app.use("/api/alerts", verifyToken, alertRoutes);
+app.use(
+  "/api/alerts",
+  verifyToken,
+  alertRoutes
+);
 
-// 404 Handler
+// ==========================================
+// DASHBOARD ROUTES - PROTECTED
+// ==========================================
+
+app.use(
+  "/api",
+  verifyToken,
+  dashboardRoutes
+);
+
+// ==========================================
+// 404 HANDLER
+// ==========================================
+
 app.use((req, res) => {
   return res.status(404).json({
     success: false,
@@ -94,14 +164,21 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
+// ==========================================
+// GLOBAL ERROR HANDLER
+// ==========================================
+
 app.use(errorHandler);
 
-// Server configuration
+// ==========================================
+// SERVER CONFIGURATION
+// ==========================================
+
 const PORT = Number(process.env.PORT || 3001);
 
 async function startServer() {
   try {
+    // Validate JWT secret
     if (
       !process.env.JWT_SECRET ||
       process.env.JWT_SECRET.length < 32
@@ -109,15 +186,18 @@ async function startServer() {
       throw new Error("Missing or weak JWT_SECRET");
     }
 
+    // Check MySQL connection
     await db.query("SELECT 1");
 
     console.log("MySQL connected successfully");
 
+    // Start Express server
     app.listen(PORT, () => {
       console.log(
         `ASTRA API running at http://localhost:${PORT}`
       );
     });
+
   } catch (error) {
     console.error("Startup failed:", error);
     process.exit(1);
