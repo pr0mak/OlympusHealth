@@ -5,7 +5,6 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import Icon from "./Icon.jsx";
 import MissionTimer from "./MissionTimer.jsx";
 
 import { useAuth } from "../context/AuthContext.jsx";
@@ -32,14 +31,19 @@ export default function Header({ showMission = false }) {
       <Link
         className="brand"
         to="/"
-        aria-label="Home"
+        aria-label="ASTRA home"
       >
         <span className="brand-symbol">
-          <Icon name="orbit" />
+          <img
+            src={`${import.meta.env.BASE_URL}brand/astra-logo.png`}
+            alt=""
+            width="48"
+            height="48"
+          />
         </span>
 
         <span className="brand-name">
-          My<span>Logo</span>
+          ASTRA
         </span>
       </Link>
 
