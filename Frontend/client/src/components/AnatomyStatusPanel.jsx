@@ -16,12 +16,13 @@ export default function AnatomyStatusPanel({ selection, kind, subtitle, onClear,
 }
 
 export function StatusScore({ label, value, accent }) {
+  const score = typeof value === "number" && Number.isFinite(value) ? value : null;
   return (
     <div className={`anatomy-metric anatomy-metric--${accent}`}>
       <dt>{label}</dt>
-      <dd>{value}<span> / 10</span></dd>
+      <dd>{score ?? "—"}<span> / 10</span></dd>
       <div className="anatomy-metric-track" aria-hidden="true">
-        <span style={{ width: `${value * 10}%` }} />
+        <span style={{ width: `${score == null ? 0 : Math.max(0, Math.min(10, score)) * 10}%` }} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { apiRequest } from "../api/client.js";
 
 export function useAnatomyStatus(category, regionKey) {
   const { token } = useAuth();
@@ -35,32 +36,10 @@ export function useAnatomyStatus(category, regionKey) {
         const url =
           `/api/anatomy/${category}/${encodeURIComponent(regionKey)}`;
 
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
+        const result = await apiRequest(url, {
+          token,
           signal: controller.signal,
         });
-
-        const contentType =
-          response.headers.get("content-type") || "";
-
-        if (!contentType.includes("application/json")) {
-          throw new Error(
-            `API returned HTML instead of JSON (${response.status}). ` +
-            "Check Express routes and Vite proxy."
-          );
-        }
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            result.message || `API error (${response.status})`
-          );
-        }
 
         if (!controller.signal.aborted) {
           setState({
