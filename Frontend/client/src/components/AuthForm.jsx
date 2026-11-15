@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { authApi } from "../api/client.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import "./Register.css";
 
 export default function AuthForm({ register = false }) {
   const navigate = useNavigate();
@@ -74,10 +75,12 @@ export default function AuthForm({ register = false }) {
 
   return (
     <main
-      className="dashboard auth-page"
-      id="main-content"
-      tabIndex={-1}
-    >
+  className={`dashboard auth-page ${
+    register ? "astra-register-page" : "astra-signin-page"
+  }`}
+  id="main-content"
+  tabIndex={-1}
+>
       <Link to="/" className="back-link">
         ← Back to overview
       </Link>
