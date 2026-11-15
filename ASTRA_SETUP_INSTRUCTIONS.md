@@ -1,6 +1,6 @@
-# ASTRA - Quick Start
+# Olympus Health - Quick Start
 
-Follow **only the steps below** to set up and run ASTRA locally.
+Follow **only the steps below** to set up and run Olympus Health locally.
 
 Run all commands from the project root directory, which contains `Frontend/`, `Backend/`, and `astra-ai/`.
 
@@ -132,11 +132,11 @@ python -m uvicorn astra.api:app --reload --port 8000
 
 On macOS or Linux, use `python3` instead of `python` if necessary.
 
-**Keep all three terminals running while using ASTRA.**
+**Keep all three terminals running while using Olympus Health.**
 
 After the initial installation, you only need the startup commands (`npm run dev` and `python -m uvicorn astra.api:app --reload --port 8000`).
 
-## 5. Open ASTRA and Sign In
+## 5. Open Olympus Health and Sign In
 
 Open the application:
 
