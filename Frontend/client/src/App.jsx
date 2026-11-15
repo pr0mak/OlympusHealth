@@ -6,7 +6,6 @@ import Home from './pages/Home.jsx';
 import Register from './pages/Register.jsx';
 import SignIn from './pages/SignIn.jsx';
 import HealthData from './pages/HealthData.jsx';
-import MissionAssistant from './pages/MissionAssistant.jsx';
 import FutureProjection from './pages/FutureProjection.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Profile from './pages/Profile.jsx';
@@ -18,7 +17,6 @@ const pageTitles = {
   '/sign-in': 'Sign in',
   '/profile': 'My profile',
   '/health-data': 'Health Data',
-  '/mission-assistant': 'Mission Assistant',
   '/future-projection': 'Future Projection',
 };
 
@@ -42,7 +40,6 @@ export default function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/health-data" element={<HealthData />} />
-        <Route path="/mission-assistant" element={<MissionAssistant />} />
         <Route path="/future-projection" element={<FutureProjection />} />
         <Route path="/alerts" element={<Alerts />} />
         <Route path="*" element={<NotFound />} />

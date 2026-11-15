@@ -1,4 +1,3 @@
-
 import {
   lazy,
   Suspense,
@@ -114,20 +113,22 @@ export default function Home() {
               <HealthDataPreview />
             </Widget>
 
-            {/* MISSION ASSISTANT */}
+             {/* ALERTS */}
             <Widget
-              id="mission-assistant"
-              title="Mission Assistant"
-              to="/mission-assistant"
+              id="alerts"
+              title="Alerts"
+              to="/alerts"
             >
-              <p className="preview-title">
-                Your mission workspace
-              </p>
+              <div className="alerts-widget-preview">
+                <p>
+                  Review health observations and alerts
+                  based on your recorded data.
+                </p>
 
-              <p className="preview-copy">
-                Review your daily check-in and explore
-                your health overview.
-              </p>
+                <span className="alerts-widget-preview-link">
+                  View alerts →
+                </span>
+              </div>
             </Widget>
 
             {/* FUTURE PROJECTION */}
@@ -149,24 +150,6 @@ export default function Home() {
                 label="Illustrative activity index"
                 compact
               />
-            </Widget>
-
-            {/* ALERTS */}
-            <Widget
-              id="alerts"
-              title="Alerts"
-              to="/alerts"
-            >
-              <div className="alerts-widget-preview">
-                <p>
-                  Review health observations and alerts
-                  based on your recorded data.
-                </p>
-
-                <span className="alerts-widget-preview-link">
-                  View alerts →
-                </span>
-              </div>
             </Widget>
 
           </div>

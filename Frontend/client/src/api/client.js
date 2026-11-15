@@ -87,39 +87,6 @@ export const projectionApi = {
 };
 
 // ==========================================
-// EXISTING AI ASSISTANT API
-// ==========================================
-
-export const aiApi = {
-  status: (token, mode = "demo") =>
-    apiRequest(
-      `/api/assistant?mode=${encodeURIComponent(mode)}`,
-      { token }
-    ),
-
-  recommend: (token, body) =>
-    apiRequest("/api/assistant", {
-      token,
-      method: "POST",
-      body: JSON.stringify(body),
-    }),
-
-  feedback: (token, body) =>
-    apiRequest("/api/assistant/feedback", {
-      token,
-      method: "POST",
-      body: JSON.stringify(body),
-    }),
-
-  demoTrain: (token, rounds = 30) =>
-    apiRequest("/api/assistant/demo/train", {
-      token,
-      method: "POST",
-      body: JSON.stringify({ rounds }),
-    }),
-};
-
-// ==========================================
 // FUTURE PROJECTION API
 // ==========================================
 

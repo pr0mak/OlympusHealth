@@ -12,7 +12,6 @@ const authRoutes = require("./routes/AuthRoutes");
 const dashboardRoutes = require("./routes/DashboardRoutes");
 const healthRoutes = require("./routes/HealthRoutes");
 const projectionRoutes = require("./routes/projectionRoutes");
-const assistantRoutes = require("./routes/assistantRoutes");
 const futureProjectionRoutes = require("./routes/FutureProjectionRoutes");
 const alertRoutes = require("./routes/alertRoutes");
 
@@ -90,12 +89,6 @@ app.use(
     futureProjectionRoutes
 );
 
-// AI Assistant - Protected
-app.use(
-    "/api/assistant",
-    verifyToken,
-    assistantRoutes
-);
 app.use(
   "/api/future-projection",
   verifyToken,
