@@ -951,3 +951,11 @@
     padding: 16px;
   }
 }
+
+/* Selected time-window summary */
+.health-range-note {
+  margin: 14px 0 0;
+  color: #aab9c8;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}

@@ -39,8 +39,9 @@ const METRICS = [
 ];
 
 const RANGES = [
-  { value: "7", label: "Last 7 records" },
-  { value: "30", label: "Last 30 records" },
+  { value: "24h", label: "Last 24 hours", milliseconds: 24 * 60 * 60 * 1000 },
+  { value: "7d", label: "Last 7 days", milliseconds: 7 * 24 * 60 * 60 * 1000 },
+  { value: "30d", label: "Last 30 days", milliseconds: 30 * 24 * 60 * 60 * 1000 },
   { value: "all", label: "All records" }
 ];
 
@@ -299,7 +300,7 @@ export default function HealthData() {
   const [error, setError] = useState("");
 
   const [metricKey, setMetricKey] = useState("heartRate");
-  const [range, setRange] = useState("30");
+  const [range, setRange] = useState("30d");
   const [showAll, setShowAll] = useState(false);
 
   // Add state
@@ -391,15 +392,22 @@ const [addValues, setAddValues] = useState({
     );
   }, [sortedRows]);
 
-  // Records for selected chart
+  // Filter by actual elapsed time, not by number of database records.
+  // The time window ends at the current time, not at the last observation.
   const chartRows = useMemo(() => {
-    const eligible = sortedRows.filter(
-      row => row[metricKey] != null
-    );
+    const selectedRange = RANGES.find(item => item.value === range);
+    const now = Date.now();
+    const start = range === "all" ? -Infinity : now - selectedRange.milliseconds;
 
-    if (range === "all") return eligible;
-
-    return eligible.slice(0, Number(range));
+    return sortedRows.filter(row => {
+      const timestamp = toTime(row.recordedAt);
+      const value = Number(row[metricKey]);
+      return Number.isFinite(timestamp) &&
+        timestamp >= start &&
+        timestamp <= now &&
+        row[metricKey] != null &&
+        Number.isFinite(value);
+    });
   }, [sortedRows, metricKey, range]);
 
   // Chart statistics
@@ -746,7 +754,7 @@ async function saveMeasurement(event) {
                     <h2>{activeMetric.label} Trend</h2>
 
                     <p className="health-muted">
-                      {activeMetric.description}
+                      {activeMetric.description} · Average and trend for the selected time window.
                     </p>
                   </div>
 
@@ -788,6 +796,12 @@ async function saveMeasurement(event) {
                   rows={chartRows}
                   metric={activeMetric}
                 />
+                <p className="health-range-note">
+                  {range === "all"
+                    ? "Showing all recorded measurements."
+                    : `Showing actual measurements from the ${RANGES.find(item => item.value === range)?.label.toLowerCase()}.`}
+                  {stats ? ` Average: ${formatValue(stats.average)} ${activeMetric.unit}.` : " No measurements available in this period."}
+                </p>
 
                 <div className="health-stats-grid">
                   {[
