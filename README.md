@@ -44,17 +44,26 @@ ASTRA separates presentation from computation. Its Python service handles statis
 
 The planner optimizes a simplified scheduling model; it does not claim to predict clinical bone-health improvements caused by exercise.
 
+
 ## Technology Stack
 
 | Layer | Technologies | Role |
 |---|---|---|
-| **Interactive anatomy** | **Three.js** | Three anatomical views, selectable body regions, 3D visualization |
-| **Frontend** | **React, Vite, JavaScript, CSS** | User interface, navigation, interactive charts and controls |
-| **Application backend** | **Node.js, Express.js** | REST APIs, request handling, data access, service coordination |
-| **Database** | **MySQL** | User profiles and historical health measurements |
-| **Authentication** | **JWT** | Authenticated access to user data |
-| **Computational engine** | **Python, FastAPI, Pydantic** | Forecasting and exercise optimization over HTTP |
-| **Numerical methods** | **NumPy, SciPy, SLSQP** | Statistical processing and constrained optimization |
+| **Interactive 3D Anatomy** | Three.js, React | Interactive 3D anatomical visualization, selectable body regions, and health-related exploration. |
+| **Frontend** | React, Vite, JavaScript (JSX), CSS | Responsive user interface, health dashboards, interactive charts, and user controls. |
+| **Frontend Routing** | React Router | Client-side navigation between Dashboard, Health Data, Alerts, Future Projection, Mission Assistant, and Profile. |
+| **Application Backend** | Node.js, Express.js | RESTful API development, request handling, business logic, and communication between services. |
+| **Database** | MySQL | Persistent storage of user accounts, physiological measurements, bone health, muscle health, organ health, and radiation records. |
+| **Authentication & Security** | JWT, bcrypt, CORS, express-rate-limit | Token-based authentication, password hashing, protected endpoints, and API security. |
+| **Health Monitoring & Alerts** | JavaScript, Express.js, MySQL | Rule-based health monitoring, measurement thresholds, and High/Medium/Low priority alerts. |
+| **AI & Computational Engine** | Python, FastAPI, Pydantic | Health projections, exercise recommendations, data validation, and computational API services. |
+| **Numerical Computing & Optimization** | NumPy, SciPy, SLSQP | Numerical calculations and constrained optimization for exercise planning. |
+| **Adaptive Exercise Planning** | LinUCB, Model Predictive Control (MPC) | Contextual exercise recommendations, adaptive decision-making, and fatigue-aware exercise scheduling. |
+| **API Communication** | REST APIs, HTTP, JSON, Fetch API | Data exchange between the React frontend, Express backend, and Python computational engine. |
+| **Data Visualization** | Three.js, SVG, CSS | 3D anatomical visualization, physiological trend charts, and statistical summaries. |
+| **API Testing & Development** | Postman | Testing REST API endpoints, HTTP methods (GET, POST, PUT), JWT authorization, and JSON request/response handling. |
+| **Version Control** | Git, GitHub | Source code management, version tracking, and team collaboration. |
+
 
 ### Architecture
 
