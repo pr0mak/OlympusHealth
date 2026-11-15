@@ -11,6 +11,8 @@ import Widget from "../components/Widget.jsx";
 import HealthDataPreview from "../components/HealthDataPreview.jsx";
 import OverviewSidebar from "../components/OverviewSidebar.jsx";
 import TrendChart from "../components/TrendChart.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import { getAnatomy } from "../data/anatomy.js";
 
 import { createProjection } from "../data/mockHealth.js";
 
@@ -21,7 +23,16 @@ const AnatomyViewer = lazy(
 );
 
 export default function Home() {
-  const [selectedPart, setSelectedPart] = useState(null);
+  const { user, loading: authLoading } = useAuth();
+  const anatomy = getAnatomy(user?.gender);
+  const modelIdentity = `${user?.id ?? "guest"}:${anatomy.sex}`;
+  const [selection, setSelection] = useState(null);
+  // Account/model changes clear focus immediately, before another model renders.
+  const selectedPart = !authLoading && selection?.owner === modelIdentity ? selection.part : null;
+  const selectPart = useCallback(part => {
+    setSelection({ owner: modelIdentity, part });
+  }, [modelIdentity]);
+  useEffect(() => { setSelection(null); }, [modelIdentity]);
   const [assembled, setAssembled] = useState(false);
 
   const assemblePage = useCallback(() => {
@@ -29,7 +40,7 @@ export default function Home() {
   }, []);
 
   const clearSelection = useCallback(() => {
-    setSelectedPart(null);
+    setSelection(null);
 
     document
       .getElementById("anatomy-viewport")
@@ -65,11 +76,17 @@ export default function Home() {
             />
           }
         >
-          <AnatomyViewer
-            onModelReady={assemblePage}
-            selected={selectedPart?.key ?? null}
-            onSelectionChange={setSelectedPart}
-          />
+          {authLoading ? (
+            <section className="anatomy-viewer" aria-label="Loading anatomy viewer" aria-busy="true" />
+          ) : (
+            <AnatomyViewer
+              key={modelIdentity}
+              gender={user?.gender}
+              onModelReady={assemblePage}
+              selected={selectedPart?.key ?? null}
+              onSelectionChange={selectPart}
+            />
+          )}
         </Suspense>
 
         {/* RIGHT SIDEBAR */}

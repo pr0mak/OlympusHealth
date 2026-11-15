@@ -1,37 +1,38 @@
 import catalog from "./anatomyCatalog.json";
 import { muscleGroups } from "./muscleGroups.js";
 
-export const MODEL_URL = `${import.meta.env.BASE_URL}models/anatomy/anatomy-male.glb`;
 export const ANATOMY_LAYERS = [
   { id: "muscles", label: "Muscles" },
   { id: "skeleton", label: "Skeleton" },
   { id: "organs", label: "Organs" },
 ];
-const anatomyMeshes = catalog
-  .filter(
-    (part) =>
-      part.sex !== "female" &&
-      ANATOMY_LAYERS.some((layer) => layer.id === part.system),
-  )
-  .sort((a, b) => a.label.localeCompare(b.label));
 
-// Source mesh metadata controls materials and layer visibility.
-export const anatomyMeshByKey = Object.fromEntries(
-  anatomyMeshes.map((part) => [part.key, part]),
-);
+function createAnatomy(sex) {
+  const meshes = catalog
+    .filter(part => (!part.sex || part.sex === sex)
+      && ANATOMY_LAYERS.some(layer => layer.id === part.system))
+    .sort((a, b) => a.label.localeCompare(b.label));
+  // Shared muscle-region IDs work with both source models.
+  const parts = [
+    ...muscleGroups,
+    ...meshes
+      .filter(part => part.system !== "muscles")
+      .map(part => ({ ...part, meshKeys: [part.key] })),
+  ];
 
-// Public selection IDs are independent of the GLB's individual muscle meshes.
-export const anatomyParts = [
-  ...muscleGroups,
-  ...anatomyMeshes
-    .filter((part) => part.system !== "muscles")
-    .map((part) => ({ ...part, meshKeys: [part.key] })),
-];
-export const anatomyByKey = Object.fromEntries(
-  anatomyParts.map((part) => [part.key, part]),
-);
-export const selectionByMeshKey = Object.fromEntries(
-  anatomyParts.flatMap((part) =>
-    part.meshKeys.map((meshKey) => [meshKey, part.key]),
-  ),
-);
+  return {
+    sex,
+    modelUrl: `${import.meta.env.BASE_URL}models/anatomy/anatomy-${sex}.glb`,
+    meshByKey: Object.fromEntries(meshes.map(part => [part.key, part])),
+    parts,
+    byKey: Object.fromEntries(parts.map(part => [part.key, part])),
+    selectionByMeshKey: Object.fromEntries(parts.flatMap(part =>
+      part.meshKeys.map(meshKey => [meshKey, part.key]))),
+  };
+}
+
+const variants = { male: createAnatomy("male"), female: createAnatomy("female") };
+
+export function getAnatomy(gender) {
+  return gender === "female" ? variants.female : variants.male;
+}

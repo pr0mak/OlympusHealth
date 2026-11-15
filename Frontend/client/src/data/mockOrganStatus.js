@@ -49,7 +49,48 @@ const eye = (pressure, strain) => profile("Vision and eye comfort",
     score("Light sensitivity", 1, "soreness"),
   ]);
 
+const breast = profile("Breast comfort and reported sensations",
+  score("Local comfort", 9), [
+    score("Tenderness", 2, "soreness"),
+    score("Soreness", 1, "soreness"),
+    score("Skin sensitivity", 2, "endurance"),
+    score("Tightness", 1, "fatigue"),
+  ]);
+
+const ovary = profile("Pelvic comfort and reported sensations",
+  score("Pelvic comfort", 9), [
+    score("Local discomfort", 1, "soreness"),
+    score("Pelvic pressure", 1, "endurance"),
+    score("Abdominal bloating", 2, "structure"),
+    score("Nausea", 1, "fatigue"),
+  ]);
+
 export const mockOrganStatus = {
+  breast_l: breast,
+  breast_r: breast,
+  ovary_l: ovary,
+  ovary_r: ovary,
+  uterus: profile("Uterine and pelvic comfort",
+    score("Pelvic comfort", 8), [
+      score("Cramping", 2, "soreness"),
+      score("Bloating", 2, "structure"),
+      score("Pelvic pressure", 1, "endurance"),
+      score("Lower-back discomfort", 1, "fatigue"),
+    ]),
+  fallopian_tubes: profile("Pelvic comfort and related sensations",
+    score("Pelvic comfort", 9), [
+      score("Pelvic discomfort", 1, "soreness"),
+      score("Abdominal cramps", 1, "endurance"),
+      score("Abdominal bloating", 2, "structure"),
+      score("Nausea", 1, "fatigue"),
+    ], "Fixed demo ratings describe reported pelvic sensations, not measured fallopian-tube function."),
+  vagina: profile("Local comfort and reported sensations",
+    score("Local comfort", 9), [
+      score("Dryness", 2, "endurance"),
+      score("Irritation", 1, "soreness"),
+      score("Tenderness", 1, "fatigue"),
+      score("Pelvic discomfort", 1, "soreness"),
+    ]),
   adrenal_l: adrenal,
   adrenal_r: adrenal,
   appendix: profile("Local abdominal comfort",
