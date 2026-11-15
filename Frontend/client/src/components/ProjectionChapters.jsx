@@ -38,6 +38,7 @@ export default function ProjectionChapters({ health, activity, ready = true }) {
           <div
             className={`fp-chapter fp-chapter--${chapter.side}`}
             data-open={active}
+            data-layout={active || state.outgoing === chapter.key}
             key={chapter.key}
             style={{ "--chapter-accent": chapter.color }}
           >
