@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext.jsx";
 import { healthApi } from "../services/healthApi.js";
+import RadiationDrawer from "../components/RadiationDrawer.jsx";
 
 import "./HealthData.css";
 
@@ -928,6 +929,7 @@ async function saveMeasurement(event) {
           )}
         </>
       )}
+      <RadiationDrawer />
     </main>
   );
 }
