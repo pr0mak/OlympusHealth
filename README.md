@@ -1,7 +1,10 @@
-# ASTRA : Interactive Astronaut Health Monitoring
+# ASTRA Interactive Astronaut Health Monitoring
 
 **NASA Space Apps Challenge 2026**  
+**Team: Olympus Mons**  
 **Explore the body. Understand the data. Plan for the mission.**
+
+> **Prototype notice:** ASTRA is a hackathon research prototype, not a clinically validated medical tool. Demo records can be synthetic; projections and alerts are not medical diagnoses.
 
 ## The Challenge
 
@@ -11,134 +14,163 @@ Astronauts also need to organize exercise alongside demanding mission schedules,
 
 ## Our Solution
 
-ASTRA is a full-stack astronaut health exploration platform built around an **interactive 3D human model using Three.js**. Users can click on anatomical regions to access relevant health indicators, visualize historical measurements, review projected trends, and explore an optimized exercise schedule.
+ASTRA is a full-stack astronaut health exploration platform built around an **interactive 3D human model using Three.js**. Users can select anatomical regions to access related health indicators, visualize historical measurements, review exploratory projections, receive rule-based alerts, and explore exercise plans.
 
 ### Three Anatomical Layers
 
-The 3D interface presents three anatomical views: **muscular system, skeletal system, and internal organs**. Rather than presenting one enormous list of measurements, ASTRA connects each metric to the relevant region of the human body.
+The 3D interface presents three anatomical views: **muscular system, skeletal system, and internal organs**. Rather than displaying one enormous list of measurements, ASTRA relates health information to the selected anatomy.
 
-| Area | Example indicators |
+| Area | Available / example indicators |
 |---|---|
 | **Vital signs** | Heart rate, blood oxygen saturation, body temperature, sleep duration |
-| **Muscular system** | Estimated recovery time, soreness, fatigue, strength, endurance |
-| **Skeletal system** | Bone density, structure, estimated strength, bone formation, bone resorption |
-| **Internal organs** | Organ-specific metrics; for example, the lungs feature oxygen-related measures, breathing rate, lung capacity, breathlessness, and breathing comfort |
+| **Muscular system** | Muscle atrophy, type I/II muscle fibers, neuromuscular coordination; more detailed regional status when recorded |
+| **Skeletal system** | Bone density, bone quality, bone formation (P1NP), bone resorption (CTX); regional status when recorded |
+| **Internal organs** | Heart rhythm and oxygen-related metrics, kidney risk indicators, and other organ-specific fields when stored and connected to the API |
 
-Each organ can have its own set of relevant indicators. The result is an intuitive way to explore complex health information through anatomy instead of disconnected spreadsheets.
+**User-specific anatomy data:** When a body part is selected, React calls a JWT-protected Express endpoint (`GET /api/anatomy/:system/:key`). The backend retrieves records belonging to the authenticated user. It distinguishes:
 
-### Three Core Modules
+- **Part-specific measurements** from `anatomy_part_measurements`, linked to the selected anatomical structure.
+- **Related context measurements** from `generic_health`, `muscle_health`, `bone_health`, or `organ_health`. Context is not claimed to be a measurement of the selected individual structure.
 
-**Health Data**  Explore the 3D body, select a region, and review its associated measurements and charts.
+Missing data is shown as unavailable rather than replaced with random anatomical values. The current API supports related general readings for muscle and skeletal selections and particular mappings for the heart, lungs, and kidneys; other organs require stored part-specific readings or additional API mappings.
 
-**Future Projection**  Examine historical health records and exploratory **7-, 14-, or 30-day projections** for supported metrics. This section also includes exercise planning and visualizations of planned activity.
+### Core Modules
 
-**Alerts**  Surface health-related notifications and highlight values or trends that may deserve attention. Alert behavior depends on the rules and measurements available in the application.
+**Interactive Anatomy** Select a muscle, bone, or organ to inspect available part-specific readings and related health data from MySQL.
+
+**Health Data** Review recorded vital signs, historical charts, and measurements. Authenticated users can add new records through the API.
+
+**Alerts** Highlight recorded values and trends requiring review using preliminary **High / Medium / Low** priority rules.
+
+**Future Projection** Examine exploratory short-horizon projections and physiological trends; the available views depend on the supported model and stored records.
 
 ## Scientific Computation and Exercise Planning
 
-ASTRA separates presentation from computation. Its Python service handles statistical forecasting and constrained exercise planning, while React and Three.js focus on making the results understandable.
+ASTRA separates presentation from computation. Its Python service provides health projection and exercise-planning endpoints, while React and Three.js present the outputs.
 
-**Health forecasting.** The forecasting pipeline groups existing measurements by date, calculates daily medians, fits a bounded linear trend to up to 30 observation days, and generates short-horizon projections where sufficient records exist. These are exploratory estimates, not direct measurements of future health.
+**Health forecasting.** The application explores health trends and model-based projections using available records and scientific assumptions. These are exploratory estimates, not direct measurements of future health or clinically validated individual predictions.
 
-**Model Predictive Control (MPC).** A Python optimizer built with **SciPy / SLSQP** generates a **seven-day exercise schedule** within specified time and modeled-fatigue constraints. It distributes planned training between **resistance and aerobic exercise**, considering parameters such as available exercise time, duration targets, chosen intensities, initial fatigue, and a fatigue ceiling. Sleep can be viewed among the health indicators; it is not currently an independently verified input to the MPC decision model.
+**Model Predictive Control (MPC).** A Python optimizer using **SciPy / SLSQP** explores a seven-day exercise schedule subject to time and modeled-fatigue constraints, including resistance and aerobic exercise. The planner optimizes a simplified scheduling model; it does not establish that the prescribed training causes specific clinical improvements.
 
-The planner optimizes a simplified scheduling model; it does not claim to predict clinical bone-health improvements caused by exercise.
+**Adaptive recommendations.** The prototype also includes a **LinUCB** recommendation component. Its demo feedback loop should not be represented as trained or validated on astronaut medical outcomes.
 
 ## Technology Stack
 
 | Layer | Technologies | Role |
 |---|---|---|
-| **3D Anatomy** | **Three.js, React** | Interactive muscular, skeletal, and organ views with selectable regions |
-| **Frontend** | **React, Vite, JavaScript/JSX, CSS, React Router** | Responsive pages, health charts, controls, and client-side navigation |
-| **Backend** | **Node.js, Express.js** | REST APIs, business logic, request validation, and coordination between services |
-| **Database** | **MySQL** | User accounts and historical physiological measurements |
-| **Authentication** | **JWT** | Token-based protected access |
-| **Computational Engine** | **Python, FastAPI, Pydantic** | Health forecasting, computational endpoints, and validated inputs |
-| **Optimization** | **NumPy, SciPy, SLSQP, MPC** | Numerical calculations and constrained exercise scheduling |
-| **Data Prototyping** | **Monte Carlo Sampling** | Generate synthetic records for MVP workflows under explicit sampling assumptions |
-| **Integration** | **HTTP, JSON, REST APIs** | Communication between React, Express, and FastAPI |
-| **Development & Testing** | **Git, GitHub, Postman** | Collaboration, version control, and API verification |
+| **Interactive 3D Anatomy** | Three.js, React | Muscular, skeletal, and organ views with selectable regions |
+| **Frontend** | React, Vite, JavaScript (JSX), CSS, React Router | Pages, interactive health charts, forms, and navigation |
+| **Application Backend** | Node.js, Express.js | Authenticated REST APIs, anatomy lookup, alerts, business logic |
+| **Database** | MySQL | User accounts, health histories, anatomical catalog, and part-specific measurements |
+| **Authentication & Security** | JWT, bcrypt, CORS, express-rate-limit | Password hashing, authorized access, and request controls |
+| **Computational Engine** | Python, FastAPI, Pydantic | Model endpoints, validation, forecasting, and planning |
+| **Numerical Computing & Optimization** | NumPy, SciPy, SLSQP, MPC | Numerical methods and constrained exercise scheduling |
+| **Adaptive Decision-Making** | LinUCB | Prototype contextual exercise recommendation logic |
+| **Data Prototyping** | Monte Carlo sampling | Synthetic records for MVP demonstrations under documented assumptions |
+| **Integration** | HTTP, JSON, REST APIs, Fetch API | Communication among frontend, Express API, and Python service |
+| **Development & Testing** | Git, GitHub, Postman | Source control, collaboration, and API verification |
 
-### Architecture
+### System Architecture
 
 ```mermaid
 flowchart TB
-    UI[React + Three.js<br/>3D Muscles / Skeleton / Organs]
-    UI --> HD[Health Data]
-    UI --> FP[Future Projection]
-    UI --> AL[Alerts]
-    HD --> API[Node.js / Express API]
-    FP --> API
-    AL --> API
-    API <--> DB[(MySQL<br/>Health Records)]
-    API <--> PY[Python / FastAPI]
-    PY --> FC[Health Forecasting]
-    PY --> MPC[MPC Exercise Planner]
-    FC --> API
-    MPC --> API
+    UI[React + Three.js / Vite] -->|JWT + REST| API[Node.js / Express]
+    API -->|Parameterized queries| DB[(MySQL)]
+    API <-->|HTTP + JSON| PY[Python / FastAPI]
+    API --> AL[Rule-based Alerts]
+    PY --> FC[Health Projections]
+    PY --> MPC[MPC Exercise Planning]
+    PY --> LB[LinUCB Recommendation Prototype]
 ```
 
-The React frontend communicates with the Express API, which accesses MySQL and sends computational requests to the Python engine. The services exchange JSON, keeping scientific logic independent of the user interface.
+The React frontend does **not** connect to MySQL directly. Express verifies the user's JWT, filters data by the authenticated `user_id`, and queries the database. Scientific computations run in the separate Python service.
+
+## Database Schema
+
+The following diagram shows the project's MySQL tables and relationships, including the user-centered health tables, anatomy-specific measurements, and additional organ-specific structures.
+
+![ASTRA MySQL database schema](![alt text](image-1.png))
+
+*Figure: ASTRA database schema, visualized in MySQL Workbench.*
+
+### Main Database Tables
+
+| Table | Purpose |
+|---|---|
+| `users` | User accounts with username, hashed password, gender, and age |
+| `generic_health` | Heart rate, oxygen saturation, body temperature, and sleep duration |
+| `muscle_health` | General muscle atrophy, muscle fiber types, and neuromuscular coordination |
+| `bone_health` | Bone density, quality, formation marker P1NP, and resorption marker CTX |
+| `organ_health` | Arrhythmia, kidney stone risk, and oxygen status |
+| `space_radiation` | Radiation doses, dose rate, and radiation event flags |
+| `anatomy_parts` | Catalog of selectable muscles, bones, and organs using `system` and `part_key` |
+| `anatomy_part_measurements` | User-linked measurements for individual anatomical parts, including metric, value, unit, origin, and timestamp |
+
+### Additional Tables Shown in the Diagram
+
+The supplied schema diagram also contains `heart`, `lungs`, `kidneys`, `liver`, `brain`, `small_intestine`, `bone_status`, and `muscle_status`. These represent additional organ-specific and region-specific measurements.
 
 ## Data and Prototype Methodology
 
-A major challenge during development was **limited access to sufficiently large, individual-level astronaut health datasets**. We worked with a small collection of reference material from NASA and publicly available scientific sources, but its coverage was not enough to train and evaluate complex, data-hungry machine-learning models reliably.
+A major challenge during development was **limited access to sufficiently large, individual-level astronaut health datasets**. We worked with reference material from NASA and publicly available scientific sources, but available observations were not sufficient to reliably train and evaluate data-hungry machine-learning models.
 
-To support a functioning hackathon MVP, we used a **Monte Carlo sample generator** to produce additional **synthetic demonstration records** from our limited reference inputs and chosen sampling assumptions. This helped us populate the application, test its data flow, and demonstrate health visualizations and short-horizon forecasts despite the scarcity of observations. The generated records are **simulated examples, not additional measurements collected by NASA or astronauts**.
+For the hackathon MVP, we used **Monte Carlo sampling** and other synthetic demonstration data to populate workflows and test charts, alerts, and projections. Such records are **simulated examples, not additional measurements collected by NASA or astronauts**.
 
-The application keeps three types of information distinct:
+The platform distinguishes:
 
-- **Research references:** Published findings used to inform the scientific context of selected health indicators.
-- **Synthetic prototype records:** Monte Carlo-generated or manually supplied examples used for demonstration and software testing.
-- **Computed outputs:** Statistical projections and exercise schedules produced by the forecasting and optimization modules.
+- **Research references:** Published material informing scientific context and modeling assumptions.
+- **Synthetic prototype records:** Simulated or manually supplied examples for demos and testing.
+- **Stored user records:** Measurements submitted to or already present in the authenticated user's database records; their origin should be recorded where available.
+- **Computed outputs:** Projections and exercise schedules produced by the computational models.
 
-Because simulated records cannot replace independent real-world observations, we chose **transparent statistical forecasting and constrained optimization** over claiming a fully trained, clinically validated physiological AI model. This lets ASTRA demonstrate the complete product experience while leaving room for future calibration with larger astronaut datasets.
+Synthetic records cannot replace independent real observations, and ASTRA does not claim a clinically validated physiological AI model.
 
-Relevant published bone-health references include [Axpe et al. (2020)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6975633/) and [Gabel et al. (2022), TBone](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/). Source publications, synthetic records, and model outputs are not treated as interchangeable.
-
+Relevant bone-health literature includes [Axpe et al. (2020)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6975633/) and [Gabel et al. (2022)](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/). Publications, synthetic records, and model outputs must not be treated as interchangeable.
 
 ## Installation & Quick Start
 
-ASTRA requires Node.js, Python 3, and MySQL Server.
+**Prerequisites:** Node.js, Python 3, and MySQL Server.
 
-For complete setup instructions, including MySQL configuration,
-database initialization, environment variables, and demo login
-credentials, follow the guide below:
+For step-by-step installation, MySQL setup, `.env` configuration, demo account credentials, and initial setup commands, use:
 
-**[ASTRA - Quick Start Guide](./ASTRA_SETUP_INSTRUCTIONS.md)**
+**[ASTRA Quick Start Guide](./ASTRA_QUICK_START.md)**
 
-Once configured, start the three services in separate terminals:
+Once configured, launch the three services in separate terminals from the repository root:
 
-### Terminal 1 — Backend
+**Terminal 1 Backend**
 
 ```bash
 cd Backend/server
 npm run dev
 ```
 
-### Terminal 2 — Frontend
+**Terminal 2 Frontend**
 
 ```bash
 cd Frontend
 npm run dev
 ```
 
-### Terminal 3 — Python Engine
+**Terminal 3 Python Engine**
 
 ```bash
 cd astra-ai
 python -m uvicorn astra.api:app --reload --port 8000
 ```
 
-### Local URLs
 
-| Service | URL |
+## Team Olympus Mons
+
+ASTRA was developed by **Olympus Mons** for the **NASA Space Apps Challenge 2026**.
+
+| Team member | Role / Space Apps handle |
 |---|---|
-| ASTRA Application | http://localhost:5173 |
-| Express API Health Check | http://localhost:3001/healthz |
-| FastAPI Documentation | http://127.0.0.1:8000/docs |
-```
+| **Michail Marakis** | Team Owner · `@mike7` |
+| **Periklis Papakostas** | `@periklis` |
+| **Prodromos-Aris Makarounas** | `@prodromos` |
+| **Stavros Rodopoulos** | `@shadowcross` |
+| **Nikolaos Poulopoulos** | `@nikwilldoit` |
 
 ## Built for the Hackathon
 
-ASTRA brings together **anatomical interaction, health-data visualization, exploratory forecasting, and constrained exercise planning** in one modular full-stack prototype. Its key contribution is not another isolated chart: it is a more intuitive interface between an astronaut, the human body, and the computational tools available to support mission health decisions.
+ASTRA combines **anatomical interaction, user-specific health visualization, rule-based alerts, exploratory forecasting, and constrained exercise planning** in one modular full-stack prototype. Its goal is to make astronaut health information more accessible through the human body while clearly separating stored data, synthetic examples, and model-derived outputs.
